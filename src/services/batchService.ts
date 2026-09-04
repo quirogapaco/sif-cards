@@ -1,4 +1,3 @@
-// src/services/batchService.ts
 import { supabase } from '../lib/supabase';
 import type { Batch, Card } from '../types/database';
 
@@ -42,24 +41,30 @@ export const batchService = {
    * Obtiene todos los lotes con sus contadores de tarjetas
    */
   async getAllBatches(): Promise<BatchSummary[]> {
+    // Usamos cards!cards_batch_id_fkey si hay ambigüedad de FK, o cards(status) estándar
     const { data: batches, error } = await supabase
       .from('batches')
-      .select('*, cards:cards(status)')
+      .select('*, cards(status)')
       .order('created_at', { ascending: false });
 
     if (error) {
+      console.error('Error al consultar lotes:', error);
       throw new Error(`Error al consultar lotes: ${error.message}`);
     }
 
-    return (batches || []).map((b: any) => {
-      const cardsList = b.cards || [];
+    if (!batches || batches.length === 0) {
+      return [];
+    }
+
+    return batches.map((b: any) => {
+      const cardsList = Array.isArray(b.cards) ? b.cards : [];
       const total = cardsList.length;
       const active = cardsList.filter((c: any) => c.status === 'active').length;
       const unclaimed = cardsList.filter((c: any) => c.status === 'unclaimed').length;
 
       return {
         ...b,
-        cards_count: total,
+        cards_count: total > 0 ? total : (b.total_quantity || 0),
         active_count: active,
         unclaimed_count: unclaimed,
       };
@@ -67,19 +72,37 @@ export const batchService = {
   },
 
   /**
-   * Obtiene las tarjetas de un lote específico (para vista de detalle o exportar CSV)
+   * Obtiene las tarjetas de un lote específico
    */
   async getCardsByBatchId(batchId: string): Promise<Card[]> {
     const { data, error } = await supabase
       .from('cards')
-      .select('*, profile:profiles(slug)')
+      .select('*, profiles(slug)')
       .eq('batch_id', batchId)
       .order('serial_number', { ascending: true });
 
     if (error) {
+      console.error('Error al cargar tarjetas:', error);
       throw new Error(`Error al cargar tarjetas del lote: ${error.message}`);
     }
 
-    return data as Card[];
+    return (data || []) as Card[];
   },
+
+  /**
+   * Obtiene el inventario global de todas las tarjetas
+   */
+  async getAllCards(): Promise<Card[]> {
+    const { data, error } = await supabase
+      .from('cards')
+      .select('*, batches(name, card_type), profiles(slug)')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error al cargar inventario general:', error);
+      throw new Error(`Error al cargar inventario general: ${error.message}`);
+    }
+
+    return (data || []) as Card[];
+  }
 };
