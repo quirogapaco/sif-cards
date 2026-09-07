@@ -2,7 +2,7 @@ export type UserRole = 'superadmin' | 'org_admin' | 'user';
 
 export type SubscriptionStatus = 'active' | 'grace_period' | 'expired' | 'suspended';
 
-export type CardStatus = 'unclaimed' | 'active' | 'inactive';
+export type CardStatus = 'inactive' | 'active' | 'blocked';
 
 export type CardPhysicalType = 
   | 'matte-black-gold' 
@@ -97,13 +97,25 @@ export interface Card {
   user?: User | null;
 }
 
+export type AnalyticsEventType =
+  | 'nfc_tap'
+  | 'profile_view'
+  | 'contact_download'
+  | 'direct_contact_click'
+  | 'social_link_click'
+  | 'profile_share'
+  | 'qr_scan'
+  | 'link_click';
+
 export interface AnalyticsEvent {
   id: string;
   profile_id: string | null;
-  event_type: 'nfc_tap' | 'qr_scan' | 'contact_download' | 'link_click' | string;
+  event_type: AnalyticsEventType | string;
   metadata: Record<string, unknown>;
   created_at: string;
 }
+
+export type AnalyticsEventInsert = Omit<AnalyticsEvent, 'id' | 'created_at'>;
 
 export type CardInsert = Omit<Card, 'id' | 'created_at' | 'serial_number'> & {
   id?: string;

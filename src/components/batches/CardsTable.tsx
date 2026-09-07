@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { DataTable, type ColumnDef } from '../ui/data-table/DataTable';
-import { Copy, CheckCheck, Link2, ShieldOff } from 'lucide-react';
+import { Copy, CheckCheck, Link2, ShieldOff, ExternalLink } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import type { Card, CardStatus } from '../../types/database';
 import { getCardFullUrl } from '../../utils/cardUtils';
@@ -13,21 +13,21 @@ type CardStatusFilter = 'all' | CardStatus;
 
 const STATUS_FILTER_OPTIONS: { value: CardStatusFilter; label: string }[] = [
   { value: 'all', label: 'Todos los estados' },
-  { value: 'unclaimed', label: 'Vírgenes' },
-  { value: 'active', label: 'Activas' },
   { value: 'inactive', label: 'Inactivas' },
+  { value: 'active', label: 'Activas' },
+  { value: 'blocked', label: 'Bloqueadas' },
 ];
 
-const STATUS_BADGE_MAP: Record<CardStatus, 'unclaimed' | 'active' | 'inactive'> = {
-  unclaimed: 'unclaimed',
-  active: 'active',
+const STATUS_BADGE_MAP: Record<CardStatus, 'inactive' | 'active' | 'blocked'> = {
   inactive: 'inactive',
+  active: 'active',
+  blocked: 'blocked',
 };
 
 const STATUS_LABEL: Record<CardStatus, string> = {
-  unclaimed: 'Virgen',
-  active: 'Activa',
   inactive: 'Inactiva',
+  active: 'Activa',
+  blocked: 'Bloqueada',
 };
 
 /** Hook para copiar al portapapeles con feedback visual */
@@ -130,12 +130,21 @@ export function CardsTable({ cards }: CardsTableProps) {
         id: 'profile',
         header: 'Titular / Perfil',
         accessorFn: (row) => row.profile?.slug ?? null,
-        cell: ({ getValue }) => {
+        cell: ({ row, getValue }) => {
           const slug = getValue() as string | null;
+          const card = row.original;
+          const targetUrl = slug ? `/p/${slug}` : (card.relative_path ?? `/t/${card.token}`);
           return slug ? (
-            <span className="font-mono text-[11px] font-semibold text-sif-text">
+            <a
+              href={targetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title={`Abrir perfil de @${slug}`}
+              className="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-sif-text hover:text-sif-gold hover:underline transition-colors"
+            >
               @{slug}
-            </span>
+              <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+            </a>
           ) : (
             <span className="text-sif-muted italic">Sin asignar</span>
           );
@@ -148,10 +157,23 @@ export function CardsTable({ cards }: CardsTableProps) {
         cell: ({ row }) => {
           const card = row.original;
           const fullUrl = getCardFullUrl(card.relative_path, card.token);
+          const profileUrl = card.profile?.slug ? `/p/${card.profile.slug}` : (card.relative_path ?? `/t/${card.token}`);
           const copyKey = `link-${card.id}`;
           const copied = copiedId === copyKey;
           return (
             <div className="flex items-center gap-1.5">
+              {/* Redirigirse al perfil / abrir enlace */}
+              <a
+                id={`view-profile-${card.id}`}
+                href={profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={card.profile?.slug ? `Ver perfil (@${card.profile.slug})` : 'Abrir enlace de la tarjeta'}
+                className="flex h-7 w-7 items-center justify-center rounded-lg border border-sif-border bg-sif-surface-subtle text-sif-muted transition-all hover:border-sif-gold/40 hover:text-sif-gold"
+              >
+                <ExternalLink className="h-3 w-3" />
+              </a>
+
               {/* Copiar enlace de activación */}
               <button
                 id={`copy-link-${card.id}`}

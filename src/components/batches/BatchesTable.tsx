@@ -3,7 +3,7 @@ import { DataTable, type ColumnDef } from '../ui/data-table/DataTable';
 import { Badge } from '../ui/Badge';
 import type { BatchSummary } from '../../services/batchService';
 import { batchService } from '../../services/batchService';
-import { exportBatchToCsv } from '../../utils/exportCsv';
+import { exportBatchToExcel } from '../../utils/exportExcel';
 import { Download, Filter } from 'lucide-react';
 
 interface BatchesTableProps {
@@ -30,13 +30,13 @@ function formatDate(iso: string) {
 export function BatchesTable({ batches, onFilterByBatch }: BatchesTableProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
-  const handleDownloadCsv = useCallback(async (batch: BatchSummary) => {
+  const handleDownloadExcel = useCallback(async (batch: BatchSummary) => {
     try {
       setDownloadingId(batch.id);
       const cards = await batchService.getCardsByBatchId(batch.id);
-      exportBatchToCsv(batch.name, batch.card_type, cards);
+      exportBatchToExcel(batch.name, batch.card_type, cards);
     } catch (err) {
-      console.error('Error al exportar CSV:', err);
+      console.error('Error al exportar Excel:', err);
     } finally {
       setDownloadingId(null);
     }
@@ -133,16 +133,16 @@ export function BatchesTable({ batches, onFilterByBatch }: BatchesTableProps) {
           const isLoading = downloadingId === batch.id;
           return (
             <div className="flex items-center gap-1.5">
-              {/* Descargar CSV */}
+              {/* Descargar Excel */}
               <button
                 id={`batch-download-${batch.id}`}
-                onClick={() => handleDownloadCsv(batch)}
+                onClick={() => handleDownloadExcel(batch)}
                 disabled={isLoading}
-                title="Descargar CSV para fabricante"
+                title="Descargar Excel para fabricante"
                 className="flex h-7 items-center gap-1.5 rounded-lg border border-sif-border bg-sif-surface-subtle px-2.5 text-[10px] font-semibold text-sif-muted transition-all hover:border-sif-gold/40 hover:text-sif-gold disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Download className="h-3 w-3" />
-                {isLoading ? 'Exportando...' : 'CSV'}
+                {isLoading ? 'Exportando...' : 'Excel'}
               </button>
 
               {/* Ver tarjetas de este lote */}
@@ -161,7 +161,7 @@ export function BatchesTable({ batches, onFilterByBatch }: BatchesTableProps) {
         },
       },
     ],
-    [downloadingId, handleDownloadCsv, onFilterByBatch]
+    [downloadingId, handleDownloadExcel, onFilterByBatch]
   );
 
   return (

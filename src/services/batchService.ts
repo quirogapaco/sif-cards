@@ -13,7 +13,7 @@ export interface CreateBatchDTO {
 export interface BatchSummary extends Batch {
   cards_count?: number;
   active_count?: number;
-  unclaimed_count?: number;
+  inactive_count?: number;
 }
 
 export const batchService = {
@@ -60,13 +60,13 @@ export const batchService = {
       const cardsList = Array.isArray(b.cards) ? b.cards : [];
       const total = cardsList.length;
       const active = cardsList.filter((c: any) => c.status === 'active').length;
-      const unclaimed = cardsList.filter((c: any) => c.status === 'unclaimed').length;
+      const inactive = cardsList.filter((c: any) => c.status === 'inactive').length;
 
       return {
         ...b,
         cards_count: total > 0 ? total : (b.total_quantity || 0),
         active_count: active,
-        unclaimed_count: unclaimed,
+        inactive_count: inactive,
       };
     });
   },
@@ -77,7 +77,7 @@ export const batchService = {
   async getCardsByBatchId(batchId: string): Promise<Card[]> {
     const { data, error } = await supabase
       .from('cards')
-      .select('*, profiles(slug)')
+      .select('*, profiles(slug), batch:batches(name, card_type)')
       .eq('batch_id', batchId)
       .order('serial_number', { ascending: true });
 
@@ -95,7 +95,7 @@ export const batchService = {
   async getAllCards(): Promise<Card[]> {
     const { data, error } = await supabase
       .from('cards')
-      .select('*, batches(name, card_type), profiles(slug)')
+      .select('*, profiles(slug), batch:batches(name, card_type)')
       .order('created_at', { ascending: false });
 
     if (error) {

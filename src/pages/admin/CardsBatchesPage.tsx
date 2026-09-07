@@ -58,10 +58,10 @@ export default function CardsBatchesPage() {
   /* ── KPIs derivados ── */
   const kpis = useMemo(() => {
     const total = allCards.length;
-    const unclaimed = allCards.filter((c) => c.status === 'unclaimed').length;
-    const active = allCards.filter((c) => c.status === 'active').length;
     const inactive = allCards.filter((c) => c.status === 'inactive').length;
-    return { total, unclaimed, active, inactive };
+    const active = allCards.filter((c) => c.status === 'active').length;
+    const blocked = allCards.filter((c) => c.status === 'blocked').length;
+    return { total, inactive, active, blocked };
   }, [allCards]);
 
   /* ── Tarjetas filtradas por lote (para sub-tab de inventario) ── */
@@ -166,10 +166,10 @@ export default function CardsBatchesPage() {
           accent="default"
         />
         <MetricCard
-          title="Vírgenes en Bodega"
-          value={kpis.unclaimed.toLocaleString('es-EC')}
+          title="Inactivas en Bodega"
+          value={kpis.inactive.toLocaleString('es-EC')}
           icon={Package2}
-          trend={kpis.total > 0 ? `${Math.round((kpis.unclaimed / kpis.total) * 100)}% del stock` : '—'}
+          trend={kpis.total > 0 ? `${Math.round((kpis.inactive / kpis.total) * 100)}% del stock` : '—'}
           accent="silver"
         />
         <MetricCard
@@ -180,10 +180,10 @@ export default function CardsBatchesPage() {
           accent="gold"
         />
         <MetricCard
-          title="Inactivas / Bloqueadas"
-          value={kpis.inactive.toLocaleString('es-EC')}
+          title="Bloqueadas"
+          value={kpis.blocked.toLocaleString('es-EC')}
           icon={WifiOff}
-          trend={kpis.inactive > 0 ? 'Requieren revisión' : 'Sin bloqueos'}
+          trend={kpis.blocked > 0 ? 'Requieren revisión' : 'Sin bloqueos'}
           accent="default"
         />
       </div>
