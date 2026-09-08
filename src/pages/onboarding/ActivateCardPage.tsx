@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { activationService } from '../../services/activationService';
-import ProfileForm, { type ProfileFormData } from '../../components/profile/ProfileForm';
+import ProfileForm, { type ProfileFormData } from '../../components/profile/ProfileForm/ProfileForm';
 import ProfileView from '../public/ProfileView';
 import AuthModal from '../../components/auth/AuthModal';
 import sifGold from '../../assets/sif_gold.png';
@@ -329,13 +329,13 @@ export default function ActivateCardPage() {
           <div className="relative z-10 max-w-2xl">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-sif-gold/30 bg-sif-gold/10 px-3 py-1 text-[11px] font-semibold text-sif-gold mb-3">
               <Sparkles className="h-3.5 w-3.5" />
-              <span>Experiencia de Alta Gama SiF</span>
+              <span>Bienvenido a SiF</span>
             </span>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-sif-text mb-2">
-              Bienvenido a la experiencia SiF. Personaliza y activa tu tarjeta inteligente.
+              Personaliza tu tarjeta inteligente!
             </h1>
             <p className="text-xs sm:text-sm text-sif-muted leading-relaxed">
-              Completa tu perfil profesional en vivo. Los cambios se verán reflejados al instante en la previsualización de tu tarjeta física.
+              Completa tu perfil. Puedes ver los cambios en tiempo real en la previsualización de tu tarjeta.
             </p>
           </div>
         </div>
