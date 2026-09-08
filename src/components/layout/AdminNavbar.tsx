@@ -3,6 +3,7 @@ import { Moon, Sun, ChevronRight, Home, Menu, LogIn, LogOut, User } from 'lucide
 import { useAppTheme } from '../../context/AppThemeContext';
 import { ADMIN_NAV_ITEMS } from '../../config/adminNav';
 import { supabase } from '../../lib/supabase';
+import { userService } from '../../services/userService';
 import { useState, useEffect, useCallback } from 'react';
 import type { User as SupabaseUser } from '@supabase/supabase-js';
 import AuthModal from '../auth/AuthModal';
@@ -33,12 +34,18 @@ export default function AdminNavbar({ onToggleSidebar }: AdminNavbarProps) {
   const checkSession = useCallback(async () => {
     const { data } = await supabase.auth.getUser();
     setAuthUser(data.user ?? null);
+    if (data.user) {
+      await userService.ensureUserRecord(data.user.id);
+    }
   }, []);
 
   useEffect(() => {
     checkSession();
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setAuthUser(session?.user ?? null);
+      if (session?.user) {
+        await userService.ensureUserRecord(session.user.id);
+      }
     });
     return () => listener.subscription.unsubscribe();
   }, [checkSession]);

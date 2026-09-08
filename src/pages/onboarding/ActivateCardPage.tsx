@@ -217,10 +217,7 @@ export default function ActivateCardPage() {
               Enlace de tu Perfil Público:
             </p>
             <p className="text-sm font-mono font-bold text-sif-gold truncate">
-              sif.link/t/{token}
-            </p>
-            <p className="text-[10px] text-sif-muted mt-1">
-              Slug corto: sif.link/p/{formData.slug}
+              {import.meta.env.VITE_APP_DOMAIN || 'https://sif.link'}/t/{token}
             </p>
           </div>
 

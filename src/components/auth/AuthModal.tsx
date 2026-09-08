@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
+import { userService } from '../../services/userService';
 import { useAppTheme } from '../../context/AppThemeContext';
 import sifGold from '../../assets/sif_gold.png';
 import sifSilver from '../../assets/sif_silver.png';
@@ -184,6 +185,12 @@ export default function AuthModal({
           },
         });
         if (error) throw error;
+
+        // Crear/asegurar el registro correspondiente en la tabla 'users'
+        if (data?.user) {
+          await userService.ensureUserRecord(data.user.id);
+        }
+
         if (data?.session) {
           if (onSuccess) {
             onSuccess();

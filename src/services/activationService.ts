@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { userService } from './userService';
 import type { Card, ProfileData } from '../types/database';
 
 export interface ActivationParams {
@@ -133,6 +134,9 @@ export const activationService = {
         return { success: false, error: 'Debes iniciar sesión para activar tu tarjeta.' };
       }
       const user = userData.user;
+
+      // Asegurar registro del usuario
+      await userService.ensureUserRecord(user.id);
 
       // 2. Verificar que la tarjeta existe y está inactiva
       const { card, error: cardError } = await this.getCardStatus(token);
