@@ -45,14 +45,12 @@ export default function ProfileBioSection({ bio, languages }: ProfileBioSectionP
       {/* Badges de idiomas */}
       {hasLanguages && (
         <div className={hasBio ? 'mt-6 pt-6 border-t' : ''} style={{ borderColor: 'var(--card-surface-border)' }}>
-          {hasBio && (
-            <p
-              className="text-[11px] font-semibold uppercase tracking-wider mb-3 font-card-body"
-              style={{ color: 'var(--card-text-muted)' }}
-            >
-              Idiomas
-            </p>
-          )}
+          <p
+            className="text-[11px] font-semibold uppercase tracking-wider mb-3 font-card-body"
+            style={{ color: 'var(--card-text-muted)' }}
+          >
+            Idiomas
+          </p>
           <div className="flex flex-wrap gap-2">
             {languages!.map((lang, idx) => (
               <span

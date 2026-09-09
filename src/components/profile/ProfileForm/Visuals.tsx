@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Palette, ChevronUp, ChevronDown, Check } from 'lucide-react';
+import { Palette, ChevronUp, ChevronDown, Check, Camera } from 'lucide-react';
 import { CARD_THEME_FAMILIES } from '../../../config/cardThemes';
 import { BANNER_PRESETS } from '../../../config/bannerPresets';
 import type { ProfileFormData } from './ProfileForm';
@@ -80,7 +80,7 @@ export default function Visuals({ formData, onChange, isOpen, onToggle }: Visual
           {/* Banner de Encabezado */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-medium text-sif-muted">Banner de Encabezado</label>
+              <label className="text-xs font-medium text-sif-muted">Banner de Perfil</label>
               <div className="flex items-center rounded-lg border border-sif-border bg-sif-surface-subtle p-0.5 text-xs">
                 <button
                   type="button"
@@ -91,7 +91,7 @@ export default function Visuals({ formData, onChange, isOpen, onToggle }: Visual
                       : 'text-sif-muted hover:text-sif-text'
                   }`}
                 >
-                  Catálogo SiF
+                  Predeterminado
                 </button>
                 <button
                   type="button"
@@ -109,6 +109,48 @@ export default function Visuals({ formData, onChange, isOpen, onToggle }: Visual
 
             {bannerTab === 'presets' ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-48 overflow-y-auto pr-1">
+                <label className={`group relative h-20 rounded-xl overflow-hidden cursor-pointer transition-all flex flex-col items-center justify-center ${
+                  formData.banner_url && !BANNER_PRESETS.some(p => p.url === formData.banner_url)
+                    ? 'border-2 border-sif-gold ring-2 ring-sif-gold/40'
+                    : 'border-2 border-dashed border-sif-border hover:border-sif-gold/50 bg-sif-surface-subtle'
+                }`}>
+                  {formData.banner_url && !BANNER_PRESETS.some(p => p.url === formData.banner_url) ? (
+                    <>
+                      <img src={formData.banner_url} alt="Custom banner" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-2 flex items-end">
+                        <span className="text-[10px] font-medium text-white truncate">
+                          Tu Foto
+                        </span>
+                      </div>
+                      <div className="absolute top-1.5 right-1.5 h-5 w-5 rounded-full bg-sif-gold text-black flex items-center justify-center">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </div>
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Camera className="h-5 w-5 text-white drop-shadow-md" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <Camera className="h-5 w-5 text-sif-muted group-hover:text-sif-gold mb-1 transition-colors" />
+                      <span className="text-[10px] font-medium text-sif-muted group-hover:text-sif-gold transition-colors">Subir Foto</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          onChange({ ...formData, banner_url: reader.result as string });
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                  />
+                </label>
                 {BANNER_PRESETS.map((preset) => {
                   const isSelected = formData.banner_url === preset.url;
                   return (

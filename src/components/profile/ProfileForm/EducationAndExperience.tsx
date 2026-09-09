@@ -98,22 +98,29 @@ export default function EducationAndExperience({ formData, onChange, isOpen, onT
             {formData.education.map((edu, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-sif-border bg-sif-surface-subtle p-4 flex flex-col gap-2.5 relative"
+                className="rounded-xl border border-sif-border bg-sif-surface-subtle p-4 flex flex-col gap-2.5"
               >
-                <button
-                  type="button"
-                  onClick={() => removeEducation(idx)}
-                  className="absolute top-3 right-3 text-sif-muted hover:text-red-400"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {/* Header de la tarjeta */}
+                <div className="flex items-center justify-between border-b border-sif-border pb-2 mb-1">
+                  <span className="text-[11px] font-semibold text-sif-muted uppercase tracking-wider">
+                    Título {idx + 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeEducation(idx)}
+                    className="text-sif-muted transition-colors hover:text-red-400 p-1 rounded-md hover:bg-red-500/10"
+                    title="Eliminar título"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
 
                 <input
                   type="text"
                   value={edu.title}
                   onChange={(e) => updateEducation(idx, 'title', e.target.value)}
                   placeholder="Título o Maestría (ej. Ingeniería en Sistemas)"
-                  className="rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
+                  className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
                 />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -156,22 +163,29 @@ export default function EducationAndExperience({ formData, onChange, isOpen, onT
             {formData.businesses.map((biz, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-sif-border bg-sif-surface-subtle p-4 flex flex-col gap-2.5 relative"
+                className="rounded-xl border border-sif-border bg-sif-surface-subtle p-4 flex flex-col gap-2.5"
               >
-                <button
-                  type="button"
-                  onClick={() => removeBusiness(idx)}
-                  className="absolute top-3 right-3 text-sif-muted hover:text-red-400"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {/* Header de la tarjeta */}
+                <div className="flex items-center justify-between border-b border-sif-border pb-2 mb-1">
+                  <span className="text-[11px] font-semibold text-sif-muted uppercase tracking-wider">
+                    Trayectoria {idx + 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => removeBusiness(idx)}
+                    className="text-sif-muted transition-colors hover:text-red-400 p-1 rounded-md hover:bg-red-500/10"
+                    title="Eliminar trayectoria"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
 
                 <input
                   type="text"
                   value={biz.name}
                   onChange={(e) => updateBusiness(idx, 'name', e.target.value)}
                   placeholder="Nombre del proyecto / marca"
-                  className="rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
+                  className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
                 />
 
                 <input

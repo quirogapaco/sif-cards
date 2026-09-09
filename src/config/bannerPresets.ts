@@ -27,12 +27,7 @@ export const BANNER_PRESETS: BannerPreset[] = [
     family: 'emerald',
     url: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1200&auto=format&fit=crop',
   },
-  {
-    id: 'emerald-mesh-2',
-    name: 'Bosque Cuántico',
-    family: 'emerald',
-    url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
-  },
+
 
   // ── SAPPHIRE ──
   {
@@ -41,12 +36,7 @@ export const BANNER_PRESETS: BannerPreset[] = [
     family: 'sapphire',
     url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1200&auto=format&fit=crop',
   },
-  {
-    id: 'sapphire-mesh-2',
-    name: 'Cobalto Galáctico',
-    family: 'sapphire',
-    url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
-  },
+
 
   // ── WINE ──
   {
@@ -62,31 +52,4 @@ export const BANNER_PRESETS: BannerPreset[] = [
     url: 'https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1200&auto=format&fit=crop',
   },
 
-  // ── MONOCHROME ──
-  {
-    id: 'mono-mesh-1',
-    name: 'Carbón & Titanio',
-    family: 'monochrome',
-    url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1200&auto=format&fit=crop',
-  },
-  {
-    id: 'mono-mesh-2',
-    name: 'Grafito Minimal',
-    family: 'monochrome',
-    url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
-  },
-
-  // ── PURPLE ──
-  {
-    id: 'purple-mesh-1',
-    name: 'Onda Neón Lavanda',
-    family: 'purple',
-    url: 'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1200&auto=format&fit=crop',
-  },
-  {
-    id: 'purple-mesh-2',
-    name: 'Violeta Cósmico',
-    family: 'purple',
-    url: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1200&auto=format&fit=crop',
-  },
 ];

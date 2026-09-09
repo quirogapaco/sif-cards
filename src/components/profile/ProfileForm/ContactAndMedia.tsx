@@ -17,15 +17,21 @@ const SUPPORTED_SOCIAL_PLATFORMS = [
   { id: 'github', label: 'GitHub' },
   { id: 'youtube', label: 'YouTube' },
   { id: 'website', label: 'Sitio Web' },
+  { id: 'other', label: 'Otro' },
 ];
 
 export default function ContactAndMedia({ formData, onChange, isOpen, onToggle }: ContactAndMediaProps) {
   const addSocialLink = () => {
+    const usedPlatforms = formData.social_links.map(l => l.platform);
+    const availablePlatform = SUPPORTED_SOCIAL_PLATFORMS.find(
+      p => !usedPlatforms.includes(p.id) || p.id === 'other' || p.id === 'website'
+    )?.id || 'other';
+
     onChange({
       ...formData,
       social_links: [
         ...formData.social_links,
-        { platform: 'linkedin', url: '' },
+        { platform: availablePlatform, url: '' },
       ],
     });
   };
@@ -55,8 +61,8 @@ export default function ContactAndMedia({ formData, onChange, isOpen, onToggle }
             <Share2 className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-sif-text">3. Contacto Secundario y Redes</h3>
-            <p className="text-xs text-sif-muted">Teléfono adicional, ciudad y perfiles sociales</p>
+            <h3 className="text-sm font-semibold text-sif-text">3. Contacto Secundario y Redes Sociales</h3>
+            <p className="text-xs text-sif-muted">Información adicional de contacto</p>
           </div>
         </div>
         {isOpen ? <ChevronUp className="h-4 w-4 text-sif-muted" /> : <ChevronDown className="h-4 w-4 text-sif-muted" />}
@@ -79,7 +85,7 @@ export default function ContactAndMedia({ formData, onChange, isOpen, onToggle }
                     },
                   })
                 }
-                placeholder="+593 2 234 5678"
+                placeholder="2 234 5678"
                 className="rounded-xl border border-sif-border bg-sif-surface-subtle px-4 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold"
               />
             </div>
@@ -125,13 +131,23 @@ export default function ContactAndMedia({ formData, onChange, isOpen, onToggle }
                   <select
                     value={link.platform}
                     onChange={(e) => updateSocialLink(idx, 'platform', e.target.value)}
-                    className="bg-transparent text-xs font-medium text-sif-text outline-none cursor-pointer"
+                    className="bg-transparent text-xs font-medium text-sif-text outline-none cursor-pointer max-w-[120px]"
                   >
-                    {SUPPORTED_SOCIAL_PLATFORMS.map((plat) => (
-                      <option key={plat.id} value={plat.id} className="bg-sif-surface text-sif-text">
-                        {plat.label}
-                      </option>
-                    ))}
+                    {SUPPORTED_SOCIAL_PLATFORMS.map((plat) => {
+                      const isUsed = formData.social_links.some((l, i) => i !== idx && l.platform === plat.id);
+                      const isDisabled = isUsed && plat.id !== 'other' && plat.id !== 'website';
+
+                      return (
+                        <option 
+                          key={plat.id} 
+                          value={plat.id} 
+                          className="bg-sif-surface text-sif-text"
+                          disabled={isDisabled}
+                        >
+                          {plat.label}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
 

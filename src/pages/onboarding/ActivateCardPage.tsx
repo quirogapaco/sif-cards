@@ -356,7 +356,7 @@ export default function ActivateCardPage() {
               onChange={setFormData}
               onSubmit={handleSubmit}
               loading={submitLoading}
-              submitButtonText="Activar mi tarjeta inteligente"
+              submitButtonText="Guardar Mi Perfil"
             />
           </div>
 
