@@ -73,11 +73,8 @@ export default function PersonalInfo({ formData, onChange, isOpen, onToggle }: P
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => {
-                          onChange({ ...formData, avatar_url: reader.result as string });
-                        };
-                        reader.readAsDataURL(file);
+                        const tempUrl = URL.createObjectURL(file);
+                        onChange({ ...formData, avatar_url: tempUrl, avatar_file: file });
                       }
                     }}
                   />

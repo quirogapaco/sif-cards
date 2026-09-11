@@ -12,7 +12,9 @@ export interface ProfileFormData {
   company: string;
   slug: string;
   avatar_url: string;
+  avatar_file?: File;
   banner_url: string;
+  banner_file?: File;
   theme_palette: string;
   direct_contacts: {
     whatsapp: string;

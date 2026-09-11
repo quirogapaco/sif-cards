@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { activationService } from '../../services/activationService';
+import { storageService } from '../../services/storageService';
 import ProfileForm, { type ProfileFormData } from '../../components/profile/ProfileForm/ProfileForm';
 import ProfileView from '../public/ProfileView';
 import AuthModal from '../../components/auth/AuthModal';
@@ -41,7 +42,7 @@ export default function ActivateCardPage() {
     company: '',
     slug: '',
     avatar_url: '',
-    banner_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop',
+    banner_url: '',
     theme_palette: 'emerald-dark',
     direct_contacts: {
       whatsapp: '',
@@ -136,21 +137,56 @@ export default function ActivateCardPage() {
     setSubmitLoading(true);
     setErrorMsg(null);
 
-    const result = await activationService.activateCard({
-      token,
-      slug: formData.slug,
-      themePalette: formData.theme_palette,
-      profileData: formData,
-    });
+    try {
+      let finalAvatarUrl = formData.avatar_url;
+      let finalBannerUrl = formData.banner_url;
 
-    if (!result.success) {
-      setErrorMsg(result.error || 'Ocurrió un error al activar tu tarjeta.');
+      // Subir Avatar si hay archivo nuevo
+      if (formData.avatar_file) {
+        const avatarBucket = import.meta.env.VITE_SUPABASE_AVATARS_BUCKET || 'avatar';
+        const ext = formData.avatar_file.name.split('.').pop() || 'jpg';
+        const path = `${token}-avatar-${Date.now()}.${ext}`;
+        const uploadedUrl = await storageService.uploadProfileImage(avatarBucket, path, formData.avatar_file);
+        if (uploadedUrl) finalAvatarUrl = uploadedUrl;
+      }
+
+      // Subir Banner si hay archivo nuevo
+      if (formData.banner_file) {
+        const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET || 'banner';
+        const ext = formData.banner_file.name.split('.').pop() || 'jpg';
+        const path = `${token}-banner-${Date.now()}.${ext}`;
+        const uploadedUrl = await storageService.uploadProfileImage(bannerBucket, path, formData.banner_file);
+        if (uploadedUrl) finalBannerUrl = uploadedUrl;
+      }
+
+      // Clonar los datos y quitar los objetos File para no ensuciar la DB
+      const finalProfileData = {
+        ...formData,
+        avatar_url: finalAvatarUrl,
+        banner_url: finalBannerUrl,
+      };
+      delete finalProfileData.avatar_file;
+      delete finalProfileData.banner_file;
+
+      const result = await activationService.activateCard({
+        token,
+        slug: finalProfileData.slug,
+        themePalette: finalProfileData.theme_palette,
+        profileData: finalProfileData,
+      });
+
+      if (!result.success) {
+        setErrorMsg(result.error || 'Ocurrió un error al activar tu tarjeta.');
+        setSubmitLoading(false);
+        return;
+      }
+
       setSubmitLoading(false);
-      return;
+      setIsActivatedSuccess(true);
+    } catch (err) {
+      setErrorMsg('Error inesperado durante la activación.');
+      setSubmitLoading(false);
     }
-
-    setSubmitLoading(false);
-    setIsActivatedSuccess(true);
   };
 
   // Construcción del objeto Profile ficticio para la previsualización
