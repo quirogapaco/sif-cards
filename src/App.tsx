@@ -43,7 +43,7 @@ export default function App() {
 
           {/* ── Rutas Públicas de Resolución y Onboarding ── */}
           <Route path="/t/:token" element={<CardResolver />} />
-          <Route path="/p/:slug" element={<CardResolver />} />
+          <Route path="/p/:slug/:token" element={<CardResolver />} />
           <Route path="/activate/:token" element={<ActivateCardPage />} />
 
           {/* ── Layout persistente del panel Admin ── */}

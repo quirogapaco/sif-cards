@@ -57,18 +57,16 @@ export const cardResolverService = {
   },
 
   /**
-   * Consulta directa a la tabla profiles buscando por slug (/p/:slug)
+   * Consulta segura a la tabla profiles buscando por slug y validando el token de la tarjeta
    */
-  async getProfileBySlug(slug: string): Promise<ProfileResolveResult> {
+  async getProfileSecure(slug: string, token: string): Promise<ProfileResolveResult> {
     try {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('slug', slug)
+        .rpc('get_profile_secure', { p_slug: slug, p_token: token })
         .maybeSingle();
 
       if (error) {
-        console.error('Error en Supabase al resolver perfil por slug:', error);
+        console.error('Error en Supabase al resolver perfil seguro:', error);
         return { profile: null, error: error.message };
       }
 
@@ -78,7 +76,7 @@ export const cardResolverService = {
 
       return { profile: data as Profile };
     } catch (err: any) {
-      console.error('Excepción en cardResolverService.getProfileBySlug:', err);
+      console.error('Excepción en cardResolverService.getProfileSecure:', err);
       return { profile: null, error: err?.message || 'Error de conexión.' };
     }
   },

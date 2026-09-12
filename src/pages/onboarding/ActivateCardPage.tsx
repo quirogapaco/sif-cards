@@ -143,7 +143,7 @@ export default function ActivateCardPage() {
 
       // Subir Avatar si hay archivo nuevo
       if (formData.avatar_file) {
-        const avatarBucket = import.meta.env.VITE_SUPABASE_AVATARS_BUCKET || 'avatar';
+        const avatarBucket = import.meta.env.VITE_SUPABASE_AVATARS_BUCKET;
         const ext = formData.avatar_file.name.split('.').pop() || 'jpg';
         const path = `${token}-avatar-${Date.now()}.${ext}`;
         const uploadedUrl = await storageService.uploadProfileImage(avatarBucket, path, formData.avatar_file);
@@ -152,7 +152,7 @@ export default function ActivateCardPage() {
 
       // Subir Banner si hay archivo nuevo
       if (formData.banner_file) {
-        const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET || 'banner';
+        const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET ;
         const ext = formData.banner_file.name.split('.').pop() || 'jpg';
         const path = `${token}-banner-${Date.now()}.${ext}`;
         const uploadedUrl = await storageService.uploadProfileImage(bannerBucket, path, formData.banner_file);

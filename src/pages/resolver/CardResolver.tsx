@@ -56,14 +56,21 @@ export default function CardResolver() {
       setProfile(null);
       setInactiveCard(null);
 
-      // ── Caso 1: Acceso directo por Slug (/p/:slug) ──
+      // ── Caso 1: Acceso seguro por Slug y Token (/p/:slug/:token) ──
       if (slug) {
-        const result = await cardResolverService.getProfileBySlug(slug);
+        if (!token) {
+          setErrorType('404');
+          setErrorMessage('Acceso denegado. Se requiere escanear la tarjeta física.');
+          setLoading(false);
+          return;
+        }
+
+        const result = await cardResolverService.getProfileSecure(slug, token);
         if (!isMounted) return;
 
         if (!result.profile) {
           setErrorType('404');
-          setErrorMessage('Tarjeta no encontrada o enlace no válido.');
+          setErrorMessage('Tarjeta no encontrada o acceso denegado.');
         } else {
           const p = result.profile;
           if (
@@ -75,6 +82,8 @@ export default function CardResolver() {
               'Membresía anual vencida. Este perfil se encuentra temporalmente suspendido hasta su renovación.'
             );
           } else {
+            setIsNfcSource(false); // Acceso web directo
+            setResolvedToken(token);
             setProfile(p);
           }
         }
@@ -83,7 +92,7 @@ export default function CardResolver() {
       }
 
       // ── Caso 2: Resolución por Token (/t/:token o /:prefix/:token) ──
-      if (token) {
+      if (token && !slug) {
         const result = await cardResolverService.getCardByToken(token, prefix);
         if (!isMounted) return;
 
@@ -134,6 +143,9 @@ export default function CardResolver() {
                 'Membresía anual vencida. Este perfil se encuentra temporalmente suspendido hasta su renovación.'
               );
             } else {
+              // Actualiza la URL visible a la versión segura /p/:slug/:token
+              window.history.replaceState(null, '', `/p/${cardProfile.slug}/${token}`);
+              
               setIsNfcSource(true);
               setResolvedToken(token);
               setProfile(cardProfile);
