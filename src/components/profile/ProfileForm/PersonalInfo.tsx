@@ -8,9 +8,10 @@ interface PersonalInfoProps {
   onChange: (updated: ProfileFormData) => void;
   isOpen: boolean;
   onToggle: () => void;
+  fieldErrors?: { [key: string]: boolean };
 }
 
-export default function PersonalInfo({ formData, onChange, isOpen, onToggle }: PersonalInfoProps) {
+export default function PersonalInfo({ formData, onChange, isOpen, onToggle, fieldErrors = {} }: PersonalInfoProps) {
   const handleNameChange = (name: string) => {
     const slugified = name
       .toLowerCase()
@@ -137,7 +138,9 @@ export default function PersonalInfo({ formData, onChange, isOpen, onToggle }: P
             <label className="text-xs font-medium text-sif-muted">
               Enlace Personalizado <span className="text-sif-gold">*</span>
             </label>
-            <div className="flex items-center rounded-xl border border-sif-border bg-sif-surface-subtle px-4 py-2.5 text-sm">
+            <div className={`flex items-center rounded-xl border bg-sif-surface-subtle px-4 py-2.5 text-sm transition-colors ${
+              fieldErrors.slug ? 'border-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.2)]' : 'border-sif-border focus-within:border-sif-gold'
+            }`}>
               <span className="text-sif-muted select-none">sif.link/p/</span>
               <input
                 type="text"

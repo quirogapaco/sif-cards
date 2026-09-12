@@ -35,6 +35,7 @@ export interface ProfileFormProps {
   onSubmit: (e: React.FormEvent) => void;
   loading?: boolean;
   submitButtonText?: string;
+  fieldErrors?: { [key: string]: boolean };
 }
 
 export default function ProfileForm({
@@ -43,6 +44,7 @@ export default function ProfileForm({
   onSubmit,
   loading = false,
   submitButtonText = 'Activar mi tarjeta',
+  fieldErrors = {},
 }: ProfileFormProps) {
   // Secciones del acordeón
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
@@ -64,6 +66,7 @@ export default function ProfileForm({
         onChange={onChange}
         isOpen={openSections.section1}
         onToggle={() => toggleSection('section1')}
+        fieldErrors={fieldErrors}
       />
       
       <Visuals

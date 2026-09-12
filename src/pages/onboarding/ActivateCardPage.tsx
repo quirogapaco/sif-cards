@@ -28,6 +28,7 @@ export default function ActivateCardPage() {
   const [initLoading, setInitLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: boolean }>({});
   const [cardData, setCardData] = useState<Card | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isActivatedSuccess, setIsActivatedSuccess] = useState(false);
@@ -59,6 +60,13 @@ export default function ActivateCardPage() {
     education: [],
     businesses: [],
   });
+
+  // Auto-scroll al mostrar error
+  useEffect(() => {
+    if (errorMsg) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [errorMsg]);
 
   // ── 1. Inicialización y Validación de Sesión / Tarjeta ──
   useEffect(() => {
@@ -138,24 +146,44 @@ export default function ActivateCardPage() {
     setErrorMsg(null);
 
     try {
+      // --- 1. Pre-validaciones antes de subir archivos ---
+      const formattedSlug = formData.slug.toLowerCase().trim().replace(/[^a-z0-9-]/g, '');
+      const isAvailable = await activationService.isSlugAvailable(formattedSlug);
+      if (!isAvailable) {
+        setErrorMsg(`El enlace personalizado "sif.link/p/${formattedSlug}" ya está en uso. Por favor elige otro.`);
+        setFieldErrors({ slug: true });
+        setSubmitLoading(false);
+        return;
+      }
+
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) {
+        setErrorMsg('Debes iniciar sesión para activar tu tarjeta.');
+        setSubmitLoading(false);
+        return;
+      }
+      // --------------------------------------------------
+
       let finalAvatarUrl = formData.avatar_url;
       let finalBannerUrl = formData.banner_url;
+      let uploadedAvatarPath = '';
+      let uploadedBannerPath = '';
 
       // Subir Avatar si hay archivo nuevo
       if (formData.avatar_file) {
         const avatarBucket = import.meta.env.VITE_SUPABASE_AVATARS_BUCKET;
         const ext = formData.avatar_file.name.split('.').pop() || 'jpg';
-        const path = `${token}-avatar-${Date.now()}.${ext}`;
-        const uploadedUrl = await storageService.uploadProfileImage(avatarBucket, path, formData.avatar_file);
+        uploadedAvatarPath = `${token}-avatar-${Date.now()}.${ext}`;
+        const uploadedUrl = await storageService.uploadProfileImage(avatarBucket, uploadedAvatarPath, formData.avatar_file);
         if (uploadedUrl) finalAvatarUrl = uploadedUrl;
       }
 
       // Subir Banner si hay archivo nuevo
       if (formData.banner_file) {
-        const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET ;
+        const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET;
         const ext = formData.banner_file.name.split('.').pop() || 'jpg';
-        const path = `${token}-banner-${Date.now()}.${ext}`;
-        const uploadedUrl = await storageService.uploadProfileImage(bannerBucket, path, formData.banner_file);
+        uploadedBannerPath = `${token}-banner-${Date.now()}.${ext}`;
+        const uploadedUrl = await storageService.uploadProfileImage(bannerBucket, uploadedBannerPath, formData.banner_file);
         if (uploadedUrl) finalBannerUrl = uploadedUrl;
       }
 
@@ -176,6 +204,13 @@ export default function ActivateCardPage() {
       });
 
       if (!result.success) {
+        // Rollback: Eliminar imágenes si la activación falla en DB
+        if (uploadedAvatarPath) {
+          await storageService.removeImage(import.meta.env.VITE_SUPABASE_AVATARS_BUCKET, uploadedAvatarPath);
+        }
+        if (uploadedBannerPath) {
+          await storageService.removeImage(import.meta.env.VITE_SUPABASE_BANNERS_BUCKET, uploadedBannerPath);
+        }
         setErrorMsg(result.error || 'Ocurrió un error al activar tu tarjeta.');
         setSubmitLoading(false);
         return;
@@ -340,13 +375,17 @@ export default function ActivateCardPage() {
       {/* ── ALERTA DE ERROR GENERAL ── */}
       {errorMsg && (
         <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-8">
-          <div className="flex items-center justify-between rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs text-red-300">
-            <span>{errorMsg}</span>
+          <div className="flex items-center justify-between gap-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs text-red-300 shadow-sm">
+            <span className="flex-1">{errorMsg}</span>
             <button
-              onClick={() => setErrorMsg(null)}
-              className="font-bold text-red-400 hover:underline"
+              type="button"
+              onClick={() => {
+                setErrorMsg(null);
+                document.getElementById('profile-form-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="flex-shrink-0 font-bold text-red-400 hover:text-red-300 hover:underline px-3 py-1 bg-red-500/10 rounded-full transition-colors"
             >
-              Cerrar
+              Ir &rarr;
             </button>
           </div>
         </div>
@@ -383,16 +422,24 @@ export default function ActivateCardPage() {
           
           {/* COLUMNA IZQUIERDA: Formulario en Acordeón */}
           <div
+            id="profile-form-container"
             className={`lg:col-span-6 xl:col-span-7 ${
               mobileTab === 'preview' ? 'hidden lg:block' : 'block'
             }`}
           >
             <ProfileForm
               formData={formData}
-              onChange={setFormData}
+              onChange={(updated) => {
+                setFormData(updated);
+                if (Object.keys(fieldErrors).length > 0) {
+                  setFieldErrors({});
+                  setErrorMsg(null);
+                }
+              }}
               onSubmit={handleSubmit}
               loading={submitLoading}
               submitButtonText="Guardar Mi Perfil"
+              fieldErrors={fieldErrors}
             />
           </div>
 

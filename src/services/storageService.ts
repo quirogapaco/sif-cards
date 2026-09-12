@@ -29,4 +29,21 @@ export const storageService = {
       return null;
     }
   },
+
+  /**
+   * Elimina una imagen del storage de Supabase.
+   */
+  async removeImage(bucketName: string, path: string): Promise<boolean> {
+    try {
+      const { error } = await supabase.storage.from(bucketName).remove([path]);
+      if (error) {
+        console.error(`Error removing image from ${bucketName}:`, error.message);
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.error('Unexpected error during image removal:', err);
+      return false;
+    }
+  },
 };
