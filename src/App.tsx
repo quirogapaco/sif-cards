@@ -5,6 +5,9 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoadingFallback from './components/ui/LoadingFallback';
 
+// ── Landing Page (Pública) ──────────────────────────────────────────────────
+const LandingPage = lazy(() => import('./pages/landing/LandingPage'));
+
 // ── Páginas de Resolución y Onboarding ─────────────────────────────────────
 const CardResolver = lazy(() => import('./pages/resolver/CardResolver'));
 const ActivateCardPage = lazy(() => import('./pages/onboarding/ActivateCardPage'));
@@ -21,24 +24,6 @@ const RenewalsPage = lazy(() => import('./pages/admin/RenewalsPage'));
 const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 
-/**
- * Raíz de la aplicación SiF con React Router.
- *
- * Árbol de rutas:
- *   /                        → redirect → /admin/dashboard
- *   /t/:token                → Resolución estándar de chip NFC / QR físico
- *   /p/:slug                 → Acceso público directo por slug de perfil
- *   /activate/:token         → Activación y onboarding de tarjeta virgen
- *   /admin                   → AdminLayout (Sidebar + Navbar persistentes)
- *     /admin/dashboard       → Dashboard Global (métricas)
- *     /admin/cards           → Lotes & Tarjetas NFC
- *     /admin/users           → Clientes & Cuentas
- *     /admin/organizations   → Organizaciones B2B
- *     /admin/renewals        → Finanzas & Renovaciones
- *     /admin/settings        → Configuración Global
- *     /admin/prueba          → Prueba de Tarjetas (previsualización de temas)
- *   /:prefix/:token          → Ruta corporativa con prefijo de lote (B2B, e.g. /segurossuarez/a7x9q2)
- */
 export default function App() {
   return (
     <AuthProvider>
@@ -46,8 +31,8 @@ export default function App() {
         <BrowserRouter>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
-              {/* Redirect raíz → dashboard */}
-              <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+              {/* ── Ruta raíz: Landing Page Oficial ── */}
+              <Route path="/" element={<LandingPage />} />
 
               {/* ── Rutas Públicas de Resolución y Onboarding ── */}
               <Route path="/t/:token" element={<CardResolver />} />
@@ -73,7 +58,6 @@ export default function App() {
                 </Route>
 
                 {/* ── Pestaña Prueba: previsualización de temas de tarjeta ── */}
-                {/* Accesible para usuarios (y admins) */}
                 <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
                   <Route path="prueba" element={<DashboardPage />} />
                 </Route>
@@ -81,6 +65,9 @@ export default function App() {
 
               {/* ── Ruta corporativa con prefijo de lote (B2B) ── */}
               <Route path="/:prefix/:token" element={<CardResolver />} />
+
+              {/* ── Fallback 404: redirige a la Landing ── */}
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>
         </BrowserRouter>

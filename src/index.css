@@ -5,57 +5,64 @@
    @theme inline — Dos Scopes Semánticos Independientes
    ======================================================== */
 @theme inline {
-  /* ── Scope 1: Plataforma SiF (App Shell / Dashboard) ── */
-  --color-sif-bg:             var(--sif-bg);
-  --color-sif-surface:        var(--sif-surface);
+  /* ── Scope 1: Plataforma SIF (App Shell / Dashboard) ── */
+  --color-sif-bg: var(--sif-bg);
+  --color-sif-surface: var(--sif-surface);
   --color-sif-surface-subtle: var(--sif-surface-subtle);
-  --color-sif-border:         var(--sif-border);
-  --color-sif-text:           var(--sif-text);
-  --color-sif-muted:          var(--sif-muted);
-  --color-sif-gold:           var(--sif-gold);
-  --color-sif-silver:         var(--sif-silver);
+  --color-sif-border: var(--sif-border);
+  --color-sif-text: var(--sif-text);
+  --color-sif-muted: var(--sif-muted);
+  --color-sif-gold: var(--sif-gold);
+  --color-sif-silver: var(--sif-silver);
 
   /* ── Scope 2: Perfil / Tarjeta (Aislado en [data-card-theme]) ── */
-  --color-card-primary:       var(--card-primary);
-  --color-card-primary-fg:    var(--card-primary-fg);
-  --color-card-secondary:     var(--card-secondary);
-  --color-card-surface:       var(--card-surface);
-  --color-card-bg:            var(--card-surface-card);
-  --color-card-border:        var(--card-surface-border);
-  --color-card-text:          var(--card-text-main);
-  --color-card-muted:         var(--card-text-muted);
+  --color-card-primary: var(--card-primary);
+  --color-card-primary-fg: var(--card-primary-fg);
+  --color-card-secondary: var(--card-secondary);
+  --color-card-surface: var(--card-surface);
+  --color-card-bg: var(--card-surface-card);
+  --color-card-border: var(--card-surface-border);
+  --color-card-text: var(--card-text-main);
+  --color-card-muted: var(--card-text-muted);
 
-  --font-card-headline:       var(--card-font-headline);
-  --font-card-body:           var(--card-font-body);
+  --font-card-headline: var(--card-font-headline);
+  --font-card-body: var(--card-font-body);
 }
 
 /* ========================================================
    1. TEMA GLOBAL PLATAFORMA SIF (App Shell)
-   Inspirado en tarjetas físicas SiF: Mate puro + Metales nobles
+   Inspirado en tarjetas físicas SIF: Mate puro + Metales nobles
    ======================================================== */
 :root,
 [data-app-theme="dark"] {
   color-scheme: dark;
-  --sif-bg:             #09090b;           /* Negro mate carbón */
-  --sif-surface:        #121215;           /* Panel oscuro */
+  --sif-bg: #09090b;
+  /* Negro mate carbón */
+  --sif-surface: #121215;
+  /* Panel oscuro */
   --sif-surface-subtle: #1c1c21;
-  --sif-border:         rgba(255, 255, 255, 0.08);
-  --sif-text:           #EBF1F9;           /* Blanco tiza */
-  --sif-muted:          #94A3B8;
-  --sif-gold:           #ddb225;           /* Foil oro tarjetas físicas */
-  --sif-silver:         #E2E8F0;           /* Foil plata */
+  --sif-border: rgba(255, 255, 255, 0.08);
+  --sif-text: #EBF1F9;
+  /* Blanco tiza */
+  --sif-muted: #94A3B8;
+  --sif-gold: #ddb225;
+  /* Foil oro tarjetas físicas */
+  --sif-silver: #E2E8F0;
+  /* Foil plata */
 }
 
 [data-app-theme="light"] {
   color-scheme: light;
-  --sif-bg:             #f8fafc;           /* Blanco mate marfil */
-  --sif-surface:        #ffffff;
+  --sif-bg: #f8fafc;
+  /* Blanco mate marfil */
+  --sif-surface: #ffffff;
   --sif-surface-subtle: #f1f5f9;
-  --sif-border:         rgba(0, 0, 0, 0.08);
-  --sif-text:           #09090b;           /* Negro ónix */
-  --sif-muted:          #64748b;
-  --sif-gold:           #B48A1B;
-  --sif-silver:         #475569;
+  --sif-border: rgba(0, 0, 0, 0.08);
+  --sif-text: #09090b;
+  /* Negro ónix */
+  --sif-muted: #64748b;
+  --sif-gold: #B48A1B;
+  --sif-silver: #475569;
 }
 
 /* ========================================================
@@ -65,162 +72,168 @@
 
 /* ── GOLD ── */
 [data-card-theme="gold-dark"] {
-  --card-primary:       #F59E0B;
-  --card-primary-fg:    #000000;
-  --card-secondary:     #0F172A;
-  --card-surface:       #0B1120;
-  --card-surface-card:  rgba(15, 23, 42, 0.75);
-  --card-surface-border:rgba(245, 158, 11, 0.25);
-  --card-text-main:     #FFFFFF;
-  --card-text-muted:    #94A3B8;
+  --card-primary: #F59E0B;
+  --card-primary-fg: #000000;
+  --card-secondary: #0F172A;
+  --card-surface: #0B1120;
+  --card-surface-card: rgba(15, 23, 42, 0.75);
+  --card-surface-border: rgba(245, 158, 11, 0.25);
+  --card-text-main: #FFFFFF;
+  --card-text-muted: #94A3B8;
   --card-font-headline: 'Inter', sans-serif;
-  --card-font-body:     'Inter', sans-serif;
+  --card-font-body: 'Inter', sans-serif;
 }
+
 [data-card-theme="gold-light"] {
-  --card-primary:       #B45309;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #FEF3C7;
-  --card-surface:       #FFFDF5;
-  --card-surface-card:  rgba(255, 255, 255, 0.9);
-  --card-surface-border:rgba(180, 83, 9, 0.25);
-  --card-text-main:     #451A03;
-  --card-text-muted:    #92400E;
+  --card-primary: #B45309;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #FEF3C7;
+  --card-surface: #FFFDF5;
+  --card-surface-card: rgba(255, 255, 255, 0.9);
+  --card-surface-border: rgba(180, 83, 9, 0.25);
+  --card-text-main: #451A03;
+  --card-text-muted: #92400E;
   --card-font-headline: 'Inter', sans-serif;
-  --card-font-body:     'Inter', sans-serif;
+  --card-font-body: 'Inter', sans-serif;
 }
 
 /* ── PURPLE ── */
 [data-card-theme="purple-dark"] {
-  --card-primary:       #A855F7;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #3B0764;
-  --card-surface:       #0E0720;
-  --card-surface-card:  rgba(28, 15, 58, 0.75);
-  --card-surface-border:rgba(168, 85, 247, 0.25);
-  --card-text-main:     #F5F3FF;
-  --card-text-muted:    #C4B5FD;
+  --card-primary: #A855F7;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #3B0764;
+  --card-surface: #0E0720;
+  --card-surface-card: rgba(28, 15, 58, 0.75);
+  --card-surface-border: rgba(168, 85, 247, 0.25);
+  --card-text-main: #F5F3FF;
+  --card-text-muted: #C4B5FD;
   --card-font-headline: 'Outfit', sans-serif;
-  --card-font-body:     'Outfit', sans-serif;
+  --card-font-body: 'Outfit', sans-serif;
 }
+
 [data-card-theme="purple-light"] {
-  --card-primary:       #7C3AED;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #EDE9FE;
-  --card-surface:       #F8F7FF;
-  --card-surface-card:  rgba(255, 255, 255, 0.9);
-  --card-surface-border:rgba(124, 58, 237, 0.22);
-  --card-text-main:     #1E1B4B;
-  --card-text-muted:    #6D28D9;
+  --card-primary: #7C3AED;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #EDE9FE;
+  --card-surface: #F8F7FF;
+  --card-surface-card: rgba(255, 255, 255, 0.9);
+  --card-surface-border: rgba(124, 58, 237, 0.22);
+  --card-text-main: #1E1B4B;
+  --card-text-muted: #6D28D9;
   --card-font-headline: 'Outfit', sans-serif;
-  --card-font-body:     'Outfit', sans-serif;
+  --card-font-body: 'Outfit', sans-serif;
 }
 
 /* ── MONOCHROME ── */
 [data-card-theme="monochrome-dark"] {
-  --card-primary:       #FFFFFF;
-  --card-primary-fg:    #000000;
-  --card-secondary:     #262626;
-  --card-surface:       #0A0A0A;
-  --card-surface-card:  rgba(26, 26, 26, 0.8);
-  --card-surface-border:rgba(255, 255, 255, 0.16);
-  --card-text-main:     #FFFFFF;
-  --card-text-muted:    #A3A3A3;
+  --card-primary: #FFFFFF;
+  --card-primary-fg: #000000;
+  --card-secondary: #262626;
+  --card-surface: #0A0A0A;
+  --card-surface-card: rgba(26, 26, 26, 0.8);
+  --card-surface-border: rgba(255, 255, 255, 0.16);
+  --card-text-main: #FFFFFF;
+  --card-text-muted: #A3A3A3;
   --card-font-headline: 'EB Garamond', serif;
-  --card-font-body:     'Hanken Grotesk', sans-serif;
+  --card-font-body: 'Hanken Grotesk', sans-serif;
 }
+
 [data-card-theme="monochrome-light"] {
-  --card-primary:       #171717;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #E5E5E5;
-  --card-surface:       #F5F5F5;
-  --card-surface-card:  rgba(255, 255, 255, 0.92);
-  --card-surface-border:rgba(0, 0, 0, 0.15);
-  --card-text-main:     #0A0A0A;
-  --card-text-muted:    #525252;
+  --card-primary: #171717;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #E5E5E5;
+  --card-surface: #F5F5F5;
+  --card-surface-card: rgba(255, 255, 255, 0.92);
+  --card-surface-border: rgba(0, 0, 0, 0.15);
+  --card-text-main: #0A0A0A;
+  --card-text-muted: #525252;
   --card-font-headline: 'EB Garamond', serif;
-  --card-font-body:     'Hanken Grotesk', sans-serif;
+  --card-font-body: 'Hanken Grotesk', sans-serif;
 }
 
 /* ── SAPPHIRE ── */
 [data-card-theme="sapphire-dark"] {
-  --card-primary:       #3B82F6;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #0F172A;
-  --card-surface:       #060D1A;
-  --card-surface-card:  rgba(15, 23, 42, 0.8);
-  --card-surface-border:rgba(59, 130, 246, 0.28);
-  --card-text-main:     #F8FAFC;
-  --card-text-muted:    #94A3B8;
+  --card-primary: #3B82F6;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #0F172A;
+  --card-surface: #060D1A;
+  --card-surface-card: rgba(15, 23, 42, 0.8);
+  --card-surface-border: rgba(59, 130, 246, 0.28);
+  --card-text-main: #F8FAFC;
+  --card-text-muted: #94A3B8;
   --card-font-headline: 'Playfair Display', serif;
-  --card-font-body:     'Inter', sans-serif;
+  --card-font-body: 'Inter', sans-serif;
 }
+
 [data-card-theme="sapphire-light"] {
-  --card-primary:       #1D4ED8;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #DBEAFE;
-  --card-surface:       #F0F6FF;
-  --card-surface-card:  rgba(255, 255, 255, 0.9);
-  --card-surface-border:rgba(29, 78, 216, 0.22);
-  --card-text-main:     #0F172A;
-  --card-text-muted:    #475569;
+  --card-primary: #1D4ED8;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #DBEAFE;
+  --card-surface: #F0F6FF;
+  --card-surface-card: rgba(255, 255, 255, 0.9);
+  --card-surface-border: rgba(29, 78, 216, 0.22);
+  --card-text-main: #0F172A;
+  --card-text-muted: #475569;
   --card-font-headline: 'Playfair Display', serif;
-  --card-font-body:     'Inter', sans-serif;
+  --card-font-body: 'Inter', sans-serif;
 }
 
 /* ── EMERALD ── */
 [data-card-theme="emerald-dark"] {
-  --card-primary:       #10B981;
-  --card-primary-fg:    #002113;
-  --card-secondary:     #064E3B;
-  --card-surface:       #061510;
-  --card-surface-card:  rgba(6, 44, 33, 0.45);
-  --card-surface-border:rgba(16, 185, 129, 0.25);
-  --card-text-main:     #F8FAFC;
-  --card-text-muted:    #A7F3D0;
+  --card-primary: #10B981;
+  --card-primary-fg: #002113;
+  --card-secondary: #064E3B;
+  --card-surface: #061510;
+  --card-surface-card: rgba(6, 44, 33, 0.45);
+  --card-surface-border: rgba(16, 185, 129, 0.25);
+  --card-text-main: #F8FAFC;
+  --card-text-muted: #A7F3D0;
   --card-font-headline: 'Playfair Display', serif;
-  --card-font-body:     'Inter', sans-serif;
+  --card-font-body: 'Inter', sans-serif;
 }
+
 [data-card-theme="emerald-light"] {
-  --card-primary:       #047857;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #D1FAE5;
-  --card-surface:       #F0FDF4;
-  --card-surface-card:  rgba(255, 255, 255, 0.9);
-  --card-surface-border:rgba(4, 120, 87, 0.22);
-  --card-text-main:     #064E3B;
-  --card-text-muted:    #047857;
+  --card-primary: #047857;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #D1FAE5;
+  --card-surface: #F0FDF4;
+  --card-surface-card: rgba(255, 255, 255, 0.9);
+  --card-surface-border: rgba(4, 120, 87, 0.22);
+  --card-text-main: #064E3B;
+  --card-text-muted: #047857;
   --card-font-headline: 'Playfair Display', serif;
-  --card-font-body:     'Inter', sans-serif;
+  --card-font-body: 'Inter', sans-serif;
 }
 
 /* ── WINE ── */
 [data-card-theme="wine-dark"] {
-  --card-primary:       #FB7185;
-  --card-primary-fg:    #4C0519;
-  --card-secondary:     #4C0519;
-  --card-surface:       #14050A;
-  --card-surface-card:  rgba(48, 10, 22, 0.6);
-  --card-surface-border:rgba(251, 113, 133, 0.25);
-  --card-text-main:     #FFF1F2;
-  --card-text-muted:    #FECDD3;
+  --card-primary: #FB7185;
+  --card-primary-fg: #4C0519;
+  --card-secondary: #4C0519;
+  --card-surface: #14050A;
+  --card-surface-card: rgba(48, 10, 22, 0.6);
+  --card-surface-border: rgba(251, 113, 133, 0.25);
+  --card-text-main: #FFF1F2;
+  --card-text-muted: #FECDD3;
   --card-font-headline: 'EB Garamond', serif;
-  --card-font-body:     'Montserrat', sans-serif;
+  --card-font-body: 'Montserrat', sans-serif;
 }
+
 [data-card-theme="wine-light"] {
-  --card-primary:       #881337;
-  --card-primary-fg:    #FFFFFF;
-  --card-secondary:     #FFE4E6;
-  --card-surface:       #FFF5F7;
-  --card-surface-card:  rgba(255, 255, 255, 0.9);
-  --card-surface-border:rgba(136, 19, 55, 0.22);
-  --card-text-main:     #4C0519;
-  --card-text-muted:    #9F1239;
+  --card-primary: #881337;
+  --card-primary-fg: #FFFFFF;
+  --card-secondary: #FFE4E6;
+  --card-surface: #FFF5F7;
+  --card-surface-card: rgba(255, 255, 255, 0.9);
+  --card-surface-border: rgba(136, 19, 55, 0.22);
+  --card-text-main: #4C0519;
+  --card-text-muted: #9F1239;
   --card-font-headline: 'EB Garamond', serif;
-  --card-font-body:     'Montserrat', sans-serif;
+  --card-font-body: 'Montserrat', sans-serif;
 }
 
 /* ========================================================
-   Base — Body usa Scope 1 (SiF Shell)
+   Base — Body usa Scope 1 (SIF Shell)
    ======================================================== */
 body {
   margin: 0;
@@ -234,14 +247,16 @@ body {
 /* ========================================================
    Neutralización de fondo blanco / autofill del navegador
    ======================================================== */
-input, textarea, select {
+input,
+textarea,
+select {
   background-color: var(--sif-surface-subtle);
   color: var(--sif-text);
 }
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
 input:-webkit-autofill:active,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
@@ -251,4 +266,75 @@ textarea:-webkit-autofill:active {
   -webkit-text-fill-color: var(--sif-text) !important;
   caret-color: var(--sif-text) !important;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ========================================================
+   3. ANIMACIONES 3D Y EFECTOS LANDING (SIF Core)
+   ======================================================== */
+.perspective-container {
+  perspective: 1500px;
+}
+
+@keyframes smoothCardSpin {
+  0% {
+    transform: rotateX(8deg) rotateZ(-4deg) rotateY(0deg);
+  }
+
+  100% {
+    transform: rotateX(8deg) rotateZ(-4deg) rotateY(360deg);
+  }
+}
+
+.card-turntable {
+  transform-style: preserve-3d;
+  animation: smoothCardSpin 19s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.card-face-back {
+  transform: rotateY(180deg);
+}
+
+@keyframes floorGaze {
+
+  0%,
+  100% {
+    transform: scale(0.92) translateZ(-60px);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: scale(1.06) translateZ(-60px);
+    opacity: 0.55;
+  }
+}
+
+.floor-shadow {
+  animation: floorGaze 9s ease-in-out infinite;
+}
+
+@keyframes singleSparkleSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.single-sparkle-beam {
+  animation: singleSparkleSpin 4s linear infinite;
+}
+
+.metallic-headline-gradient {
+  background: linear-gradient(135deg, #ffffff 15%, #e2e8f0 45%, #edd88e 75%, #ddb225 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

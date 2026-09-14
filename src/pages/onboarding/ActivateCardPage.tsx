@@ -243,7 +243,7 @@ export default function ActivateCardPage() {
       <div className="min-h-screen w-full bg-sif-bg flex flex-col items-center justify-center p-4">
         <div className="relative flex items-center justify-center">
           <div className="h-16 w-16 rounded-full border-2 border-sif-border border-t-sif-gold animate-spin" />
-          <span className="absolute font-bold text-xs tracking-wider text-sif-gold">SiF</span>
+          <span className="absolute font-bold text-xs tracking-wider text-sif-gold">SIF</span>
         </div>
         <p className="mt-4 text-xs text-sif-muted animate-pulse">Preparando entorno de activación...</p>
       </div>
@@ -261,7 +261,7 @@ export default function ActivateCardPage() {
         />
 
         <div className="relative z-10 w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-8 shadow-2xl backdrop-blur-md flex flex-col items-center text-center">
-          <img src={sifGold} alt="SiF Logo" className="h-12 w-auto mb-6 object-contain" />
+          <img src={sifGold} alt="SIF Logo" className="h-12 w-auto mb-6 object-contain" />
 
           <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-sif-gold/40 bg-sif-gold/10 text-sif-gold shadow-lg">
             <Sparkles className="h-8 w-8 animate-pulse" />
@@ -277,7 +277,7 @@ export default function ActivateCardPage() {
           </h1>
 
           <p className="text-xs text-sif-muted mb-6 leading-relaxed">
-            Tu tarjeta inteligente SiF ahora está activa y lista para compartir al instante con el mundo.
+            Tu tarjeta inteligente SIF ahora está activa y lista para compartir al instante con el mundo.
           </p>
 
           {/* Tarjeta con URL pública */}
@@ -346,7 +346,7 @@ export default function ActivateCardPage() {
           <div className="flex items-center gap-3">
             <img
               src={sifGold}
-              alt="SiF Logo"
+              alt="SIF Logo"
               className="h-9 w-auto object-contain drop-shadow-sm"
             />
             <div className="hidden sm:block h-6 w-px bg-sif-border" />
@@ -402,7 +402,7 @@ export default function ActivateCardPage() {
           <div className="relative z-10 max-w-2xl">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-sif-gold/30 bg-sif-gold/10 px-3 py-1 text-[11px] font-semibold text-sif-gold mb-3">
               <Sparkles className="h-3.5 w-3.5" />
-              <span>Bienvenido a SiF</span>
+              <span>Bienvenido a SIF</span>
             </span>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-sif-text mb-2">
               Personaliza tu tarjeta inteligente!
@@ -504,7 +504,7 @@ export default function ActivateCardPage() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         initialMode="register"
-        title="Bienvenido a la experiencia SiF"
+        title="Bienvenido a la experiencia SIF"
         subtitle="Para configurar y activar tu tarjeta inteligente, inicia sesión o crea tu cuenta gratuita."
         onSuccess={() => setIsAuthModalOpen(false)}
       />

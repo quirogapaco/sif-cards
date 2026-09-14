@@ -1,6 +1,6 @@
-// Tipos para el sistema de doble tematización SiF
+// Tipos para el sistema de doble tematización SIF
 
-/** Modo del App Shell (plataforma SiF) */
+/** Modo del App Shell (plataforma SIF) */
 export type AppThemeMode = 'dark' | 'light';
 
 /** IDs de los 12 temas de tarjeta disponibles */

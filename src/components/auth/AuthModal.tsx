@@ -224,7 +224,7 @@ export default function AuthModal({
   const logoSrc = appTheme === 'dark' ? sifGold : sifSilver;
 
   const displayTitle =
-    title ?? (mode === 'login' ? 'Bienvenido de vuelta' : 'Crea tu cuenta SiF');
+    title ?? (mode === 'login' ? 'Bienvenido de vuelta' : 'Crea tu cuenta SIF');
   const displaySubtitle =
     subtitle ??
     (mode === 'login'
@@ -282,7 +282,7 @@ export default function AuthModal({
         <div className="mb-7 flex flex-col items-center gap-3">
           <img
             src={logoSrc}
-            alt="SiF – Sharing is Fast"
+            alt="SIF – Sharing is Fast"
             className="h-11 w-auto object-contain drop-shadow-sm"
             draggable={false}
           />

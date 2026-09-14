@@ -1,6 +1,6 @@
 // src/services/analyticsService.ts
 //
-// Servicio fire-and-forget de telemetría SiF.
+// Servicio fire-and-forget de telemetría SIF.
 // Nunca lanza excepciones ni bloquea la UI: todos los errores se capturan
 // internamente. Compatible con bloqueadores de rastreo e incógnito estricto.
 

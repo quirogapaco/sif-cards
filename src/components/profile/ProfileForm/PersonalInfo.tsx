@@ -127,7 +127,7 @@ export default function PersonalInfo({ formData, onChange, isOpen, onToggle, fie
                 required
                 value={formData.company}
                 onChange={(e) => onChange({ ...formData, company: e.target.value })}
-                placeholder="Ej. SiF Tech"
+                placeholder="Ej. SIF Tech"
                 className="rounded-xl border border-sif-border bg-sif-surface-subtle px-4 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold"
               />
             </div>

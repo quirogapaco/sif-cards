@@ -32,7 +32,7 @@ export function AppThemeProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/** Hook para consumir el contexto del tema global SiF */
+/** Hook para consumir el contexto del tema global SIF */
 export function useAppTheme(): AppThemeContextValue {
   const ctx = useContext(AppThemeContext);
   if (!ctx) {

@@ -9,7 +9,7 @@ interface AdminSidebarProps {
 }
 
 /**
- * Sidebar del Panel SuperAdmin SiF.
+ * Sidebar del Panel SuperAdmin SIF.
  *
  * Comportamiento:
  * - Mobile (<lg): drawer overlay que desliza desde la izquierda.
@@ -69,7 +69,7 @@ export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
               WebkitTextFillColor: 'transparent',
             }}
           >
-            SiF
+            SIF
           </p>
           <p className="whitespace-nowrap text-[9px] font-medium uppercase tracking-widest text-sif-muted">
             Sharing is Fast
