@@ -124,7 +124,7 @@ export default function CardResolver() {
         } else if (card.status === 'blocked') {
           setErrorType('blocked');
           setErrorMessage(
-            'Esta tarjeta ha sido suspendida o reportada como extraviada. Contacta a soporte SiF.'
+            'Esta tarjeta ha sido suspendida o reportada como extraviada. Contacta a soporte SIF.'
           );
         } else if (card.status === 'active') {
           if (!card.profile) {
@@ -189,7 +189,7 @@ export default function CardResolver() {
           <div className="relative flex items-center justify-center">
             <div className="h-16 w-16 rounded-full border-2 border-sif-border border-t-sif-gold animate-spin" />
             <span className="absolute font-bold text-xs tracking-wider text-sif-gold">
-              SiF
+              SIF
             </span>
           </div>
           <div className="text-center space-y-1">
@@ -243,7 +243,7 @@ export default function CardResolver() {
             }}
           >
             <div className="flex justify-between items-start">
-              <img src={sifGold} alt="SiF" className="h-8 w-auto object-contain" />
+              <img src={sifGold} alt="SIF" className="h-8 w-auto object-contain" />
               <span className="text-[10px] font-mono tracking-widest text-sif-gold border border-sif-gold/30 px-2.5 py-0.5 rounded-full bg-sif-gold/10">
                 TARJETA VIRGEN
               </span>
@@ -275,7 +275,7 @@ export default function CardResolver() {
               <Sparkles className="h-4 w-4 text-sif-gold" />
               <span>Tarjeta Lista para Activación</span>
             </h2>
-            <p className="text-xs text-sif-muted">SiF • Sharing is Fast</p>
+            <p className="text-xs text-sif-muted">SIF • Sharing is Fast</p>
           </div>
         </div>
 
@@ -301,8 +301,8 @@ export default function CardResolver() {
           isOpen={isAuthModalOpen}
           onClose={() => setIsAuthModalOpen(false)}
           initialMode="register"
-          title="Bienvenido a SiF"
-          subtitle="Inicia sesión o crea tu cuenta para configurar tu perfil digital, editar tus datos cuando lo desees y acceder a todas las funcionalidades exclusivas como miembro de SiF."
+          title="Bienvenido a SIF"
+          subtitle="Inicia sesión o crea tu cuenta para configurar tu perfil digital, editar tus datos cuando lo desees y acceder a todas las funcionalidades exclusivas como miembro de SIF."
           onSuccess={handleAuthSuccess}
         />
       </div>
@@ -345,7 +345,7 @@ export default function CardResolver() {
         {/* Footer / Branding */}
         <div className="w-full border-t border-sif-border pt-5 flex items-center justify-between text-xs text-sif-muted">
           <span>
-            Powered by <strong className="text-sif-text">SiF</strong>
+            Powered by <strong className="text-sif-text">SIF</strong>
           </span>
           <Link
             to="/admin"

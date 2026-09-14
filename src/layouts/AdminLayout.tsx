@@ -4,7 +4,7 @@ import AdminNavbar from '../components/layout/AdminNavbar';
 import AdminSidebar from '../components/layout/AdminSidebar';
 
 /**
- * Layout maestro del Panel SuperAdmin SiF.
+ * Layout maestro del Panel SuperAdmin SIF.
  *
  * Estructura corregida:
  *   ┌──────────┬────────────────────────────────┐

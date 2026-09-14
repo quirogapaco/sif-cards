@@ -13,7 +13,7 @@ interface AdminNavbarProps {
 }
 
 /**
- * Header del Panel SuperAdmin SiF.
+ * Header del Panel SuperAdmin SIF.
  * - Botón hamburguesa para colapsar/expandir el sidebar.
  * - Breadcrumb dinámico basado en la ruta activa.
  * - Toggle Dark/Light + identificador SuperAdmin.

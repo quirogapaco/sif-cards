@@ -22,7 +22,7 @@ interface ProfileViewProps {
 }
 
 /**
- * Vista pública del perfil SiF.
+ * Vista pública del perfil SIF.
  * Envoltura raíz con [data-card-theme] para el scope aislado de CSS.
  * Todos los hijos consumen exclusivamente variables card-*.
  */
@@ -193,7 +193,7 @@ export default function ProfileView({ profile, isNfcSource = false, token }: Pro
         {/* ── 2f. Educación ──────────────────────────────────────────────── */}
         <ProfileEducation educationList={data.education} />
 
-        {/* ── 2g. Footer SiF ─────────────────────────────────────────────── */}
+        {/* ── 2g. Footer SIF ─────────────────────────────────────────────── */}
         <ProfileFooter />
       </div>
     </div>

@@ -14,7 +14,7 @@ export default function GlobalDashboardPage() {
       <div>
         <h1 className="text-xl font-bold text-sif-text">Dashboard Global</h1>
         <p className="mt-0.5 text-sm text-sif-muted">
-          Métricas globales de la plataforma SiF en tiempo real
+          Métricas globales de la plataforma SIF en tiempo real
         </p>
       </div>
 

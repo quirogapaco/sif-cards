@@ -23,7 +23,7 @@ export default function ProfileFooter() {
             color: 'var(--card-primary)',
           }}
         >
-          SiF
+          SIF
         </span>
         <span>Sharing is Fast</span>
       </div>

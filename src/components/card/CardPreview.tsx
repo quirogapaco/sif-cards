@@ -129,13 +129,13 @@ export default function CardPreview({ profile }: CardPreviewProps) {
           ))}
         </div>
 
-        {/* Footer — SiF Branding */}
+        {/* Footer — SIF Branding */}
         <div className="mt-6 border-t border-card-border pt-4 text-center transition-colors duration-500">
           <span
             className="inline-flex items-center gap-1 text-[11px] tracking-wide text-card-muted font-card-body"
           >
             Powered by{' '}
-            <strong className="font-bold text-card-text">SiF</strong>
+            <strong className="font-bold text-card-text">SIF</strong>
             <span className="mx-0.5">·</span>
             <span className="italic">Sharing is Fast</span>
             <ExternalLink className="h-2.5 w-2.5" />

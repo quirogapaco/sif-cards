@@ -1,4 +1,4 @@
-# Matriz Maestra de Requerimientos y Roadmap de Implementación — Plataforma SiF
+# Matriz Maestra de Requerimientos y Roadmap de Implementación — Plataforma SIF
 
 ---
 
@@ -236,7 +236,7 @@ El sistema debe segmentar el acceso en 3 niveles de autorización:
 ### Fase IV: Landing Page Institucional y Conversión
 
 * [ ] **REQ-PUB-001: Hero Section de Presentación de Marca**
-* *Descripción:* El sistema debe contar con una página de inicio pública (`/`) con estética oscura, acentos metálicos oro/plata, animaciones de fluidos y exhibición de tarjetas físicas SiF en 3D/mockup.
+* *Descripción:* El sistema debe contar con una página de inicio pública (`/`) con estética oscura, acentos metálicos oro/plata, animaciones de fluidos y exhibición de tarjetas físicas SIF en 3D/mockup.
 
 
 * [ ] **REQ-PUB-002: Simulador Interactivo de Tarjetas**
