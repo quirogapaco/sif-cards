@@ -26,13 +26,10 @@ export default function AdminNavbar({ onToggleSidebar }: AdminNavbarProps) {
   );
 
   // ── Estado de sesión + modal ──────────────────────────────────────────
-  const { user: authUser } = useAuth();
-  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const { user: authUser, signOut, openAuthModal } = useAuth();
 
   const handleSignOut = async () => {
-    // Para simplificar, obtenemos la instancia de supabase aquí en vez de importarla arriba (o la importamos)
-    const { supabase } = await import('../../lib/supabase');
-    await supabase.auth.signOut();
+    await signOut();
   };
 
   return (
@@ -156,10 +153,10 @@ export default function AdminNavbar({ onToggleSidebar }: AdminNavbarProps) {
           </div>
         ) : (
           <div
-            onClick={() => setAuthModalOpen(true)}
+            onClick={() => openAuthModal('login')}
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && setAuthModalOpen(true)}
+            onKeyDown={(e) => e.key === 'Enter' && openAuthModal('login')}
             title="Haz clic para iniciar sesión"
             className="flex cursor-pointer items-center gap-2 rounded-xl border border-sif-border bg-sif-surface-subtle p-1 pr-3 transition-all duration-150 hover:border-sif-gold/50 active:scale-95"
           >
@@ -174,24 +171,16 @@ export default function AdminNavbar({ onToggleSidebar }: AdminNavbarProps) {
             </div>
             <div className="hidden flex-col leading-tight sm:flex">
               <span className="text-xs font-semibold text-sif-text">
-                Super Admin
+                Iniciar Sesión
               </span>
               <span className="text-[10px]" style={{ color: 'var(--sif-gold)' }}>
-                Acceso Total
+                Acceso SIF
               </span>
             </div>
           </div>
         )}
         </div>
       </header>
-
-      {/* ── Modal de Autenticación ── */}
-      <AuthModal
-        isOpen={authModalOpen}
-        onClose={() => setAuthModalOpen(false)}
-        initialMode="login"
-        onSuccess={() => setAuthModalOpen(false)}
-      />
     </>
   );
 }

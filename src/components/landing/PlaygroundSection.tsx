@@ -47,24 +47,24 @@ export const PlaygroundSection: React.FC = () => {
   return (
     <section
       id="playground"
-      className="relative w-full py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-[#09090b] text-slate-300 overflow-hidden"
+      className="relative w-full py-12 sm:py-16 lg:py-20 px-4 sm:px-6 dark:bg-[#09090b] bg-[#fafafa] dark:text-slate-300 text-slate-700 overflow-hidden transition-colors duration-300"
     >
       <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(circle_at_50%_15%,rgba(16,185,129,0.035),transparent_65%)]" />
 
       <div className="max-w-4xl mx-auto">
         {/* Encabezado */}
         <header className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.02] text-slate-400 font-mono text-[10px] sm:text-xs tracking-widest uppercase mb-3 shadow-sm backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border dark:border-white/10 border-slate-200 dark:bg-white/[0.02] bg-white dark:text-slate-400 text-slate-600 font-mono text-[10px] sm:text-xs tracking-widest uppercase mb-3 shadow-sm backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span>PERSONALIZACIÓN EN TIEMPO REAL</span>
           </div>
 
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#EBF1F9] leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight dark:text-[#EBF1F9] text-slate-900 leading-tight">
             Diseñado para reflejar tu identidad,{' '}
-            <span className="font-serif italic font-normal text-slate-200">no la nuestra.</span>
+            <span className="font-serif italic font-normal dark:text-slate-200 text-slate-700">no la nuestra.</span>
           </h2>
 
-          <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mt-2 leading-relaxed">
+          <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 max-w-md mx-auto mt-2 leading-relaxed">
             Personaliza el tema y modo en vivo. Cada tarjeta física sincroniza su perfil digital de manera independiente.
           </p>
         </header>
@@ -73,7 +73,7 @@ export const PlaygroundSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-6 items-center justify-center max-w-3xl mx-auto">
           
           {/* ── COLUMNA IZQUIERDA: DOCK RESPONSIVE ── */}
-          <aside className="w-full max-w-[340px] sm:max-w-[370px] lg:max-w-none mx-auto lg:col-span-6 bg-[#121215] border border-white/[0.08] rounded-2xl lg:rounded-3xl p-2 sm:p-2.5 lg:p-7 shadow-xl backdrop-blur-xl lg:h-[530px] flex flex-col justify-between">
+          <aside className="w-full max-w-[340px] sm:max-w-[370px] lg:max-w-none mx-auto lg:col-span-6 dark:bg-[#121215] bg-white border dark:border-white/[0.08] border-slate-200/90 rounded-2xl lg:rounded-3xl p-2 sm:p-2.5 lg:p-7 shadow-xl backdrop-blur-xl lg:h-[530px] flex flex-col justify-between">
             {/* 1. Versión móvil */}
             <div className="flex lg:hidden items-center justify-between gap-2 px-1">
               <div className="flex items-center p-0.5 bg-black/60 border border-white/10 rounded-full gap-0.5">
@@ -138,34 +138,34 @@ export const PlaygroundSection: React.FC = () => {
             {/* 2. Versión escritorio */}
             <div className="hidden lg:block">
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-[#EBF1F9] text-xs font-semibold tracking-wider uppercase">
+                <h3 className="dark:text-[#EBF1F9] text-slate-900 text-xs font-bold tracking-wider uppercase">
                   Personalización de Tarjeta
                 </h3>
-                <span className="inline-flex items-center gap-1.5 text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                  <span className="w-1 h-1 rounded-full bg-emerald-400 animate-ping" />
+                <span className="inline-flex items-center gap-1.5 text-[9px] font-mono text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-semibold">
+                  <span className="w-1 h-1 rounded-full bg-emerald-500 animate-ping" />
                   EN VIVO
                 </span>
               </div>
-              <p className="text-slate-500 text-[11px] mb-4">
+              <p className="dark:text-slate-400 text-slate-600 text-[11px] mb-4">
                 Los cambios solo afectan la vista de tu perfil.
               </p>
 
               {/* Selector Dark / Light */}
               <div className="mb-4">
-                <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase mb-2 block">
+                <label className="text-[10px] font-mono tracking-widest dark:text-slate-400 text-slate-700 uppercase mb-2 block font-semibold">
                   Modo del Perfil
                 </label>
-                <div className="grid grid-cols-2 p-1 bg-black/40 border border-white/5 rounded-2xl gap-1">
+                <div className="grid grid-cols-2 p-1 dark:bg-black/40 bg-slate-100 dark:border-white/5 border-slate-200 rounded-2xl gap-1">
                   <button
                     type="button"
                     onClick={() => setCurrentMode('dark')}
-                    className={`py-1.5 px-3 rounded-xl flex items-center justify-center gap-2 text-xs font-medium transition cursor-pointer ${
+                    className={`py-1.5 px-3 rounded-xl flex items-center justify-center gap-2 text-xs font-semibold transition cursor-pointer ${
                       currentMode === 'dark'
-                        ? 'border border-white/20 bg-white/[0.08] text-white shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'dark:border-white/20 dark:bg-white/[0.08] bg-slate-900 text-white shadow-sm'
+                        : 'dark:text-slate-400 text-slate-600 dark:hover:text-white hover:text-slate-900'
                     }`}
                   >
-                    <svg className="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <span>Dark</span>
@@ -174,13 +174,13 @@ export const PlaygroundSection: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setCurrentMode('light')}
-                    className={`py-1.5 px-3 rounded-xl flex items-center justify-center gap-2 text-xs font-medium transition cursor-pointer ${
+                    className={`py-1.5 px-3 rounded-xl flex items-center justify-center gap-2 text-xs font-semibold transition cursor-pointer ${
                       currentMode === 'light'
-                        ? 'border border-white/20 bg-white/[0.08] text-white shadow-sm'
-                        : 'text-slate-400 hover:text-white'
+                        ? 'dark:border-white/20 dark:bg-white/[0.08] bg-slate-900 text-white shadow-sm'
+                        : 'dark:text-slate-400 text-slate-600 dark:hover:text-white hover:text-slate-900'
                     }`}
                   >
-                    <svg className="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <span>Light</span>
@@ -191,10 +191,10 @@ export const PlaygroundSection: React.FC = () => {
               {/* Selector de Paletas */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">
+                  <label className="text-[10px] font-mono tracking-widest dark:text-slate-400 text-slate-700 uppercase font-semibold">
                     Paleta de Marca
                   </label>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-200 font-medium">
+                  <span className="text-[10px] font-mono uppercase tracking-wider dark:text-slate-200 text-slate-800 font-semibold">
                     {currentPalette}
                   </span>
                 </div>
@@ -209,8 +209,8 @@ export const PlaygroundSection: React.FC = () => {
                         onClick={() => setCurrentPalette(item.key)}
                         className={`p-2.5 rounded-xl flex items-center gap-2.5 text-xs font-medium transition text-left cursor-pointer border ${
                           isActive
-                            ? 'border-white/35 bg-white/[0.08] text-white shadow-sm ring-1 ring-white/20'
-                            : 'border-white/[0.06] bg-white/[0.02] text-slate-400 hover:border-white/20 hover:text-slate-200'
+                            ? 'dark:border-white/35 dark:bg-white/[0.08] bg-slate-900 text-white shadow-sm border-slate-900'
+                            : 'dark:border-white/[0.06] border-slate-200 dark:bg-white/[0.02] bg-slate-100/70 dark:text-slate-400 text-slate-700 dark:hover:border-white/20 hover:border-slate-300 hover:text-slate-900'
                         }`}
                       >
                         <span
@@ -229,14 +229,14 @@ export const PlaygroundSection: React.FC = () => {
             </div>
 
             {/* Footer desktop */}
-            <div className="hidden lg:block pt-3 border-t border-white/[0.06]">
+            <div className="hidden lg:block pt-3 border-t dark:border-white/[0.06] border-slate-200">
               <div className="flex items-center justify-between gap-2 text-[10px] font-mono">
-                <span className="text-slate-400">Card Theme:</span>
-                <span className="px-2.5 py-0.5 rounded-lg border border-white/10 bg-white/[0.04] text-white uppercase font-semibold tracking-wide">
+                <span className="dark:text-slate-400 text-slate-600 font-medium">Card Theme:</span>
+                <span className="px-2.5 py-0.5 rounded-lg border dark:border-white/10 border-slate-200 dark:bg-white/[0.04] bg-slate-100 dark:text-white text-slate-900 uppercase font-semibold tracking-wide">
                   {themeScope}
                 </span>
               </div>
-              <p className="text-slate-500 text-[10px] mt-2 flex items-center gap-1.5">
+              <p className="dark:text-slate-500 text-slate-600 text-[10px] mt-2 flex items-center gap-1.5 font-medium">
                 <span>✦</span>
                 Temas independientes por tarjeta.
               </p>

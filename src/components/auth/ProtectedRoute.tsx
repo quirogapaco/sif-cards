@@ -1,4 +1,5 @@
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import type { UserRole } from '../../types/database';
 
@@ -7,39 +8,35 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
-  const { session, userRole, loading } = useAuth();
+  const { session, userRole, loading, openAuthModal } = useAuth();
 
+  useEffect(() => {
+    // Si la verificación terminó y no hay sesión activa en una ruta protegida, abre el modal de login
+    if (!loading && allowedRoles && !session) {
+      openAuthModal('login');
+    }
+  }, [loading, allowedRoles, session, openAuthModal]);
+
+  // Pantalla de carga sutil durante la comprobación de sesión
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-sif-bg">
+      <div className="flex h-screen w-full items-center justify-center bg-[#09090b]">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-sif-gold border-t-transparent" />
-          <p className="text-sm font-medium text-sif-muted">Verificando sesión...</p>
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-[#ddb225]" />
+          <p className="text-sm font-medium text-slate-400">Verificando acceso...</p>
         </div>
       </div>
     );
   }
 
+  // 1. Sin sesión activa: Redirección inmediata a la raíz (bloquea el acceso a la URL)
   if (allowedRoles && !session) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center p-8 text-center bg-sif-bg">
-        <h2 className="mb-2 text-2xl font-bold text-sif-text">Acceso Restringido</h2>
-        <p className="text-sif-muted">
-          Inicia sesión para acceder a esta sección.
-        </p>
-      </div>
-    );
+    return <Navigate to="/" replace />;
   }
 
+  // 2. Rol no autorizado: Redirección inmediata a la raíz
   if (allowedRoles && userRole && !allowedRoles.includes(userRole)) {
-    return (
-      <div className="flex h-full flex-col items-center justify-center p-8 text-center bg-sif-bg">
-        <h2 className="mb-2 text-2xl font-bold text-sif-text">Acceso Denegado</h2>
-        <p className="text-sif-muted">
-          No tienes permisos suficientes para ver esta página.
-        </p>
-      </div>
-    );
+    return <Navigate to="/" replace />;
   }
 
   return <Outlet />;

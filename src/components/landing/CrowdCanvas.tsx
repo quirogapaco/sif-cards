@@ -261,11 +261,11 @@ export const CrowdCanvas: React.FC<CrowdCanvasProps> = ({
   }, [src, rows, cols]);
 
   return (
-  <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none opacity-30 filter invert contrast-125"
-  />
-    );
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full pointer-events-none dark:opacity-30 opacity-40 dark:filter dark:invert dark:contrast-125 transition-opacity duration-300"
+    />
+  );
 };
 
 export default CrowdCanvas;

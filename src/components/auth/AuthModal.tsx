@@ -241,17 +241,14 @@ export default function AuthModal({
       aria-modal="true"
       aria-label={displayTitle}
       onClick={handleBackdropClick}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 dark:bg-black/75 bg-slate-900/40 backdrop-blur-md transition-colors duration-200"
       style={{
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
-        background: 'rgba(0, 0, 0, 0.65)',
         animation: 'sif-fade-in 0.18s ease',
       }}
     >
       {/* Contenedor del modal */}
       <div
-        className="relative w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-6 shadow-2xl sm:p-8"
+        className="relative w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-6 shadow-2xl sm:p-8 text-sif-text transition-all duration-200"
         style={{ animation: 'sif-slide-up 0.22s cubic-bezier(0.22, 1, 0.36, 1)' }}
         role="document"
       >
@@ -278,19 +275,19 @@ export default function AuthModal({
           </svg>
         </button>
 
-        {/* ── Cabecera con logo ── */}
-        <div className="mb-7 flex flex-col items-center gap-3">
+        {/* ── Cabecera con imagotipo destacado ── */}
+        <div className="mb-6 flex flex-col items-center gap-3">
           <img
             src={logoSrc}
             alt="SIF – Sharing is Fast"
-            className="h-11 w-auto object-contain drop-shadow-sm"
+            className="h-14 sm:h-16 w-auto object-contain drop-shadow-md mx-auto block transition-transform duration-300 hover:scale-105"
             draggable={false}
           />
           <div className="text-center">
-            <h1 className="text-lg font-semibold tracking-tight text-sif-text">
+            <h1 className="text-xl font-semibold tracking-tight text-sif-text">
               {displayTitle}
             </h1>
-            <p className="mt-0.5 text-xs text-sif-muted">
+            <p className="mt-1 text-xs text-sif-muted">
               {displaySubtitle}
             </p>
           </div>

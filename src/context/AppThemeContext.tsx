@@ -12,14 +12,34 @@ const AppThemeContext = createContext<AppThemeContextValue | null>(null);
 
 export function AppThemeProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<AppThemeMode>(() => {
-    const stored = localStorage.getItem(APP_THEME_STORAGE_KEY);
-    return stored === 'light' || stored === 'dark' ? stored : DEFAULT_APP_THEME;
+    try {
+      const stored = localStorage.getItem(APP_THEME_STORAGE_KEY);
+      if (stored === 'light' || stored === 'dark') {
+        return stored;
+      }
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    } catch {
+      // Ignorar excepciones de acceso a localStorage en navegadores restrictivos
+    }
+    return DEFAULT_APP_THEME;
   });
 
-  // Aplica el atributo en <html> cada vez que el modo cambia
+  // Sincroniza la clase .dark y data-app-theme en <html>
   useEffect(() => {
-    document.documentElement.setAttribute('data-app-theme', mode);
-    localStorage.setItem(APP_THEME_STORAGE_KEY, mode);
+    const root = document.documentElement;
+    root.setAttribute('data-app-theme', mode);
+    if (mode === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    try {
+      localStorage.setItem(APP_THEME_STORAGE_KEY, mode);
+    } catch {
+      // Fallback silencioso
+    }
   }, [mode]);
 
   const toggleAppTheme = () =>

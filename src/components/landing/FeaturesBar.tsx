@@ -73,28 +73,28 @@ export const FeaturesBar: React.FC = () => {
     <section
       id="tecnologia"
       aria-labelledby="features-heading"
-      className="relative w-full py-12 sm:py-18 lg:py-22 px-5 sm:px-6 bg-[#09090b] border-t border-b border-white/[0.04] overflow-hidden"
+      className="relative w-full py-12 sm:py-18 lg:py-22 px-5 sm:px-6 dark:bg-[#09090b] bg-[#fafafa] border-t border-b dark:border-white/[0.04] border-slate-200/80 overflow-hidden transition-colors duration-300"
     >
       <div className="absolute inset-0 pointer-events-none -z-10 bg-[radial-gradient(circle_450px_at_50%_20%,rgba(221,178,37,0.03),transparent_70%)]" />
 
       {/* Encabezado */}
       <div className="max-w-2xl mx-auto text-center flex flex-col items-center mb-8 sm:mb-12 px-2">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-[9px] sm:text-[10px] font-mono tracking-widest text-slate-400 uppercase mb-2.5 backdrop-blur-sm">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border dark:border-white/10 border-slate-200 dark:bg-white/[0.03] bg-white text-[9px] sm:text-[10px] font-mono tracking-widest dark:text-slate-400 text-slate-600 uppercase mb-2.5 backdrop-blur-sm shadow-sm">
           <span className="text-[#ddb225]">✦</span>
           <span>TECNOLOGÍA SIN FRICCIÓN</span>
         </div>
 
         <h2
           id="features-heading"
-          className="text-xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight leading-tight mb-2"
+          className="text-xl sm:text-3xl lg:text-4xl font-semibold dark:text-white text-slate-900 tracking-tight leading-tight mb-2"
         >
           <span className="block">Diseñada para impresionar.</span>
-          <span className="block font-serif italic font-normal text-slate-200">
+          <span className="block font-serif italic font-normal dark:text-slate-200 text-slate-700">
             Optimizada para conectar.
           </span>
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed">
+        <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 max-w-md leading-relaxed">
           Todo lo necesario para proyectar autoridad profesional.
         </p>
       </div>
@@ -107,10 +107,10 @@ export const FeaturesBar: React.FC = () => {
             return (
               <article
                 key={item.id}
-                className={`bg-[#121215] rounded-xl p-3.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-all duration-300 relative group border ${
+                className={`dark:bg-[#121215] bg-white rounded-xl p-3.5 sm:p-4 lg:p-5 flex flex-col justify-between transition-all duration-300 relative group border shadow-sm hover:shadow-md ${
                   isGold
-                    ? 'border-[#ddb225]/25 hover:border-[#ddb225]/45 hover:shadow-[0_6px_25px_rgba(221,178,37,0.06)]'
-                    : 'border-white/[0.08] hover:border-white/20 hover:shadow-[0_6px_25px_rgba(0,0,0,0.6)]'
+                    ? 'dark:border-[#ddb225]/25 border-[#ddb225]/40 hover:border-[#ddb225]/70 dark:hover:border-[#ddb225]/45'
+                    : 'dark:border-white/[0.08] border-slate-200/90 dark:hover:border-white/20 hover:border-slate-300'
                 }`}
               >
                 <div>
@@ -120,7 +120,7 @@ export const FeaturesBar: React.FC = () => {
                       className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center transition-colors border ${
                         isGold
                           ? 'bg-[#ddb225]/10 border-[#ddb225]/25 text-[#ddb225]'
-                          : 'bg-white/[0.04] border-white/[0.08] text-slate-300 group-hover:text-white'
+                          : 'dark:bg-white/[0.04] bg-slate-100 dark:border-white/[0.08] border-slate-200 dark:text-slate-300 text-slate-700 group-hover:text-[#ddb225]'
                       }`}
                     >
                       {item.icon}
@@ -129,18 +129,18 @@ export const FeaturesBar: React.FC = () => {
                     <span
                       className={`font-mono text-[9px] sm:text-[10px] tracking-widest ${
                         isGold
-                          ? 'text-[#ddb225]/60 group-hover:text-[#ddb225]'
-                          : 'text-slate-500 group-hover:text-slate-400'
+                          ? 'text-[#ddb225]/80 group-hover:text-[#ddb225]'
+                          : 'dark:text-slate-500 text-slate-600 group-hover:text-slate-900 font-medium'
                       }`}
                     >
                       {item.index}
                     </span>
                   </div>
 
-                  <h3 className="text-white font-semibold text-xs sm:text-sm lg:text-base mb-1 tracking-tight line-clamp-1">
+                  <h3 className="dark:text-white text-slate-900 font-semibold text-xs sm:text-sm lg:text-base mb-1 tracking-tight line-clamp-1">
                     {item.title}
                   </h3>
-                  <p className="text-slate-400 text-[11px] sm:text-xs leading-relaxed font-normal mb-2.5 line-clamp-3">
+                  <p className="dark:text-slate-400 text-slate-700 text-[11px] sm:text-xs leading-snug font-normal line-clamp-3">
                     {item.description}
                   </p>
                 </div>
@@ -149,7 +149,7 @@ export const FeaturesBar: React.FC = () => {
                   className={`mt-auto pt-2.5 border-t flex items-center gap-1.5 text-[9px] sm:text-[10px] font-mono ${
                     isGold
                       ? 'border-[#ddb225]/15 text-[#ddb225]/85'
-                      : 'border-white/[0.05] text-slate-500'
+                      : 'dark:border-white/[0.05] border-slate-200 dark:text-slate-400 text-slate-700 font-medium'
                   }`}
                 >
                   <span
@@ -166,12 +166,12 @@ export const FeaturesBar: React.FC = () => {
       </div>
 
       {/* Línea inferior de especificaciones */}
-      <div className="mt-8 sm:mt-12 max-w-2xl mx-auto border-t border-white/[0.05] pt-4 text-center px-4">
-        <p className="text-[9px] sm:text-[10px] font-mono tracking-widest text-slate-500 uppercase flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+      <div className="mt-8 sm:mt-12 max-w-2xl mx-auto dark:border-white/[0.05] border-slate-200/80 pt-4 text-center px-4">
+        <p className="text-[9px] sm:text-[10px] font-mono tracking-widest dark:text-slate-500 text-slate-600 uppercase flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-medium">
           <span>Sincronización en tiempo real</span>
-          <span className="text-slate-700">·</span>
+          <span className="dark:text-slate-700 text-slate-300">·</span>
           <span>Cifrado de datos</span>
-          <span className="text-slate-700">·</span>
+          <span className="dark:text-slate-700 text-slate-300">·</span>
           <span>Actualización remota ilimitada</span>
         </p>
       </div>

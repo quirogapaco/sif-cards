@@ -65,7 +65,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             filter: 'blur(95px)',
           }}
         />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#09090b] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t dark:from-[#09090b] from-[#fafafa] to-transparent" />
       </div>
 
       {/* ── 2. Contenedor Principal Espacioso ── */}
@@ -76,25 +76,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           
           {/* Pill Kicker minimalista */}
           <div className="relative inline-flex p-[1px] rounded-full overflow-hidden mb-6 sm:mb-8 shadow-sm">
-            <span className="absolute inset-0 rounded-full border border-white/10" />
+            <span className="absolute inset-0 rounded-full border dark:border-white/10 border-slate-200" />
             <div className="absolute inset-[-150%] single-sparkle-beam bg-[conic-gradient(from_0deg,transparent_0deg,transparent_340deg,rgba(255,255,255,0.9)_352deg,#ddb225_357deg,transparent_360deg)] opacity-80 pointer-events-none" />
-            <div className="relative px-3.5 py-1 rounded-full bg-[#09090b]/90 backdrop-blur-md flex items-center gap-2">
-              <span className="text-[10px] text-slate-400 font-mono tracking-wider">
+            <div className="relative px-3.5 py-1 rounded-full dark:bg-[#09090b]/90 bg-white/90 backdrop-blur-md flex items-center gap-2">
+              <span className="text-[10px] dark:text-slate-400 text-slate-600 font-mono tracking-wider">
                 ✦ El nuevo estándar del Networking
               </span>
             </div>
           </div>
 
           {/* Titular: Tipografía Newsreader serif elegante con tamaño calibrado */}
-          <h1 className="font-serif font-normal text-white text-[38px] sm:text-[46px] lg:text-[54px] tracking-[-0.025em] leading-[1.08] mb-6">
+          <h1 className="font-serif font-normal dark:text-white text-slate-900 text-[38px] sm:text-[46px] lg:text-[54px] tracking-[-0.025em] leading-[1.08] mb-6">
             Tu primera impresión.{' '}
-            <span className="italic block mt-1 text-slate-200">
+            <span className="italic block mt-1 dark:text-slate-200 text-slate-700">
               A tan solo un Tap.
             </span>
           </h1>
 
           {/* Subtítulo espaciado y sintetizado (estilo Resend) */}
-          <p className="text-slate-400 text-xs sm:text-[13px] lg:text-[14px] font-normal leading-relaxed max-w-md lg:max-w-lg mb-8 tracking-normal">
+          <p className="dark:text-slate-400 text-slate-600 text-xs sm:text-[13px] lg:text-[14px] font-normal leading-relaxed max-w-md lg:max-w-lg mb-8 tracking-normal">
             Eleva tu presencia profesional transfiriendo tu perfil corporativo, redes y canales directos a la agenda de cualquier smartphone al instante. Sin aplicaciones intermedias y con edición en tiempo real.
           </p>
 
@@ -102,7 +102,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="flex flex-row items-center justify-center lg:justify-start w-full max-w-xs sm:max-w-md">
             <a
               href="#modelos"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white text-black text-xs sm:text-sm font-semibold hover:bg-slate-200 transition-all duration-200 shadow-sm hover:scale-[1.01] active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full dark:bg-white dark:text-black bg-slate-900 text-white text-xs sm:text-sm font-semibold hover:bg-slate-800 dark:hover:bg-slate-200 transition-all duration-200 shadow-md hover:scale-[1.01] active:scale-[0.98]"
             >
               <span>Adquirir Tarjeta</span>
               <span className="text-xs">→</span>
@@ -110,18 +110,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           {/* Especificaciones discretas con mayor separación */}
-          <div className="mt-12 sm:mt-14 pt-6 border-t border-white/[0.07] grid grid-cols-3 gap-6 text-left w-full max-w-xs sm:max-w-sm">
+          <div className="mt-12 sm:mt-14 pt-6 border-t dark:border-white/[0.07] border-slate-200 grid grid-cols-3 gap-6 text-left w-full max-w-xs sm:max-w-sm">
             <div>
-              <div className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mb-1">Hardware</div>
-              <div className="text-xs font-medium text-slate-200">NFC + Dynamic QR</div>
+              <div className="text-[9px] font-mono dark:text-slate-500 text-slate-600 uppercase tracking-widest mb-1">Hardware</div>
+              <div className="text-xs font-semibold dark:text-slate-200 text-slate-900">NFC + Dynamic QR</div>
             </div>
             <div>
-              <div className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mb-1">Compatibilidad</div>
-              <div className="text-xs font-medium text-slate-200">iOS & Android</div>
+              <div className="text-[9px] font-mono dark:text-slate-500 text-slate-600 uppercase tracking-widest mb-1">Compatibilidad</div>
+              <div className="text-xs font-semibold dark:text-slate-200 text-slate-900">iOS & Android</div>
             </div>
             <div>
-              <div className="text-[9px] font-mono text-slate-500 uppercase tracking-widest mb-1">Configuración</div>
-              <div className="text-xs font-medium text-slate-200">En 60 Segundos</div>
+              <div className="text-[9px] font-mono dark:text-slate-500 text-slate-600 uppercase tracking-widest mb-1">Configuración</div>
+              <div className="text-xs font-semibold dark:text-slate-200 text-slate-900">En 60 Segundos</div>
             </div>
           </div>
         </div>

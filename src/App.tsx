@@ -1,9 +1,10 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppThemeProvider } from './context/AppThemeContext';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoadingFallback from './components/ui/LoadingFallback';
+import AuthModal from './components/auth/AuthModal';
 
 // ── Landing Page (Pública) ──────────────────────────────────────────────────
 const LandingPage = lazy(() => import('./pages/landing/LandingPage'));
@@ -24,10 +25,25 @@ const RenewalsPage = lazy(() => import('./pages/admin/RenewalsPage'));
 const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 
+/**
+ * Componente modal de autenticación global enlazado al AuthContext.
+ */
+function GlobalAuthModal() {
+  const { isAuthModalOpen, closeAuthModal, authModalMode } = useAuth();
+  return (
+    <AuthModal
+      isOpen={isAuthModalOpen}
+      onClose={closeAuthModal}
+      initialMode={authModalMode}
+    />
+  );
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <AppThemeProvider>
+        <GlobalAuthModal />
         <BrowserRouter>
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
@@ -39,27 +55,29 @@ export default function App() {
               <Route path="/p/:slug/:token" element={<CardResolver />} />
               <Route path="/activate/:token" element={<ActivateCardPage />} />
 
-              {/* ── Layout persistente del panel Admin ── */}
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Navigate to="/admin/dashboard" replace />} />
+              {/* ── Layout persistente del panel Admin (Protegido globalmente) ── */}
+              <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<Navigate to="/admin/dashboard" replace />} />
 
-                {/* Rutas para superadmin y org_admin */}
-                <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin']} />}>
-                  <Route path="dashboard" element={<GlobalDashboardPage />} />
-                  <Route path="cards" element={<CardsBatchesPage />} />
-                </Route>
+                  {/* Rutas para superadmin y org_admin */}
+                  <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin']} />}>
+                    <Route path="dashboard" element={<GlobalDashboardPage />} />
+                    <Route path="cards" element={<CardsBatchesPage />} />
+                  </Route>
 
-                {/* Rutas solo para superadmin */}
-                <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
-                  <Route path="users" element={<UsersPage />} />
-                  <Route path="organizations" element={<OrganizationsPage />} />
-                  <Route path="renewals" element={<RenewalsPage />} />
-                  <Route path="settings" element={<SettingsPage />} />
-                </Route>
+                  {/* Rutas solo para superadmin */}
+                  <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
+                    <Route path="users" element={<UsersPage />} />
+                    <Route path="organizations" element={<OrganizationsPage />} />
+                    <Route path="renewals" element={<RenewalsPage />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                  </Route>
 
-                {/* ── Pestaña Prueba: previsualización de temas de tarjeta ── */}
-                <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
-                  <Route path="prueba" element={<DashboardPage />} />
+                  {/* ── Pestaña Prueba: previsualización de temas de tarjeta ── */}
+                  <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
+                    <Route path="prueba" element={<DashboardPage />} />
+                  </Route>
                 </Route>
               </Route>
 
