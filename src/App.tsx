@@ -1,22 +1,25 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppThemeProvider } from './context/AppThemeContext';
-import AdminLayout from './layouts/AdminLayout';
-
-// ── Páginas de Resolución y Onboarding ─────────────────────────────────────
-import CardResolver from './pages/resolver/CardResolver';
-import ActivateCardPage from './pages/onboarding/ActivateCardPage';
-
-// ── Páginas del Panel SuperAdmin ──────────────────────────────────────────────
-import GlobalDashboardPage from './pages/admin/batchAdmin/GlobalDashboardPage';
-import CardsBatchesPage    from './pages/admin/batchAdmin/CardsBatchesPage';
-import UsersPage           from './pages/admin/UsersPage';
-import OrganizationsPage   from './pages/admin/OrganizationsPage';
-import RenewalsPage        from './pages/admin/RenewalsPage';
-import SettingsPage        from './pages/admin/SettingsPage';
-import DashboardPage       from './pages/admin/DashboardPage';   // ← Pestaña "Prueba"
-
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import LoadingFallback from './components/ui/LoadingFallback';
+
+// ── Páginas de Resolución y Onboarding ─────────────────────────────────────
+const CardResolver = lazy(() => import('./pages/resolver/CardResolver'));
+const ActivateCardPage = lazy(() => import('./pages/onboarding/ActivateCardPage'));
+
+// ── Layout persistente del panel Admin ─────────────────────────────────────
+const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
+
+// ── Páginas del Panel SuperAdmin ───────────────────────────────────────────
+const GlobalDashboardPage = lazy(() => import('./pages/admin/GlobalDashboardPage'));
+const CardsBatchesPage = lazy(() => import('./pages/admin/CardsBatchesPage'));
+const UsersPage = lazy(() => import('./pages/admin/UsersPage'));
+const OrganizationsPage = lazy(() => import('./pages/admin/OrganizationsPage'));
+const RenewalsPage = lazy(() => import('./pages/admin/RenewalsPage'));
+const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
+const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
 
 /**
  * Raíz de la aplicación SiF con React Router.
@@ -41,45 +44,47 @@ export default function App() {
     <AuthProvider>
       <AppThemeProvider>
         <BrowserRouter>
-          <Routes>
-            {/* Redirect raíz → dashboard */}
-            <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+          <Suspense fallback={<LoadingFallback />}>
+            <Routes>
+              {/* Redirect raíz → dashboard */}
+              <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
 
-            {/* ── Rutas Públicas de Resolución y Onboarding ── */}
-            <Route path="/t/:token" element={<CardResolver />} />
-            <Route path="/p/:slug/:token" element={<CardResolver />} />
-            <Route path="/activate/:token" element={<ActivateCardPage />} />
+              {/* ── Rutas Públicas de Resolución y Onboarding ── */}
+              <Route path="/t/:token" element={<CardResolver />} />
+              <Route path="/p/:slug/:token" element={<CardResolver />} />
+              <Route path="/activate/:token" element={<ActivateCardPage />} />
 
-            {/* ── Layout persistente del panel Admin ── */}
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Navigate to="/admin/dashboard" replace />} />
-              
-              {/* Rutas para superadmin y org_admin */}
-              <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin']} />}>
-                <Route path="dashboard"     element={<GlobalDashboardPage />} />
-                <Route path="cards"         element={<CardsBatchesPage />} />
+              {/* ── Layout persistente del panel Admin ── */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Navigate to="/admin/dashboard" replace />} />
+
+                {/* Rutas para superadmin y org_admin */}
+                <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin']} />}>
+                  <Route path="dashboard" element={<GlobalDashboardPage />} />
+                  <Route path="cards" element={<CardsBatchesPage />} />
+                </Route>
+
+                {/* Rutas solo para superadmin */}
+                <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
+                  <Route path="users" element={<UsersPage />} />
+                  <Route path="organizations" element={<OrganizationsPage />} />
+                  <Route path="renewals" element={<RenewalsPage />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                </Route>
+
+                {/* ── Pestaña Prueba: previsualización de temas de tarjeta ── */}
+                {/* Accesible para usuarios (y admins) */}
+                <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
+                  <Route path="prueba" element={<DashboardPage />} />
+                </Route>
               </Route>
-              
-              {/* Rutas solo para superadmin */}
-              <Route element={<ProtectedRoute allowedRoles={['superadmin']} />}>
-                <Route path="users"         element={<UsersPage />} />
-                <Route path="organizations" element={<OrganizationsPage />} />
-                <Route path="renewals"      element={<RenewalsPage />} />
-                <Route path="settings"      element={<SettingsPage />} />
-              </Route>
 
-              {/* ── Pestaña Prueba: previsualización de temas de tarjeta ── */}
-              {/* Accesible para usuarios (y admins) */}
-              <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
-                <Route path="prueba"        element={<DashboardPage />} />
-              </Route>
-            </Route>
-
-          {/* ── Ruta corporativa con prefijo de lote (B2B) ── */}
-          <Route path="/:prefix/:token" element={<CardResolver />} />
-        </Routes>
+              {/* ── Ruta corporativa con prefijo de lote (B2B) ── */}
+              <Route path="/:prefix/:token" element={<CardResolver />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </AppThemeProvider>
     </AuthProvider>
   );
-}
+}
