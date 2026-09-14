@@ -9,7 +9,7 @@ import {
   Inbox,
 } from 'lucide-react';
 
-export interface ColumnDef<TData, TValue = unknown> {
+export interface ColumnDef<TData> {
   id?: string;
   accessorKey?: keyof TData | string;
   accessorFn?: (row: TData) => unknown;
@@ -21,8 +21,8 @@ export interface ColumnDef<TData, TValue = unknown> {
   enableSorting?: boolean;
 }
 
-interface DataTableProps<TData, TValue = unknown> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[];
   data: TData[];
   searchPlaceholder?: string;
   filterComponent?: ReactNode;
@@ -31,27 +31,27 @@ interface DataTableProps<TData, TValue = unknown> {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-export function DataTable<TData, TValue = unknown>({
+export function DataTable<TData>({
   columns,
   data,
   searchPlaceholder = 'Buscar...',
   filterComponent,
   pageSize = 10,
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData>) {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<SortDirection>(null);
   const [currentPage, setCurrentPage] = useState(0);
 
   // Helper para obtener el valor de una celda según accessorKey o accessorFn
-  const getCellValue = (item: TData, col: ColumnDef<TData, TValue>): unknown => {
+  const getCellValue = (item: TData, col: ColumnDef<TData>): unknown => {
     if (col.accessorFn) return col.accessorFn(item);
     if (col.accessorKey) return (item as Record<string, unknown>)[col.accessorKey as string];
     return null;
   };
 
   // Identificador único de columna
-  const getColId = (col: ColumnDef<TData, TValue>, idx: number): string => {
+  const getColId = (col: ColumnDef<TData>, idx: number): string => {
     return col.id || (col.accessorKey as string) || `col_${idx}`;
   };
 

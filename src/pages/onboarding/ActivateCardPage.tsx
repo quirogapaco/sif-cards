@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { activationService } from '../../services/activationService';
 import { storageService } from '../../services/storageService';
@@ -10,7 +10,6 @@ import sifGold from '../../assets/sif_gold.png';
 import type { Card, Profile } from '../../types/database';
 import {
   Sparkles,
-  Smartphone,
   Eye,
   Edit3,
   CheckCircle2,
@@ -22,7 +21,6 @@ import {
 
 export default function ActivateCardPage() {
   const { token } = useParams<{ token: string }>();
-  const navigate = useNavigate();
 
   // Estados de página y carga
   const [initLoading, setInitLoading] = useState(true);

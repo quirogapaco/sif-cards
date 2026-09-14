@@ -8,7 +8,6 @@ import { supabase } from '../../lib/supabase';
 import sifGold from '../../assets/sif_gold.png';
 import {
   AlertCircle,
-  CreditCard,
   ShieldAlert,
   Clock,
   HelpCircle,

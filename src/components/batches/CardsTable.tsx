@@ -66,7 +66,7 @@ export function CardsTable({ cards }: CardsTableProps) {
     </select>
   );
 
-  const columns = useMemo<ColumnDef<Card, unknown>[]>(
+  const columns = useMemo<ColumnDef<Card>[]>(
     () => [
       {
         accessorKey: 'serial_number',

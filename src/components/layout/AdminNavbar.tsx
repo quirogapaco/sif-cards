@@ -1,12 +1,10 @@
 import { useLocation } from 'react-router-dom';
-import { Moon, Sun, ChevronRight, Home, Menu, LogIn, LogOut, User } from 'lucide-react';
+import { Moon, Sun, ChevronRight, Home, Menu, LogOut } from 'lucide-react';
 import { useAppTheme } from '../../context/AppThemeContext';
 import { ADMIN_NAV_ITEMS } from '../../config/adminNav';
-import { supabase } from '../../lib/supabase';
-import { userService } from '../../services/userService';
-import { useState, useEffect, useCallback } from 'react';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
+import { useState } from 'react';
 import AuthModal from '../auth/AuthModal';
+import { useAuth } from '../../context/AuthContext';
 
 interface AdminNavbarProps {
   onToggleSidebar: () => void;
@@ -28,29 +26,12 @@ export default function AdminNavbar({ onToggleSidebar }: AdminNavbarProps) {
   );
 
   // ── Estado de sesión + modal ──────────────────────────────────────────
-  const [authUser, setAuthUser] = useState<SupabaseUser | null>(null);
+  const { user: authUser } = useAuth();
   const [authModalOpen, setAuthModalOpen] = useState(false);
 
-  const checkSession = useCallback(async () => {
-    const { data } = await supabase.auth.getUser();
-    setAuthUser(data.user ?? null);
-    if (data.user) {
-      await userService.ensureUserRecord(data.user.id);
-    }
-  }, []);
-
-  useEffect(() => {
-    checkSession();
-    const { data: listener } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setAuthUser(session?.user ?? null);
-      if (session?.user) {
-        await userService.ensureUserRecord(session.user.id);
-      }
-    });
-    return () => listener.subscription.unsubscribe();
-  }, [checkSession]);
-
   const handleSignOut = async () => {
+    // Para simplificar, obtenemos la instancia de supabase aquí en vez de importarla arriba (o la importamos)
+    const { supabase } = await import('../../lib/supabase');
     await supabase.auth.signOut();
   };
 

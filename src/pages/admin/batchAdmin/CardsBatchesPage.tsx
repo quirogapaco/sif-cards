@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Layers, Package2, WifiOff, Wifi, Plus, RefreshCw } from 'lucide-react';
-import { MetricCard } from '../../components/ui/MetricCard';
-import { BatchesTable } from '../../components/batches/BatchesTable';
-import { CardsTable } from '../../components/batches/CardsTable';
-import { CreateBatchModal } from '../../components/batches/CreateBatchModal';
-import { batchService, type BatchSummary } from '../../services/batchService';
-import type { Card } from '../../types/database';
+import { MetricCard } from '../../../components/ui/MetricCard';
+import { BatchesTable } from '../../../components/batches/BatchesTable';
+import { CardsTable } from '../../../components/batches/CardsTable';
+import { CreateBatchModal } from '../../../components/batches/CreateBatchModal';
+import { batchService, type BatchSummary } from '../../../services/batchService';
+import type { Card } from '../../../types/database';
 
 type ActiveTab = 'batches' | 'inventory';
 
