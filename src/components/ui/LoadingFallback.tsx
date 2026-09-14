@@ -17,7 +17,7 @@ export default function LoadingFallback() {
         <div className="relative flex items-center justify-center w-12 h-12">
           {/* Anillo de pulso sutil */}
           <div className="absolute inset-0 rounded-full border border-[#ddb225]/20 animate-ping opacity-75" />
-          
+
           {/* Spinner de alto contraste */}
           <div className="w-10 h-10 rounded-full border-2 border-white/10 border-t-[#ddb225] animate-spin" />
         </div>

@@ -1,6 +1,8 @@
 import { LayoutDashboard, Layers, Users, Building2, CalendarClock, Settings, FlaskConical } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
+import type { UserRole } from '../types/database';
+
 export interface NavItem {
   id: string;
   label: string;
@@ -8,6 +10,7 @@ export interface NavItem {
   icon: LucideIcon;
   /** Descripción corta para breadcrumb / tooltip */
   description: string;
+  allowedRoles?: UserRole[];
 }
 
 export const ADMIN_NAV_ITEMS: NavItem[] = [
@@ -17,6 +20,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/dashboard',
     icon: LayoutDashboard,
     description: 'Métricas globales de la plataforma',
+    allowedRoles: ['superadmin', 'org_admin'],
   },
   {
     id: 'cards',
@@ -24,6 +28,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/cards',
     icon: Layers,
     description: 'Gestión de inventario físico y números de serie',
+    allowedRoles: ['superadmin', 'org_admin'],
   },
   {
     id: 'users',
@@ -31,6 +36,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/users',
     icon: Users,
     description: 'Usuarios particulares y corporativos',
+    allowedRoles: ['superadmin'],
   },
   {
     id: 'organizations',
@@ -38,6 +44,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/organizations',
     icon: Building2,
     description: 'Empresas asociadas y contratos',
+    allowedRoles: ['superadmin'],
   },
   {
     id: 'renewals',
@@ -45,6 +52,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/renewals',
     icon: CalendarClock,
     description: 'Membresías activas y vencimientos',
+    allowedRoles: ['superadmin'],
   },
   {
     id: 'settings',
@@ -52,6 +60,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/settings',
     icon: Settings,
     description: 'Ajustes de la plataforma y dominios',
+    allowedRoles: ['superadmin'],
   },
   {
     id: 'prueba',
@@ -59,5 +68,6 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/prueba',
     icon: FlaskConical,
     description: 'Previsualización de temas de tarjeta',
+    allowedRoles: ['superadmin', 'org_admin', 'user'],
   },
 ];

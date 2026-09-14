@@ -113,7 +113,6 @@ export default function DashboardPage() {
                         isSelected
                           ? {
                               backgroundColor: `${fam.accentColor}18`,
-                              ringColor: fam.accentColor,
                               boxShadow: `0 0 0 2px ${fam.accentColor}55`,
                             }
                           : {}

@@ -25,4 +25,26 @@ export const userService = {
       console.error('Excepción al crear el registro en la tabla users:', err);
     }
   },
+
+  /**
+   * Obtiene el rol del usuario desde la tabla pública 'users'.
+   */
+  async getUserRole(userId: string): Promise<UserRole | null> {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('Error al obtener el rol del usuario:', error.message);
+        return null;
+      }
+      return data?.role as UserRole;
+    } catch (err) {
+      console.error('Excepción al obtener el rol del usuario:', err);
+      return null;
+    }
+  },
 };

@@ -1,6 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { ChevronRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { ADMIN_NAV_ITEMS } from '../../config/adminNav';
+import { useAuth } from '../../context/AuthContext';
 
 interface AdminSidebarProps {
   expanded: boolean;
@@ -19,6 +20,7 @@ interface AdminSidebarProps {
  */
 export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
   const location = useLocation();
+  const { userRole, user } = useAuth();
 
   return (
     <aside
@@ -92,7 +94,9 @@ export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
           </p>
         )}
 
-        {ADMIN_NAV_ITEMS.map(({ id, label, path, icon: Icon }) => {
+        {ADMIN_NAV_ITEMS.filter(
+          (item) => !item.allowedRoles || (userRole && item.allowedRoles.includes(userRole))
+        ).map(({ id, label, path, icon: Icon }) => {
           const isPrueba = id === 'prueba';
           const isActive = location.pathname.startsWith(path);
 
@@ -165,12 +169,12 @@ export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
           >
             SA
           </div>
-          {expanded && (
+          {expanded && user && (
             <div className="min-w-0 overflow-hidden">
               <p className="truncate text-xs font-semibold text-sif-text">
-                Super Admin
+                {user.user_metadata?.full_name || 'Admin'}
               </p>
-              <p className="truncate text-[10px] text-sif-muted">admin@sif.io</p>
+              <p className="truncate text-[10px] text-sif-muted">{user.email}</p>
             </div>
           )}
         </div>

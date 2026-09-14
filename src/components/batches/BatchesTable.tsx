@@ -1,6 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
 import { DataTable, type ColumnDef } from '../ui/data-table/DataTable';
-import { Badge } from '../ui/Badge';
 import type { BatchSummary } from '../../services/batchService';
 import { batchService } from '../../services/batchService';
 import { exportBatchToExcel } from '../../utils/exportExcel';
@@ -42,7 +41,7 @@ export function BatchesTable({ batches, onFilterByBatch }: BatchesTableProps) {
     }
   }, []);
 
-  const columns = useMemo<ColumnDef<BatchSummary, unknown>[]>(
+  const columns = useMemo<ColumnDef<BatchSummary>[]>(
     () => [
       {
         accessorKey: 'name',
