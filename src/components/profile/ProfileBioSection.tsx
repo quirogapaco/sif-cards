@@ -17,7 +17,7 @@ export default function ProfileBioSection({ bio, languages }: ProfileBioSectionP
 
   return (
     <div
-      className="rounded-3xl border p-6 shadow-sm transition-colors duration-500"
+      className="rounded-2xl border p-5 shadow-sm transition-colors duration-500"
       style={{
         backgroundColor: 'var(--card-surface-card)',
         borderColor: 'var(--card-surface-border)',
@@ -25,7 +25,7 @@ export default function ProfileBioSection({ bio, languages }: ProfileBioSectionP
     >
       {/* Encabezado de sección */}
       <h3
-        className="text-base font-semibold flex items-center gap-2 mb-4 font-card-headline transition-colors duration-500"
+        className="text-base font-semibold flex items-center gap-2 mb-3 font-card-headline transition-colors duration-500"
         style={{ color: 'var(--card-primary)' }}
       >
         <BookOpen className="w-5 h-5 shrink-0" />
@@ -44,7 +44,7 @@ export default function ProfileBioSection({ bio, languages }: ProfileBioSectionP
 
       {/* Badges de idiomas */}
       {hasLanguages && (
-        <div className={hasBio ? 'mt-6 pt-6 border-t' : ''} style={{ borderColor: 'var(--card-surface-border)' }}>
+        <div className={hasBio ? 'mt-4 pt-4 border-t' : ''} style={{ borderColor: 'var(--card-surface-border)' }}>
           <p
             className="text-[11px] font-semibold uppercase tracking-wider mb-3 font-card-body"
             style={{ color: 'var(--card-text-muted)' }}

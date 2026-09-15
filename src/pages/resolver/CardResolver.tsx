@@ -206,7 +206,7 @@ export default function CardResolver() {
 
   // 2. Renderizado exitoso del perfil activo
   if (profile && !errorType) {
-    return <ProfileView profile={profile} isNfcSource={isNfcSource} token={resolvedToken} />;
+    return <ProfileView profile={profile} isNfcSource={isNfcSource} token={resolvedToken} isStandalone={true} />;
   }
 
   // 3. Vista especial para Tarjeta Virgen / Inactiva

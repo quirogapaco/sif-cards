@@ -4,11 +4,9 @@ import type { ProfileFormData } from './ProfileForm';
 interface EducationAndExperienceProps {
   formData: ProfileFormData;
   onChange: (updated: ProfileFormData) => void;
-  isOpen: boolean;
-  onToggle: () => void;
 }
 
-export default function EducationAndExperience({ formData, onChange, isOpen, onToggle }: EducationAndExperienceProps) {
+export default function EducationAndExperience({ formData, onChange }: EducationAndExperienceProps) {
   const addEducation = () => {
     onChange({
       ...formData,
@@ -58,156 +56,171 @@ export default function EducationAndExperience({ formData, onChange, isOpen, onT
   };
 
   return (
-    <div className="rounded-2xl border border-sif-border bg-sif-surface overflow-hidden">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="flex w-full items-center justify-between p-5 text-left transition-colors hover:bg-sif-surface-subtle/50"
-      >
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-sif-gold/30 bg-sif-gold/10 text-sif-gold">
-            <Briefcase className="h-4 w-4" />
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold text-sif-text">5. Trayectoria y Emprendimientos</h3>
-            <p className="text-xs text-sif-muted">Estudios académicos y proyectos propios</p>
-          </div>
+    <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      {/* Educación */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-semibold text-sif-text flex items-center gap-1.5">
+            <GraduationCap className="h-4 w-4 text-sif-gold" />
+            <span>Educación / Títulos</span>
+          </label>
+          <button
+            type="button"
+            onClick={addEducation}
+            className="flex items-center gap-1 text-xs font-semibold text-sif-gold hover:underline"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Añadir</span>
+          </button>
         </div>
-        {isOpen ? <ChevronUp className="h-4 w-4 text-sif-muted" /> : <ChevronDown className="h-4 w-4 text-sif-muted" />}
-      </button>
 
-      {isOpen && (
-        <div className="border-t border-sif-border p-5 flex flex-col gap-6">
-          {/* Educación */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-sif-text flex items-center gap-1.5">
-                <GraduationCap className="h-4 w-4 text-sif-gold" />
-                <span>Educación / Títulos</span>
-              </label>
+        {formData.education.map((edu, idx) => (
+          <div
+            key={idx}
+            className="rounded-xl border border-sif-border bg-sif-surface-subtle p-3 flex flex-col gap-2"
+          >
+            {/* Header de la tarjeta */}
+            <div className="flex items-center justify-between border-b border-sif-border pb-2 mb-1">
+              <span className="text-[11px] font-semibold text-sif-muted uppercase tracking-wider">
+                Título {idx + 1}
+              </span>
               <button
                 type="button"
-                onClick={addEducation}
-                className="flex items-center gap-1 text-xs font-semibold text-sif-gold hover:underline"
+                onClick={() => removeEducation(idx)}
+                className="text-sif-muted transition-colors hover:text-red-400 p-1 rounded-md hover:bg-red-500/10"
+                title="Eliminar título"
               >
-                <Plus className="h-3.5 w-3.5" />
-                <span>Añadir</span>
+                <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
 
-            {formData.education.map((edu, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl border border-sif-border bg-sif-surface-subtle p-4 flex flex-col gap-2.5"
-              >
-                {/* Header de la tarjeta */}
-                <div className="flex items-center justify-between border-b border-sif-border pb-2 mb-1">
-                  <span className="text-[11px] font-semibold text-sif-muted uppercase tracking-wider">
-                    Título {idx + 1}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => removeEducation(idx)}
-                    className="text-sif-muted transition-colors hover:text-red-400 p-1 rounded-md hover:bg-red-500/10"
-                    title="Eliminar título"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                </div>
+            <div className="relative">
+              <input
+                type="text"
+                id={`edu_title_${idx}`}
+                value={edu.title}
+                onChange={(e) => updateEducation(idx, 'title', e.target.value)}
+                placeholder=" "
+                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+              />
+              <label htmlFor={`edu_title_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
+                Título o Maestría
+              </label>
+            </div>
 
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div className="relative">
                 <input
                   type="text"
-                  value={edu.title}
-                  onChange={(e) => updateEducation(idx, 'title', e.target.value)}
-                  placeholder="Título o Maestría (ej. Ingeniería en Sistemas)"
-                  className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
+                  id={`edu_inst_${idx}`}
+                  value={edu.institution}
+                  onChange={(e) => updateEducation(idx, 'institution', e.target.value)}
+                  placeholder=" "
+                  className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
                 />
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    value={edu.institution}
-                    onChange={(e) => updateEducation(idx, 'institution', e.target.value)}
-                    placeholder="Universidad / Instituto"
-                    className="rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
-                  />
-                  <input
-                    type="text"
-                    value={edu.period}
-                    onChange={(e) => updateEducation(idx, 'period', e.target.value)}
-                    placeholder="Periodo (ej. 2018 - 2022)"
-                    className="rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
-                  />
-                </div>
+                <label htmlFor={`edu_inst_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
+                  Universidad / Instituto
+                </label>
               </div>
-            ))}
+              <div className="relative">
+                <input
+                  type="text"
+                  id={`edu_per_${idx}`}
+                  value={edu.period}
+                  onChange={(e) => updateEducation(idx, 'period', e.target.value)}
+                  placeholder=" "
+                  className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+                />
+                <label htmlFor={`edu_per_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
+                  Periodo
+                </label>
+              </div>
+            </div>
           </div>
+        ))}
+      </div>
 
-          {/* Emprendimientos */}
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-sif-text flex items-center gap-1.5">
-                <Building2 className="h-4 w-4 text-sif-gold" />
-                <span>Negocios y Proyectos</span>
-              </label>
+      {/* Emprendimientos */}
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-semibold text-sif-text flex items-center gap-1.5">
+            <Building2 className="h-4 w-4 text-sif-gold" />
+            <span>Negocios y Proyectos</span>
+          </label>
+          <button
+            type="button"
+            onClick={addBusiness}
+            className="flex items-center gap-1 text-xs font-semibold text-sif-gold hover:underline"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            <span>Añadir</span>
+          </button>
+        </div>
+
+        {formData.businesses.map((biz, idx) => (
+          <div
+            key={idx}
+            className="rounded-xl border border-sif-border bg-sif-surface-subtle p-3 flex flex-col gap-2"
+          >
+            {/* Header de la tarjeta */}
+            <div className="flex items-center justify-between border-b border-sif-border pb-2 mb-1">
+              <span className="text-[11px] font-semibold text-sif-muted uppercase tracking-wider">
+                Trayectoria {idx + 1}
+              </span>
               <button
                 type="button"
-                onClick={addBusiness}
-                className="flex items-center gap-1 text-xs font-semibold text-sif-gold hover:underline"
+                onClick={() => removeBusiness(idx)}
+                className="text-sif-muted transition-colors hover:text-red-400 p-1 rounded-md hover:bg-red-500/10"
+                title="Eliminar trayectoria"
               >
-                <Plus className="h-3.5 w-3.5" />
-                <span>Añadir</span>
+                <Trash2 className="h-3.5 w-3.5" />
               </button>
             </div>
 
-            {formData.businesses.map((biz, idx) => (
-              <div
-                key={idx}
-                className="rounded-xl border border-sif-border bg-sif-surface-subtle p-4 flex flex-col gap-2.5"
-              >
-                {/* Header de la tarjeta */}
-                <div className="flex items-center justify-between border-b border-sif-border pb-2 mb-1">
-                  <span className="text-[11px] font-semibold text-sif-muted uppercase tracking-wider">
-                    Trayectoria {idx + 1}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => removeBusiness(idx)}
-                    className="text-sif-muted transition-colors hover:text-red-400 p-1 rounded-md hover:bg-red-500/10"
-                    title="Eliminar trayectoria"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                </div>
+            <div className="relative">
+              <input
+                type="text"
+                id={`biz_name_${idx}`}
+                value={biz.name}
+                onChange={(e) => updateBusiness(idx, 'name', e.target.value)}
+                placeholder=" "
+                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+              />
+              <label htmlFor={`biz_name_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
+                Nombre del proyecto / marca
+              </label>
+            </div>
 
-                <input
-                  type="text"
-                  value={biz.name}
-                  onChange={(e) => updateBusiness(idx, 'name', e.target.value)}
-                  placeholder="Nombre del proyecto / marca"
-                  className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
-                />
+            <div className="relative">
+              <input
+                type="text"
+                id={`biz_desc_${idx}`}
+                value={biz.description}
+                onChange={(e) => updateBusiness(idx, 'description', e.target.value)}
+                placeholder=" "
+                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+              />
+              <label htmlFor={`biz_desc_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
+                Breve resumen del servicio
+              </label>
+            </div>
 
-                <input
-                  type="text"
-                  value={biz.description}
-                  onChange={(e) => updateBusiness(idx, 'description', e.target.value)}
-                  placeholder="Breve resumen del servicio"
-                  className="rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
-                />
-
-                <input
-                  type="url"
-                  value={biz.url}
-                  onChange={(e) => updateBusiness(idx, 'url', e.target.value)}
-                  placeholder="Enlace web (ej. https://miempresa.com)"
-                  className="rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold"
-                />
-              </div>
-            ))}
+            <div className="relative">
+              <input
+                type="url"
+                id={`biz_url_${idx}`}
+                value={biz.url}
+                onChange={(e) => updateBusiness(idx, 'url', e.target.value)}
+                placeholder=" "
+                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+              />
+              <label htmlFor={`biz_url_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
+                Enlace web (ej. https://miempresa.com)
+              </label>
+            </div>
           </div>
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 }

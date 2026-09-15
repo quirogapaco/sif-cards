@@ -20,7 +20,7 @@ export default function ProfileSocialBar({ socialLinks, onSocialClick }: Profile
   if (!socialLinks || socialLinks.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-3 justify-center">
+    <div className="flex flex-wrap gap-2 justify-center">
       {socialLinks.map((link, idx) => {
         return (
           <a
@@ -30,7 +30,7 @@ export default function ProfileSocialBar({ socialLinks, onSocialClick }: Profile
             rel="noopener noreferrer"
             aria-label={link.platform}
             onClick={() => onSocialClick?.(link.platform, link.url)}
-            className="w-12 h-12 rounded-full border flex items-center justify-center shadow-sm transition-colors duration-300"
+            className="w-10 h-10 rounded-full border flex items-center justify-center shadow-sm transition-colors duration-300"
             style={{
               borderColor: 'var(--card-surface-border)',
               backgroundColor: 'var(--card-surface-card)',

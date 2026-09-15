@@ -20,7 +20,7 @@ export default function ProfileBusinesses({ businessesList }: ProfileBusinessesP
 
   return (
     <div
-      className="rounded-3xl border p-6 shadow-sm transition-colors duration-500"
+      className="rounded-2xl border p-5 shadow-sm transition-colors duration-500"
       style={{
         backgroundColor: 'var(--card-surface-card)',
         borderColor: 'var(--card-surface-border)',
@@ -28,7 +28,7 @@ export default function ProfileBusinesses({ businessesList }: ProfileBusinessesP
     >
       {/* Encabezado de sección */}
       <h3
-        className="text-base font-semibold flex items-center gap-2 mb-5 font-card-headline transition-colors duration-500"
+        className="text-base font-semibold flex items-center gap-2 mb-3 font-card-headline transition-colors duration-500"
         style={{ color: 'var(--card-primary)' }}
       >
         <Building2 className="w-5 h-5 shrink-0" />
@@ -36,7 +36,7 @@ export default function ProfileBusinesses({ businessesList }: ProfileBusinessesP
       </h3>
 
       {/* Lista de entradas */}
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
         {businessesList.map((entry, idx) => (
           <div key={idx}>
             <BusinessItem
@@ -47,7 +47,7 @@ export default function ProfileBusinesses({ businessesList }: ProfileBusinessesP
             {/* Divisor entre entradas (excepto la última) */}
             {idx < businessesList.length - 1 && (
               <div
-                className="mt-5 border-t transition-colors duration-500"
+                className="mt-3 border-t transition-colors duration-500"
                 style={{ borderColor: 'var(--card-surface-border)' }}
               />
             )}

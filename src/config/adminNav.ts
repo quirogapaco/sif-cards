@@ -64,7 +64,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
   },
   {
     id: 'profile',
-    label: 'Mis Perfiles',
+    label: 'Perfiles',
     path: '/admin/profile',
     icon: UserCircle,
     description: 'Edición de perfiles de tarjeta',

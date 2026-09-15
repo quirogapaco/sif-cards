@@ -1,6 +1,5 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { Download, Share2, Check } from 'lucide-react';
-import { useState } from 'react';
 import type { Profile } from '../../types/database';
 import { downloadVCard } from '../../utils/vcfGenerator';
 import { useProfileAnalytics } from '../../hooks/useProfileAnalytics';
@@ -20,6 +19,8 @@ interface ProfileViewProps {
   isNfcSource?: boolean;
   /** Token del chip NFC, solo cuando isNfcSource = true */
   token?: string;
+  /** Si es true, inyecta el color de fondo al <body> para evitar destellos blancos al hacer overscroll */
+  isStandalone?: boolean;
 }
 
 /**
@@ -27,7 +28,7 @@ interface ProfileViewProps {
  * Envoltura raíz con [data-card-theme] para el scope aislado de CSS.
  * Todos los hijos consumen exclusivamente variables card-*.
  */
-export default function ProfileView({ profile, isNfcSource = false, token }: ProfileViewProps) {
+export default function ProfileView({ profile, isNfcSource = false, token, isStandalone = false }: ProfileViewProps) {
   const data     = profile.data;
   const theme    = profile.theme_palette || 'emerald-dark';
   const contacts = data.direct_contacts;
@@ -35,6 +36,24 @@ export default function ProfileView({ profile, isNfcSource = false, token }: Pro
   // ── Telemetría ──────────────────────────────────────────────────────────────
   const { trackContactSave, trackDirectContact, trackSocialClick, trackShare } =
     useProfileAnalytics({ profileId: profile.id, isNfcSource, token });
+
+  // ── Desactivar rebote (Overscroll) e inyectar color global ──
+  useEffect(() => {
+    document.body.classList.add('overscroll-y-none');
+    
+    if (isStandalone) {
+      document.documentElement.setAttribute('data-card-theme', theme);
+      document.body.style.backgroundColor = 'var(--card-surface)';
+    }
+
+    return () => {
+      document.body.classList.remove('overscroll-y-none');
+      if (isStandalone) {
+        document.documentElement.removeAttribute('data-card-theme');
+        document.body.style.backgroundColor = '';
+      }
+    };
+  }, [isStandalone, theme]);
 
   // ── Estado del botón Compartir ──────────────────────────────────────────────
   const [shareState, setShareState] = useState<'idle' | 'copied'>('idle');
@@ -78,17 +97,17 @@ export default function ProfileView({ profile, isNfcSource = false, token }: Pro
   return (
     <div
       data-card-theme={theme}
-      className="min-h-screen w-full font-card-body transition-colors duration-300"
+      className="min-h-screen w-full font-card-body transition-colors duration-300 overscroll-y-none"
       style={{ backgroundColor: 'var(--card-surface)', color: 'var(--card-text-main)' }}
     >
       {/* ── 1. Banner Superior ─────────────────────────────────────────────── */}
       <ProfileBanner bannerUrl={data.banner_url} />
 
       {/* ── 2. Contenido Central ───────────────────────────────────────────── */}
-      <div className="relative z-10 w-full max-w-md mx-auto px-5 pb-6 space-y-5">
+      <div className="relative z-10 w-full max-w-md mx-auto px-4 pb-6 space-y-4">
 
         {/* ── 2a. Header: Avatar + Identidad ─────────────────────────────── */}
-        <div className="flex flex-col items-center text-center -mt-[72px] space-y-3">
+        <div className="flex flex-col items-center text-center -mt-[72px] space-y-2">
 
           {/* Avatar flotante solapado */}
           <ProfileAvatar
@@ -97,7 +116,7 @@ export default function ProfileView({ profile, isNfcSource = false, token }: Pro
           />
 
           {/* Identidad */}
-          <div className="space-y-1.5 pt-1">
+          <div className="space-y-1">
             <h1
               className="text-2xl font-bold leading-tight font-card-headline transition-colors duration-500"
               style={{ color: 'var(--card-text-main)' }}
@@ -178,7 +197,7 @@ export default function ProfileView({ profile, isNfcSource = false, token }: Pro
         />
 
         {/* ── 2d. Contactos Directos ─────────────────────────────────────── */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <ContactItem type="whatsapp" value={contacts?.whatsapp} onTrack={trackDirectContact} />
           <ContactItem type="email"    value={contacts?.email}    onTrack={trackDirectContact} />
           <ContactItem type="phone"    value={contacts?.phone}    onTrack={trackDirectContact} />

@@ -27,8 +27,13 @@ export default function ProfileEditorLayout({
         </section>
 
         {/* Columna Derecha */}
-        <section className={`flex flex-1 flex-col lg:sticky lg:top-0 ${mobileTab === 'form' ? 'hidden lg:block' : 'block'}`}>
-          <div className="flex items-center justify-between px-1 mb-3">
+        <section 
+          className={`
+            ${mobileTab === 'form' ? 'hidden lg:flex' : 'fixed inset-0 z-40 bg-sif-bg lg:static lg:bg-transparent lg:z-auto'} 
+            flex flex-col lg:flex-1 lg:items-center lg:sticky lg:top-8
+          `}
+        >
+          <div className={`flex items-center justify-between mb-3 w-full shrink-0 lg:w-[375px] ${mobileTab === 'preview' ? 'px-6 pt-6 lg:p-0' : 'px-1'}`}>
             <span className="text-xs font-semibold uppercase tracking-wider text-sif-muted flex items-center gap-1.5">
               <Eye className="h-3.5 w-3.5 text-sif-gold" />
               <span>Vista Previa en Vivo</span>
@@ -42,7 +47,12 @@ export default function ProfileEditorLayout({
           
           <div
             data-card-theme={themePalette || 'emerald-dark'}
-            className="rounded-3xl border border-sif-border bg-sif-surface shadow-2xl overflow-hidden min-h-[600px]"
+            className={`
+              bg-sif-surface overflow-y-auto
+              ${mobileTab === 'preview' ? 'w-full flex-1 pb-24' : 'rounded-3xl border border-sif-border shadow-2xl min-h-[600px] overflow-hidden'}
+              lg:w-[375px] lg:h-[800px] lg:max-h-[85vh] lg:min-h-0 lg:rounded-[40px] lg:border-[8px] lg:border-gray-900 lg:shadow-2xl lg:overflow-y-auto lg:pb-0 lg:flex-none
+              [&::-webkit-scrollbar]:hidden
+            `}
           >
             {childrenRight}
           </div>
@@ -50,7 +60,7 @@ export default function ProfileEditorLayout({
       </div>
 
       {/* ── BOTÓN FLOTANTE INFERIOR MÓVIL [ Formulario | Vista Previa ] ── */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 lg:hidden">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden">
         <div className="flex items-center rounded-full border border-sif-border bg-sif-surface/95 p-1.5 shadow-2xl backdrop-blur-xl">
           <button
             onClick={() => setMobileTab('form')}

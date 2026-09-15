@@ -54,7 +54,7 @@ export default function ContactItem({ type, value, onTrack }: ContactItemProps) 
       target={type === 'email' || type === 'phone' ? '_self' : '_blank'}
       rel="noopener noreferrer"
       onClick={() => onTrack?.(type, value!.trim())}
-      className="flex items-center justify-between rounded-2xl border p-4 transition-all duration-300 group"
+      className="flex items-center justify-between rounded-xl border p-3 transition-all duration-300 group"
       style={{
         backgroundColor: 'var(--card-surface-card)',
         borderColor: 'var(--card-surface-border)',
@@ -67,16 +67,16 @@ export default function ContactItem({ type, value, onTrack }: ContactItemProps) 
       }}
     >
       {/* Ícono en contenedor circular */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <div
-          className="w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
+          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
           style={{
             backgroundColor: 'color-mix(in srgb, var(--card-primary) 10%, transparent)',
             color: 'var(--card-primary)',
-          }}
-        >
-          <Icon className="w-5 h-5" />
-        </div>
+        }}
+      >
+        <Icon className="w-4 h-4" />
+      </div>
         <div className="min-w-0">
           <p
             className="text-[11px] font-semibold uppercase tracking-wider font-card-body"

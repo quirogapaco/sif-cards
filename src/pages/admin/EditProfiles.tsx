@@ -171,9 +171,9 @@ export default function EditProfiles() {
       {/* Encabezado */}
       <div className="border-b border-sif-border bg-sif-surface px-6 py-4 flex items-center justify-between">
         <div>
-          <h2 className="text-base font-semibold text-sif-text">Mi Perfil</h2>
+          <h2 className="text-base font-semibold text-sif-text">Perfiles</h2>
           <p className="mt-0.5 text-xs text-sif-muted">
-            Edita y personaliza tus perfiles.
+            Personaliza tus perfiles.
           </p>
         </div>
 
@@ -232,6 +232,7 @@ export default function EditProfiles() {
               loading={submitLoading}
               submitButtonText="Guardar Cambios"
               fieldErrors={fieldErrors}
+              alwaysShowSubmit={true}
             />
           )
         }
