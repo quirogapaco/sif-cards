@@ -110,9 +110,13 @@ export const activationService = {
     // Emprendimientos / Negocios
     if (data.businesses && data.businesses.length > 0) {
       const validBiz = data.businesses.filter(
-        (b) => b.name?.trim() && b.description?.trim()
+        (b) => b.name?.trim()
       );
-      if (validBiz.length > 0) cleaned.businesses = validBiz;
+      if (validBiz.length > 0) cleaned.businesses = validBiz.map(b => ({
+        name: b.name.trim(),
+        description: b.description?.trim() || '',
+        url: b.url?.trim() || ''
+      }));
     }
 
     return cleaned;

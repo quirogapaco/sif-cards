@@ -59,7 +59,7 @@ export const CrowdCanvas: React.FC<CrowdCanvasProps> = ({
     };
 
     const normalWalk = ({ peep, props }: { peep: any; props: any }) => {
-      const { startX, startY, endX } = props;
+      const { startY, endX } = props;
       const xDuration = 12;
       const yDuration = 0.25;
 

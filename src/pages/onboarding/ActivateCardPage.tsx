@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { profileService } from '../../services/profileService';
 import { activationService } from '../../services/activationService';
-import { storageService } from '../../services/storageService';
 import ProfileForm, { type ProfileFormData } from '../../components/profile/ProfileForm/ProfileForm';
 import ProfileView from '../public/ProfileView';
+import ProfileEditorLayout from '../../components/profile/ProfileEditorLayout/ProfileEditorLayout';
 import AuthModal from '../../components/auth/AuthModal';
 import sifGold from '../../assets/sif_gold.png';
 import type { Card, Profile } from '../../types/database';
 import {
   Sparkles,
-  Eye,
-  Edit3,
   CheckCircle2,
   ExternalLink,
   ShieldAlert,
@@ -30,9 +29,6 @@ export default function ActivateCardPage() {
   const [cardData, setCardData] = useState<Card | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isActivatedSuccess, setIsActivatedSuccess] = useState(false);
-
-  // Tab activo en pantallas móviles ('form' | 'preview')
-  const [mobileTab, setMobileTab] = useState<'form' | 'preview'>('form');
 
   // Estado unificado del formulario
   const [formData, setFormData] = useState<ProfileFormData>({
@@ -162,37 +158,14 @@ export default function ActivateCardPage() {
       }
       // --------------------------------------------------
 
-      let finalAvatarUrl = formData.avatar_url;
-      let finalBannerUrl = formData.banner_url;
-      let uploadedAvatarPath = '';
-      let uploadedBannerPath = '';
+      const { finalProfileData, uploadedPaths, error: uploadError } = await profileService.processProfileImages(
+        formData,
+        token
+      );
 
-      // Subir Avatar si hay archivo nuevo
-      if (formData.avatar_file) {
-        const avatarBucket = import.meta.env.VITE_SUPABASE_AVATARS_BUCKET;
-        const ext = formData.avatar_file.name.split('.').pop() || 'jpg';
-        uploadedAvatarPath = `${token}-avatar-${Date.now()}.${ext}`;
-        const uploadedUrl = await storageService.uploadProfileImage(avatarBucket, uploadedAvatarPath, formData.avatar_file);
-        if (uploadedUrl) finalAvatarUrl = uploadedUrl;
+      if (uploadError) {
+        throw new Error(uploadError);
       }
-
-      // Subir Banner si hay archivo nuevo
-      if (formData.banner_file) {
-        const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET;
-        const ext = formData.banner_file.name.split('.').pop() || 'jpg';
-        uploadedBannerPath = `${token}-banner-${Date.now()}.${ext}`;
-        const uploadedUrl = await storageService.uploadProfileImage(bannerBucket, uploadedBannerPath, formData.banner_file);
-        if (uploadedUrl) finalBannerUrl = uploadedUrl;
-      }
-
-      // Clonar los datos y quitar los objetos File para no ensuciar la DB
-      const finalProfileData = {
-        ...formData,
-        avatar_url: finalAvatarUrl,
-        banner_url: finalBannerUrl,
-      };
-      delete finalProfileData.avatar_file;
-      delete finalProfileData.banner_file;
 
       const result = await activationService.activateCard({
         token,
@@ -203,11 +176,13 @@ export default function ActivateCardPage() {
 
       if (!result.success) {
         // Rollback: Eliminar imágenes si la activación falla en DB
-        if (uploadedAvatarPath) {
-          await storageService.removeImage(import.meta.env.VITE_SUPABASE_AVATARS_BUCKET, uploadedAvatarPath);
-        }
-        if (uploadedBannerPath) {
-          await storageService.removeImage(import.meta.env.VITE_SUPABASE_BANNERS_BUCKET, uploadedBannerPath);
+        if (uploadedPaths && uploadedPaths.length > 0) {
+          // As processProfileImages returns all paths, we can use storageService to remove them
+          const { storageService } = await import('../../services/storageService');
+          for (const p of uploadedPaths) {
+            const bucket = p.includes('avatar') ? import.meta.env.VITE_SUPABASE_AVATARS_BUCKET : import.meta.env.VITE_SUPABASE_BANNERS_BUCKET;
+            await storageService.removeImage(bucket, p);
+          }
         }
         setErrorMsg(result.error || 'Ocurrió un error al activar tu tarjeta.');
         setSubmitLoading(false);
@@ -415,16 +390,10 @@ export default function ActivateCardPage() {
       </section>
 
       {/* ── CONTENIDO PRINCIPAL LAYOUT RESPONSIVO (2 COLUMNAS / TOGGLE MÓVIL) ── */}
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-8 pb-24 lg:pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* COLUMNA IZQUIERDA: Formulario en Acordeón */}
-          <div
-            id="profile-form-container"
-            className={`lg:col-span-6 xl:col-span-7 ${
-              mobileTab === 'preview' ? 'hidden lg:block' : 'block'
-            }`}
-          >
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-8 pb-24 lg:pb-12" id="profile-form-container">
+        <ProfileEditorLayout
+          themePalette={formData.theme_palette}
+          childrenLeft={
             <ProfileForm
               formData={formData}
               onChange={(updated) => {
@@ -439,65 +408,12 @@ export default function ActivateCardPage() {
               submitButtonText="Guardar Mi Perfil"
               fieldErrors={fieldErrors}
             />
-          </div>
-
-          {/* COLUMNA DERECHA: Vista Previa en Vivo (Encapsulada con data-card-theme) */}
-          <div
-            className={`lg:col-span-6 xl:col-span-5 lg:sticky lg:top-24 ${
-              mobileTab === 'form' ? 'hidden lg:block' : 'block'
-            }`}
-          >
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between px-1">
-                <span className="text-xs font-semibold uppercase tracking-wider text-sif-muted flex items-center gap-1.5">
-                  <Eye className="h-3.5 w-3.5 text-sif-gold" />
-                  <span>Vista Previa en Vivo (Perfil Activo)</span>
-                </span>
-                <span className="text-[10px] text-sif-gold font-mono border border-sif-gold/30 px-2 py-0.5 rounded-full bg-sif-gold/10">
-                  {formData.theme_palette}
-                </span>
-              </div>
-
-              {/* Contenedor estrictamente aislado con data-card-theme */}
-              <div
-                data-card-theme={formData.theme_palette}
-                className="rounded-3xl border border-sif-border bg-sif-surface shadow-2xl overflow-hidden min-h-[600px]"
-              >
-                <ProfileView profile={previewProfile} isNfcSource={false} />
-              </div>
-            </div>
-          </div>
-
-        </div>
+          }
+          childrenRight={
+            <ProfileView profile={previewProfile} isNfcSource={false} />
+          }
+        />
       </main>
-
-      {/* ── BOTÓN FLOTANTE INFERIOR MÓVIL [ Formulario | Vista Previa ] ── */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 lg:hidden">
-        <div className="flex items-center rounded-full border border-sif-border bg-sif-surface/95 p-1.5 shadow-2xl backdrop-blur-xl">
-          <button
-            onClick={() => setMobileTab('form')}
-            className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold transition-all ${
-              mobileTab === 'form'
-                ? 'bg-sif-gold text-black shadow-md'
-                : 'text-sif-muted hover:text-sif-text'
-            }`}
-          >
-            <Edit3 className="h-3.5 w-3.5" />
-            <span>Formulario</span>
-          </button>
-          <button
-            onClick={() => setMobileTab('preview')}
-            className={`flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold transition-all ${
-              mobileTab === 'preview'
-                ? 'bg-sif-gold text-black shadow-md'
-                : 'text-sif-muted hover:text-sif-text'
-            }`}
-          >
-            <Eye className="h-3.5 w-3.5" />
-            <span>Vista Previa</span>
-          </button>
-        </div>
-      </div>
 
       {/* ── Modal de Autenticación de respaldo si el usuario no tiene sesión ── */}
       <AuthModal

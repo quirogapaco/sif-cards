@@ -23,7 +23,7 @@ const UsersPage = lazy(() => import('./pages/admin/UsersPage'));
 const OrganizationsPage = lazy(() => import('./pages/admin/OrganizationsPage'));
 const RenewalsPage = lazy(() => import('./pages/admin/RenewalsPage'));
 const SettingsPage = lazy(() => import('./pages/admin/SettingsPage'));
-const DashboardPage = lazy(() => import('./pages/admin/DashboardPage'));
+const EditProfiles = lazy(() => import('./pages/admin/EditProfiles'));
 
 /**
  * Componente modal de autenticación global enlazado al AuthContext.
@@ -60,9 +60,13 @@ export default function App() {
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<Navigate to="/admin/dashboard" replace />} />
 
+                  {/* Rutas compartidas (todos los roles) */}
+                  <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
+                    <Route path="dashboard" element={<GlobalDashboardPage />} />
+                  </Route>
+
                   {/* Rutas para superadmin y org_admin */}
                   <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin']} />}>
-                    <Route path="dashboard" element={<GlobalDashboardPage />} />
                     <Route path="cards" element={<CardsBatchesPage />} />
                   </Route>
 
@@ -74,9 +78,9 @@ export default function App() {
                     <Route path="settings" element={<SettingsPage />} />
                   </Route>
 
-                  {/* ── Pestaña Prueba: previsualización de temas de tarjeta ── */}
+                  {/* ── Pestaña Mi Perfil: edición de perfiles ── */}
                   <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
-                    <Route path="prueba" element={<DashboardPage />} />
+                    <Route path="profile" element={<EditProfiles />} />
                   </Route>
                 </Route>
               </Route>

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Layers, Users, Building2, CalendarClock, Settings, FlaskConical } from 'lucide-react';
+import { LayoutDashboard, Layers, Users, Building2, CalendarClock, Settings, UserCircle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 import type { UserRole } from '../types/database';
@@ -20,7 +20,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     path: '/admin/dashboard',
     icon: LayoutDashboard,
     description: 'Métricas globales de la plataforma',
-    allowedRoles: ['superadmin', 'org_admin'],
+    allowedRoles: ['superadmin', 'org_admin', 'user'],
   },
   {
     id: 'cards',
@@ -63,11 +63,11 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     allowedRoles: ['superadmin'],
   },
   {
-    id: 'prueba',
-    label: 'Prueba de Tarjetas',
-    path: '/admin/prueba',
-    icon: FlaskConical,
-    description: 'Previsualización de temas de tarjeta',
+    id: 'profile',
+    label: 'Mis Perfiles',
+    path: '/admin/profile',
+    icon: UserCircle,
+    description: 'Edición de perfiles de tarjeta',
     allowedRoles: ['superadmin', 'org_admin', 'user'],
   },
 ];

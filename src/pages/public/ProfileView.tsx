@@ -11,6 +11,7 @@ import ProfileSocialBar   from '../../components/profile/ProfileSocialBar';
 import ContactItem        from '../../components/profile/ContactItem';
 import ProfileBioSection  from '../../components/profile/ProfileBioSection';
 import ProfileEducation   from '../../components/profile/ProfileEducation';
+import ProfileBusinesses  from '../../components/profile/ProfileBusinesses';
 import ProfileFooter      from '../../components/profile/ProfileFooter';
 
 interface ProfileViewProps {
@@ -193,7 +194,10 @@ export default function ProfileView({ profile, isNfcSource = false, token }: Pro
         {/* ── 2f. Educación ──────────────────────────────────────────────── */}
         <ProfileEducation educationList={data.education} />
 
-        {/* ── 2g. Footer SIF ─────────────────────────────────────────────── */}
+        {/* ── 2g. Trayectoria (Businesses) ───────────────────────────────── */}
+        <ProfileBusinesses businessesList={data.businesses} />
+
+        {/* ── 2h. Footer SIF ─────────────────────────────────────────────── */}
         <ProfileFooter />
       </div>
     </div>

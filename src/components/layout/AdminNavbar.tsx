@@ -2,8 +2,6 @@ import { useLocation } from 'react-router-dom';
 import { Moon, Sun, ChevronRight, Home, Menu, LogOut } from 'lucide-react';
 import { useAppTheme } from '../../context/AppThemeContext';
 import { ADMIN_NAV_ITEMS } from '../../config/adminNav';
-import { useState } from 'react';
-import AuthModal from '../auth/AuthModal';
 import { useAuth } from '../../context/AuthContext';
 
 interface AdminNavbarProps {
