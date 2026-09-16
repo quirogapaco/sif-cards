@@ -3,6 +3,8 @@ import { Save, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { profileService } from '../../services/profileService';
 import { activationService } from '../../services/activationService';
+import { batchService, type BatchSummary } from '../../services/batchService';
+import { userService } from '../../services/userService';
 import ProfileForm, { type ProfileFormData } from '../../components/profile/ProfileForm/ProfileForm';
 import ProfileView from '../public/ProfileView';
 import ProfileEditorLayout from '../../components/profile/ProfileEditorLayout/ProfileEditorLayout';
@@ -11,8 +13,14 @@ import type { Profile } from '../../types/database';
 export default function EditProfiles() {
   const { user } = useAuth();
 
-  const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [activeProfileId, setActiveProfileId] = useState<string | null>(null);
+  // Opciones simplificadas para el selector de perfiles
+  const [profileOptions, setProfileOptions] = useState<{ id: string; display_name: string }[]>([]);
+  // Perfil completo cargado actualmente en memoria
+  const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
+
+  // Estados para org_admin
+  const [batchOptions, setBatchOptions] = useState<BatchSummary[]>([]);
+  const [activeBatchId, setActiveBatchId] = useState<string | null>(null);
 
   const [initLoading, setInitLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -25,29 +33,72 @@ export default function EditProfiles() {
 
   const [formData, setFormData] = useState<ProfileFormData | null>(null);
 
-  // Cargar perfiles al inicio
+  // ── 1. Carga Inicial (Lotes u Opciones de Usuario) ──
   useEffect(() => {
-    async function loadProfiles() {
+    async function loadInitialData() {
       if (!user) return;
       setInitLoading(true);
-      const { profiles: userProfiles, error } = await profileService.getUserProfiles(user.id);
 
-      if (error) {
-        setErrorMsg(error);
+      const dbUser = await userService.getUserRecord(user.id);
+      
+      if (dbUser?.role === 'org_admin' && dbUser.org_id) {
+        // Cargar Lotes para Org Admin
+        const batches = await batchService.getOrgBatches(dbUser.org_id);
+        setBatchOptions(batches);
+        
+        if (batches.length > 0) {
+          const firstBatchId = batches[0].id;
+          setActiveBatchId(firstBatchId);
+          await loadProfilesForBatch(firstBatchId);
+        } else {
+          setInitLoading(false);
+        }
       } else {
-        setProfiles(userProfiles);
-        if (userProfiles.length > 0) {
-          handleProfileSelect(userProfiles[0]);
+        // Usuario Normal
+        const options = await profileService.getUserProfileOptions(user.id);
+        setProfileOptions(options);
+        
+        if (options.length > 0) {
+          await handleProfileSelect(options[0].id);
+        } else {
+          setInitLoading(false);
         }
       }
-      setInitLoading(false);
     }
 
-    loadProfiles();
+    loadInitialData();
   }, [user]);
 
-  const handleProfileSelect = (profile: Profile) => {
-    setActiveProfileId(profile.id);
+  // ── 2. Carga de Opciones de Perfil por Lote (org_admin) ──
+  const loadProfilesForBatch = async (batchId: string) => {
+    setInitLoading(true);
+    const options = await profileService.getBatchProfileOptions(batchId);
+    setProfileOptions(options);
+    
+    if (options.length > 0) {
+      await handleProfileSelect(options[0].id);
+    } else {
+      setActiveProfile(null);
+      setFormData(null);
+      setInitLoading(false);
+    }
+  };
+
+  // ── 3. Carga de un Perfil Específico (Completo) ──
+  const handleProfileSelect = async (profileId: string) => {
+    setInitLoading(true);
+    
+    const { profile, error } = await profileService.getProfileById(profileId);
+    
+    if (error || !profile) {
+      setErrorMsg(error || 'Error al cargar el perfil.');
+      setActiveProfile(null);
+      setFormData(null);
+      setInitLoading(false);
+      return;
+    }
+
+    setActiveProfile(profile);
     
     // Restaurar borrador de sessionStorage si existe
     const draftKey = `sif_draft_${profile.id}`;
@@ -65,6 +116,7 @@ export default function EditProfiles() {
     setErrorMsg(null);
     setSuccessMsg(null);
     setFieldErrors({});
+    setInitLoading(false);
   };
 
   const handleOpenConfirm = (e: React.FormEvent) => {
@@ -74,18 +126,20 @@ export default function EditProfiles() {
 
   // Guardar en sessionStorage automáticamente al cambiar (con debouncing)
   useEffect(() => {
-    if (!activeProfileId || !formData) return;
+    if (!activeProfile?.id || !formData) return;
 
     const timeoutId = setTimeout(() => {
-      sessionStorage.setItem(`sif_draft_${activeProfileId}`, JSON.stringify(formData));
+      sessionStorage.setItem(`sif_draft_${activeProfile.id}`, JSON.stringify(formData));
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, [formData, activeProfileId]);
+  }, [formData, activeProfile?.id]);
 
   const handleConfirmSubmit = async () => {
     setIsConfirmModalOpen(false);
-    if (!activeProfileId || !formData) return;
+    if (!activeProfile?.id || !formData) return;
+
+    const currentProfileId = activeProfile.id;
 
     setSubmitLoading(true);
     setErrorMsg(null);
@@ -94,7 +148,7 @@ export default function EditProfiles() {
     try {
       const { finalProfileData, error: uploadError } = await profileService.processProfileImages(
         formData,
-        activeProfileId
+        currentProfileId
       );
 
       if (uploadError) {
@@ -102,7 +156,7 @@ export default function EditProfiles() {
       }
 
       const { success, error } = await profileService.updateProfile(
-        activeProfileId,
+        currentProfileId,
         finalProfileData.slug,
         finalProfileData.theme_palette,
         finalProfileData
@@ -115,16 +169,23 @@ export default function EditProfiles() {
         setSuccessMsg('Perfil actualizado exitosamente.');
         
         // Limpiar el borrador
-        sessionStorage.removeItem(`sif_draft_${activeProfileId}`);
+        sessionStorage.removeItem(`sif_draft_${currentProfileId}`);
         
-        // Actualizar la lista de perfiles local
-        setProfiles((prev) =>
-          prev.map((p) => p.id === activeProfileId ? {
-            ...p,
-            slug: finalProfileData.slug,
-            theme_palette: finalProfileData.theme_palette,
-            data: activationService.cleanProfileData(finalProfileData)
-          } : p)
+        // Actualizar el perfil activo actual en memoria
+        setActiveProfile((prev) => prev ? {
+          ...prev,
+          slug: finalProfileData.slug,
+          theme_palette: finalProfileData.theme_palette,
+          data: activationService.cleanProfileData(finalProfileData)
+        } : null);
+
+        // Actualizar el display_name en la lista de opciones si cambió
+        setProfileOptions((prevOptions) => 
+          prevOptions.map((opt) => 
+            opt.id === currentProfileId 
+              ? { ...opt, display_name: finalProfileData.display_name || opt.display_name }
+              : opt
+          )
         );
       }
     } catch (err) {
@@ -142,22 +203,42 @@ export default function EditProfiles() {
     );
   }
 
-  if (profiles.length === 0) {
+  // Si no tiene lotes (org_admin) o no tiene perfiles (user normal / org_admin en lote vacío)
+  if (profileOptions.length === 0) {
     return (
       <div className="flex h-full flex-col items-center justify-center p-6 text-center">
         <div className="mb-4 rounded-full bg-sif-surface-subtle p-4 text-sif-muted">
           <AlertCircle className="h-8 w-8" />
         </div>
-        <h2 className="mb-2 text-lg font-bold text-sif-text">No tienes perfiles configurados</h2>
+        <h2 className="mb-2 text-lg font-bold text-sif-text">No hay perfiles configurados</h2>
         <p className="text-sm text-sif-muted max-w-md">
-          Aún no has activado ninguna tarjeta inteligente asociada a esta cuenta.
-          Activa una tarjeta primero para poder editar tu perfil.
+          {batchOptions.length > 0
+            ? 'El lote seleccionado actualmente no tiene tarjetas activadas y vinculadas a un perfil.'
+            : 'Aún no has activado ninguna tarjeta inteligente asociada a esta cuenta. Activa una tarjeta primero para poder editar tu perfil.'}
         </p>
+        
+        {batchOptions.length > 0 && (
+          <div className="mt-6 flex items-center gap-2">
+            <span className="text-xs text-sif-muted">Cambiar de Lote:</span>
+            <select
+              value={activeBatchId || ''}
+              onChange={(e) => {
+                setActiveBatchId(e.target.value);
+                loadProfilesForBatch(e.target.value);
+              }}
+              className="rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
+            >
+              {batchOptions.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     );
   }
-
-  const activeProfile = profiles.find((p) => p.id === activeProfileId);
 
   const previewProfile: Profile | null = activeProfile && formData ? {
     ...activeProfile,
@@ -177,26 +258,50 @@ export default function EditProfiles() {
           </p>
         </div>
 
-        {/* Selector de perfiles */}
-        {profiles.length > 1 && (
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-sif-muted">Perfil:</span>
-            <select
-              value={activeProfileId || ''}
-              onChange={(e) => {
-                const p = profiles.find((x) => x.id === e.target.value);
-                if (p) handleProfileSelect(p);
-              }}
-              className="rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
-            >
-              {profiles.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.data.display_name || p.slug || 'Perfil sin nombre'}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
+        {/* Selectores (Lote y Perfil) */}
+        <div className="flex items-center gap-4">
+          
+          {/* Selector de Lotes (Sólo si hay más de 0, típicamente org_admin) */}
+          {batchOptions.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-sif-muted">Lote:</span>
+              <select
+                value={activeBatchId || ''}
+                onChange={(e) => {
+                  setActiveBatchId(e.target.value);
+                  loadProfilesForBatch(e.target.value);
+                }}
+                className="rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
+              >
+                {batchOptions.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Selector de perfiles */}
+          {profileOptions.length > 0 && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-sif-muted">Perfil:</span>
+              <select
+                value={activeProfile?.id || ''}
+                onChange={(e) => {
+                  handleProfileSelect(e.target.value);
+                }}
+                className="rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
+              >
+                {profileOptions.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.display_name || 'Perfil sin nombre'}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Alertas */}

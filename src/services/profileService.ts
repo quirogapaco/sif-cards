@@ -27,6 +27,72 @@ export const profileService = {
   },
 
   /**
+   * Obtiene la lista simplificada de perfiles para un usuario específico (para el select).
+   */
+  async getUserProfileOptions(userId: string): Promise<{ id: string; display_name: string }[]> {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, display_name:data->>display_name')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return (data as any[]) || [];
+    } catch (err: unknown) {
+      console.error('Error al obtener opciones de perfil:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Obtiene la lista simplificada de perfiles vinculados a las tarjetas de un lote (org_admin).
+   */
+  async getBatchProfileOptions(batchId: string): Promise<{ id: string; display_name: string }[]> {
+    try {
+      const { data, error } = await supabase
+        .from('cards')
+        .select(`
+          profiles!inner(
+            id,
+            display_name:data->>display_name
+          )
+        `)
+        .eq('batch_id', batchId)
+        .not('profile_id', 'is', null);
+
+      if (error) throw error;
+      
+      // La respuesta viene anidada: [{ profiles: { id, display_name } }]
+      return (data as any[]).map((row) => row.profiles).filter(Boolean);
+    } catch (err: unknown) {
+      console.error('Error al obtener opciones de perfil del lote:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Obtiene el perfil completo por su ID.
+   */
+  async getProfileById(profileId: string): Promise<{ profile: Profile | null; error?: string }> {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', profileId)
+        .single();
+
+      if (error) throw error;
+      return { profile: data as Profile };
+    } catch (err: unknown) {
+      return {
+        profile: null,
+        error: err instanceof Error ? err.message : 'Error al obtener el perfil.',
+      };
+    }
+  },
+
+  /**
    * Actualiza la información de un perfil existente.
    */
   async updateProfile(
