@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { DataTable, type ColumnDef } from '../ui/data-table/DataTable';
-import { Copy, CheckCheck, Link2, ShieldOff, ExternalLink } from 'lucide-react';
+import { Copy, CheckCheck, Link2, ShieldOff, ExternalLink, Edit } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Badge } from '../ui/Badge';
 import type { Card, CardStatus } from '../../types/database';
 import { getCardFullUrl } from '../../utils/cardUtils';
@@ -45,6 +46,7 @@ function useCopy() {
 export function CardsTable({ cards }: CardsTableProps) {
   const [statusFilter, setStatusFilter] = useState<CardStatusFilter>('all');
   const { copiedId, copy } = useCopy();
+  const navigate = useNavigate();
 
   /* Filtro de estado aplicado antes de pasarle a DataTable */
   const filteredCards = useMemo(
@@ -133,7 +135,7 @@ export function CardsTable({ cards }: CardsTableProps) {
         cell: ({ row, getValue }) => {
           const slug = getValue() as string | null;
           const card = row.original;
-          const targetUrl = slug ? `/p/${slug}` : (card.relative_path ?? `/t/${card.token}`);
+          const targetUrl = slug ? `/p/${slug}/${card.token}` : (card.relative_path ?? `/t/${card.token}`);
           return slug ? (
             <a
               href={targetUrl}
@@ -157,7 +159,7 @@ export function CardsTable({ cards }: CardsTableProps) {
         cell: ({ row }) => {
           const card = row.original;
           const fullUrl = getCardFullUrl(card.relative_path, card.token);
-          const profileUrl = card.profile?.slug ? `/p/${card.profile.slug}` : (card.relative_path ?? `/t/${card.token}`);
+          const profileUrl = card.profile?.slug ? `/p/${card.profile.slug}/${card.token}` : (card.relative_path ?? `/t/${card.token}`);
           const copyKey = `link-${card.id}`;
           const copied = copiedId === copyKey;
           return (
@@ -173,6 +175,18 @@ export function CardsTable({ cards }: CardsTableProps) {
               >
                 <ExternalLink className="h-3 w-3" />
               </a>
+
+              {/* Editar Perfil */}
+              {card.profile_id && (
+                <button
+                  id={`edit-profile-${card.id}`}
+                  onClick={() => navigate('/admin/profile', { state: { batchId: card.batch_id, profileId: card.profile_id } })}
+                  title="Editar perfil en administrador"
+                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-sif-border bg-sif-surface-subtle text-sif-muted transition-all hover:border-sif-gold/40 hover:text-sif-gold"
+                >
+                  <Edit className="h-3 w-3" />
+                </button>
+              )}
 
               {/* Copiar enlace de activación */}
               <button

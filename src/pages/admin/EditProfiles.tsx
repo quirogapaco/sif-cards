@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Save, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { profileService } from '../../services/profileService';
@@ -12,6 +13,9 @@ import type { Profile } from '../../types/database';
 
 export default function EditProfiles() {
   const { user } = useAuth();
+  const location = useLocation();
+  const initialBatchId = location.state?.batchId;
+  const initialProfileId = location.state?.profileId;
 
   // Opciones simplificadas para el selector de perfiles
   const [profileOptions, setProfileOptions] = useState<{ id: string; display_name: string }[]>([]);
@@ -47,9 +51,9 @@ export default function EditProfiles() {
         setBatchOptions(batches);
         
         if (batches.length > 0) {
-          const firstBatchId = batches[0].id;
+          const firstBatchId = initialBatchId || batches[0].id;
           setActiveBatchId(firstBatchId);
-          await loadProfilesForBatch(firstBatchId);
+          await loadProfilesForBatch(firstBatchId, initialProfileId);
         } else {
           setInitLoading(false);
         }
@@ -59,7 +63,10 @@ export default function EditProfiles() {
         setProfileOptions(options);
         
         if (options.length > 0) {
-          await handleProfileSelect(options[0].id);
+          const targetProfileId = initialProfileId && options.find(o => o.id === initialProfileId)
+            ? initialProfileId 
+            : options[0].id;
+          await handleProfileSelect(targetProfileId);
         } else {
           setInitLoading(false);
         }
@@ -70,13 +77,16 @@ export default function EditProfiles() {
   }, [user]);
 
   // ── 2. Carga de Opciones de Perfil por Lote (org_admin) ──
-  const loadProfilesForBatch = async (batchId: string) => {
+  const loadProfilesForBatch = async (batchId: string, profileIdToSelect?: string) => {
     setInitLoading(true);
     const options = await profileService.getBatchProfileOptions(batchId);
     setProfileOptions(options);
     
     if (options.length > 0) {
-      await handleProfileSelect(options[0].id);
+      const targetProfileId = profileIdToSelect && options.find(o => o.id === profileIdToSelect)
+        ? profileIdToSelect 
+        : options[0].id;
+      await handleProfileSelect(targetProfileId);
     } else {
       setActiveProfile(null);
       setFormData(null);
