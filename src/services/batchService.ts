@@ -41,7 +41,6 @@ export const batchService = {
    * Obtiene todos los lotes con sus contadores de tarjetas
    */
   async getAllBatches(): Promise<BatchSummary[]> {
-    // Usamos cards!cards_batch_id_fkey si hay ambigüedad de FK, o cards(status) estándar
     const { data: batches, error } = await supabase
       .from('batches')
       .select('*, cards(status)')
@@ -49,6 +48,40 @@ export const batchService = {
 
     if (error) {
       console.error('Error al consultar lotes:', error);
+      throw new Error(`Error al consultar lotes: ${error.message}`);
+    }
+
+    if (!batches || batches.length === 0) {
+      return [];
+    }
+
+    return batches.map((b: any) => {
+      const cardsList = Array.isArray(b.cards) ? b.cards : [];
+      const total = cardsList.length;
+      const active = cardsList.filter((c: any) => c.status === 'active').length;
+      const inactive = cardsList.filter((c: any) => c.status === 'inactive').length;
+
+      return {
+        ...b,
+        cards_count: total > 0 ? total : (b.total_quantity || 0),
+        active_count: active,
+        inactive_count: inactive,
+      };
+    });
+  },
+
+  /**
+   * Obtiene los lotes pertenecientes a una organización específica con sus contadores
+   */
+  async getOrgBatches(orgId: string): Promise<BatchSummary[]> {
+    const { data: batches, error } = await supabase
+      .from('batches')
+      .select('*, cards(status)')
+      .eq('org_id', orgId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error al consultar lotes de la organización:', error);
       throw new Error(`Error al consultar lotes: ${error.message}`);
     }
 

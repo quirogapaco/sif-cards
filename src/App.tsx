@@ -17,8 +17,8 @@ const ActivateCardPage = lazy(() => import('./pages/onboarding/ActivateCardPage'
 const AdminLayout = lazy(() => import('./layouts/AdminLayout'));
 
 // ── Páginas del Panel SuperAdmin ───────────────────────────────────────────
-const GlobalDashboardPage = lazy(() => import('./pages/admin/GlobalDashboardPage'));
-const CardsBatchesPage = lazy(() => import('./pages/admin/CardsBatchesPage'));
+const GlobalDashboardPage = lazy(() => import('./pages/admin/batchAdmin/GlobalDashboardPage'));
+const CardsBatchesPage = lazy(() => import('./pages/admin/batchAdmin/CardsBatchesPage'));
 const UsersPage = lazy(() => import('./pages/admin/UsersPage'));
 const OrganizationsPage = lazy(() => import('./pages/admin/OrganizationsPage'));
 const RenewalsPage = lazy(() => import('./pages/admin/RenewalsPage'));

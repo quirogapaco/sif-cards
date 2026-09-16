@@ -47,4 +47,26 @@ export const userService = {
       return null;
     }
   },
+
+  /**
+   * Obtiene el registro completo del usuario desde la tabla pública 'users'.
+   */
+  async getUserRecord(userId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) {
+        console.error('Error al obtener el usuario:', error.message);
+        return null;
+      }
+      return data;
+    } catch (err) {
+      console.error('Excepción al obtener el usuario:', err);
+      return null;
+    }
+  },
 };

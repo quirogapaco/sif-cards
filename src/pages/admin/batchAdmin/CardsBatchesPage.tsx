@@ -6,6 +6,8 @@ import { CardsTable } from '../../../components/batches/CardsTable';
 import { CreateBatchModal } from '../../../components/batches/CreateBatchModal';
 import { batchService, type BatchSummary } from '../../../services/batchService';
 import type { Card } from '../../../types/database';
+import { useAuth } from '../../../context/AuthContext';
+import { userService } from '../../../services/userService';
 
 type ActiveTab = 'batches' | 'inventory';
 
@@ -15,6 +17,8 @@ const TABS: { id: ActiveTab; label: string; icon: React.ElementType }[] = [
 ];
 
 export default function CardsBatchesPage() {
+  const { user, userRole } = useAuth();
+
   /* ── Estado de datos ── */
   const [batches, setBatches] = useState<BatchSummary[]>([]);
   const [allCards, setAllCards] = useState<Card[]>([]);
@@ -34,7 +38,17 @@ export default function CardsBatchesPage() {
     setLoadError(null);
 
     try {
-      const batchList = await batchService.getAllBatches();
+      let batchList: BatchSummary[] = [];
+
+      if (userRole === 'superadmin') {
+        batchList = await batchService.getAllBatches();
+      } else if (userRole === 'org_admin' && user?.id) {
+        const dbUser = await userService.getUserRecord(user.id);
+        if (dbUser?.org_id) {
+          batchList = await batchService.getOrgBatches(dbUser.org_id);
+        }
+      }
+
       setBatches(batchList);
 
       /* Carga todas las tarjetas de todos los lotes en paralelo */
@@ -49,7 +63,7 @@ export default function CardsBatchesPage() {
       setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, []);
+  }, [userRole, user?.id]);
 
   useEffect(() => {
     loadData();
