@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkles, User, Palette, Share2, FileText, Briefcase, ArrowRight } from 'lucide-react';
+import { User, Palette, Share2, FileText, Briefcase, ArrowRight } from 'lucide-react';
 import PersonalInfo from './PersonalInfo';
 import Visuals from './Visuals';
 import ContactAndMedia from './ContactAndMedia';
@@ -150,10 +150,8 @@ export default function ProfileForm({
               boxShadow: '0 4px 24px rgba(221, 178, 37, 0.35)',
             }}
           >
-            {loading ? (
+            {loading && (
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent" />
-            ) : (
-              <Sparkles className="h-5 w-5" />
             )}
             <span>{submitButtonText}</span>
           </button>

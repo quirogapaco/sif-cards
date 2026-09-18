@@ -31,6 +31,12 @@ export default function CardsBatchesPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [batchFilter, setBatchFilter] = useState<string | null>(null); // batchId para filtrar inventario
 
+  useEffect(() => {
+    if (userRole && userRole !== 'superadmin') {
+      setActiveTab('inventory');
+    }
+  }, [userRole]);
+
   /* ── Carga paralela de datos ── */
   const loadData = useCallback(async (showSpinner = true) => {
     if (showSpinner) setIsLoading(true);
@@ -139,7 +145,8 @@ export default function CardsBatchesPage() {
           </button>
 
           {/* CTA principal: Crear nuevo lote */}
-          <button
+          {userRole === 'superadmin' && (
+            <button
             id="open-create-batch"
             onClick={() => setIsCreateModalOpen(true)}
             className="flex items-center gap-2 rounded-xl border border-sif-gold/40 px-4 py-2.5 text-sm font-bold transition-all hover:opacity-90 active:scale-95"
@@ -151,8 +158,9 @@ export default function CardsBatchesPage() {
             }}
           >
             <Plus className="h-4 w-4" />
-            Crear Nuevo Lote
-          </button>
+              Crear Nuevo Lote
+            </button>
+          )}
         </div>
       </div>
 
@@ -171,7 +179,7 @@ export default function CardsBatchesPage() {
       )}
 
       {/* ── Barra de KPIs ── */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4">
         <MetricCard
           title="Total Fabricadas"
           value={kpis.total.toLocaleString('es-EC')}
@@ -205,7 +213,8 @@ export default function CardsBatchesPage() {
       {/* ── Panel principal con sub-tabs ── */}
       <div className="rounded-2xl border border-sif-border bg-sif-surface shadow-sm">
         {/* Cabecera del panel: pestañas */}
-        <div className="flex items-center gap-0 border-b border-sif-border px-2 pt-2">
+        {userRole === 'superadmin' && (
+          <div className="flex items-center gap-0 border-b border-sif-border px-2 pt-2">
           {TABS.map(({ id, label, icon: Icon }) => {
             const isActive = activeTab === id;
             return (
@@ -240,6 +249,7 @@ export default function CardsBatchesPage() {
             );
           })}
         </div>
+        )}
 
         {/* Contenido de la pestaña activa */}
         <div className="p-5">
