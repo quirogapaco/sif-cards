@@ -87,6 +87,7 @@ export default function App() {
 
               {/* ── Ruta corporativa con prefijo de lote (B2B) ── */}
               <Route path="/:prefix/:token" element={<CardResolver />} />
+              <Route path="/:prefix/:slug/:token" element={<CardResolver />} />
 
               {/* ── Fallback 404: redirige a la Landing ── */}
               <Route path="*" element={<Navigate to="/" replace />} />

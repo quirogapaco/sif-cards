@@ -41,6 +41,7 @@ export default function CardResolver() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isNfcSource, setIsNfcSource] = useState<boolean>(false);
   const [resolvedToken, setResolvedToken] = useState<string | undefined>();
+  const [activeCardPrefix, setActiveCardPrefix] = useState<string | undefined>();
   const [inactiveCard, setInactiveCard] = useState<Card | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -54,9 +55,10 @@ export default function CardResolver() {
       setErrorMessage(null);
       setProfile(null);
       setInactiveCard(null);
+      setActiveCardPrefix(undefined);
 
-      // ── Caso 1: Acceso seguro por Slug y Token (/p/:slug/:token) ──
-      if (slug) {
+      // ── Caso 1: Acceso seguro por Slug y Token genérico (/p/:slug/:token) ──
+      if (slug && !prefix) {
         if (!token) {
           setErrorType('404');
           setErrorMessage('Acceso denegado. Se requiere escanear la tarjeta física.');
@@ -64,34 +66,43 @@ export default function CardResolver() {
           return;
         }
 
-        const result = await cardResolverService.getProfileSecure(slug, token);
+        const result = await cardResolverService.getCardByToken(token);
         if (!isMounted) return;
 
-        if (!result.profile) {
+        if (!result.card || result.card.profile?.slug !== slug) {
           setErrorType('404');
           setErrorMessage('Tarjeta no encontrada o acceso denegado.');
+          setLoading(false);
+          return;
+        }
+
+        const card = result.card;
+
+        // Si la tarjeta pertenece a un lote con prefijo, no debe usarse la ruta /p/:slug/:token
+        if (card.batch?.url_prefix) {
+          setErrorType('404');
+          setErrorMessage('Enlace no válido. Esta tarjeta utiliza un acceso corporativo.');
+          setLoading(false);
+          return;
+        }
+
+        const p = card.profile;
+        if (p.subscription_status === 'expired' || p.subscription_status === 'suspended') {
+          setErrorType('subscription_expired');
+          setErrorMessage(
+            'Membresía anual vencida. Este perfil se encuentra temporalmente suspendido hasta su renovación.'
+          );
         } else {
-          const p = result.profile;
-          if (
-            p.subscription_status === 'expired' ||
-            p.subscription_status === 'suspended'
-          ) {
-            setErrorType('subscription_expired');
-            setErrorMessage(
-              'Membresía anual vencida. Este perfil se encuentra temporalmente suspendido hasta su renovación.'
-            );
-          } else {
-            setIsNfcSource(false); // Acceso web directo
-            setResolvedToken(token);
-            setProfile(p);
-          }
+          setIsNfcSource(false); // Acceso web directo
+          setResolvedToken(token);
+          setProfile(p);
         }
         setLoading(false);
         return;
       }
 
-      // ── Caso 2: Resolución por Token (/t/:token o /:prefix/:token) ──
-      if (token && !slug) {
+      // ── Caso 2: Resolución por Token (/t/:token o /:prefix/:token o /:prefix/:slug/:token) ──
+      if (token && (!slug || prefix)) {
         const result = await cardResolverService.getCardByToken(token, prefix);
         if (!isMounted) return;
 
@@ -103,6 +114,14 @@ export default function CardResolver() {
         }
 
         const card: Card = result.card;
+
+        // Si se envió un slug por la ruta corporativa, validarlo
+        if (slug && card.profile?.slug !== slug) {
+          setErrorType('404');
+          setErrorMessage('Tarjeta no encontrada o acceso denegado.');
+          setLoading(false);
+          return;
+        }
 
         // Evaluación del ciclo de vida del producto en cards.status
         if (card.status === 'inactive') {
@@ -142,10 +161,17 @@ export default function CardResolver() {
                 'Membresía anual vencida. Este perfil se encuentra temporalmente suspendido hasta su renovación.'
               );
             } else {
-              // Actualiza la URL visible a la versión segura /p/:slug/:token
-              window.history.replaceState(null, '', `/p/${cardProfile.slug}/${token}`);
+              // Actualiza la URL visible a la versión adecuada
+              if (card.batch?.url_prefix) {
+                window.history.replaceState(null, '', `/${card.batch.url_prefix}/${cardProfile.slug}/${token}`);
+                setActiveCardPrefix(card.batch.url_prefix);
+              } else {
+                window.history.replaceState(null, '', `/p/${cardProfile.slug}/${token}`);
+              }
               
-              setIsNfcSource(true);
+              // Si vino con slug ya en la URL, asumimos que no es un escaneo directo de NFC nuevo
+              // sino quizás alguien recargando la página o compartiendo el link.
+              setIsNfcSource(!slug); 
               setResolvedToken(token);
               setProfile(cardProfile);
             }
@@ -206,7 +232,7 @@ export default function CardResolver() {
 
   // 2. Renderizado exitoso del perfil activo
   if (profile && !errorType) {
-    return <ProfileView profile={profile} isNfcSource={isNfcSource} token={resolvedToken} isStandalone={true} />;
+    return <ProfileView profile={profile} isNfcSource={isNfcSource} token={resolvedToken} prefix={activeCardPrefix} isStandalone={true} />;
   }
 
   // 3. Vista especial para Tarjeta Virgen / Inactiva

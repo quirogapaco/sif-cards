@@ -110,7 +110,7 @@ export const batchService = {
   async getCardsByBatchId(batchId: string): Promise<Card[]> {
     const { data, error } = await supabase
       .from('cards')
-      .select('*, profile:profiles(slug), batch:batches(name, card_type)')
+      .select('*, profile:profiles(slug), batch:batches(name, card_type, url_prefix)')
       .eq('batch_id', batchId)
       .order('serial_number', { ascending: true });
 
@@ -128,7 +128,7 @@ export const batchService = {
   async getAllCards(): Promise<Card[]> {
     const { data, error } = await supabase
       .from('cards')
-      .select('*, profile:profiles(slug), batch:batches(name, card_type)')
+      .select('*, profile:profiles(slug), batch:batches(name, card_type, url_prefix)')
       .order('created_at', { ascending: false });
 
     if (error) {

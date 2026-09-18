@@ -19,6 +19,8 @@ interface ProfileViewProps {
   isNfcSource?: boolean;
   /** Token del chip NFC, solo cuando isNfcSource = true */
   token?: string;
+  /** Prefijo del lote B2B al que pertenece la tarjeta (si aplica) */
+  prefix?: string;
   /** Si es true, inyecta el color de fondo al <body> para evitar destellos blancos al hacer overscroll */
   isStandalone?: boolean;
 }
@@ -28,7 +30,7 @@ interface ProfileViewProps {
  * Envoltura raíz con [data-card-theme] para el scope aislado de CSS.
  * Todos los hijos consumen exclusivamente variables card-*.
  */
-export default function ProfileView({ profile, isNfcSource = false, token, isStandalone = false }: ProfileViewProps) {
+export default function ProfileView({ profile, isNfcSource = false, token, prefix, isStandalone = false }: ProfileViewProps) {
   const data     = profile.data;
   const theme    = profile.theme_palette || 'emerald-dark';
   const contacts = data.direct_contacts;
@@ -64,7 +66,10 @@ export default function ProfileView({ profile, isNfcSource = false, token, isSta
   }, [trackContactSave, data, profile.slug]);
 
   const handleShare = useCallback(async () => {
-    const shareUrl = `${window.location.origin}/p/${profile.slug}`;
+    const shareUrl = prefix && token 
+      ? `${window.location.origin}/${prefix}/${profile.slug}/${token}`
+      : `${window.location.origin}/p/${profile.slug}`;
+      
     const shareData = {
       title: data.display_name,
       text: `${data.job_title} · ${data.company}`,
@@ -92,7 +97,7 @@ export default function ProfileView({ profile, isNfcSource = false, token, isSta
       // Fallback final: selección manual con prompt
       window.prompt('Copia el enlace del perfil:', shareUrl);
     }
-  }, [profile.slug, data.display_name, data.job_title, data.company, trackShare]);
+  }, [profile.slug, data.display_name, data.job_title, data.company, trackShare, prefix, token]);
 
   return (
     <div

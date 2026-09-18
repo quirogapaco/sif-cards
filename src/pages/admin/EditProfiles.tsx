@@ -260,7 +260,7 @@ export default function EditProfiles() {
   return (
     <div className="flex flex-1 flex-col overflow-hidden bg-sif-bg">
       {/* Encabezado */}
-      <div className="border-b border-sif-border bg-sif-surface px-6 py-4 flex items-center justify-between">
+      <div className="border-b border-sif-border bg-sif-surface px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-base font-semibold text-sif-text">Perfiles</h2>
           <p className="mt-0.5 text-xs text-sif-muted">
@@ -269,19 +269,19 @@ export default function EditProfiles() {
         </div>
 
         {/* Selectores (Lote y Perfil) */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mt-2 sm:mt-0">
           
           {/* Selector de Lotes (Sólo si hay más de 0, típicamente org_admin) */}
           {batchOptions.length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-sif-muted">Lote:</span>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <span className="text-xs text-sif-muted whitespace-nowrap min-w-[40px]">Lote:</span>
               <select
                 value={activeBatchId || ''}
                 onChange={(e) => {
                   setActiveBatchId(e.target.value);
                   loadProfilesForBatch(e.target.value);
                 }}
-                className="rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
+                className="flex-1 sm:flex-none w-full sm:w-auto rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
               >
                 {batchOptions.map((b) => (
                   <option key={b.id} value={b.id}>
@@ -294,14 +294,14 @@ export default function EditProfiles() {
 
           {/* Selector de perfiles */}
           {profileOptions.length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-sif-muted">Perfil:</span>
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <span className="text-xs text-sif-muted whitespace-nowrap min-w-[40px]">Perfil:</span>
               <select
                 value={activeProfile?.id || ''}
                 onChange={(e) => {
                   handleProfileSelect(e.target.value);
                 }}
-                className="rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
+                className="flex-1 sm:flex-none w-full sm:w-auto rounded-lg border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text focus:border-sif-gold focus:outline-none"
               >
                 {profileOptions.map((p) => (
                   <option key={p.id} value={p.id}>

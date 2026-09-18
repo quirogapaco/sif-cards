@@ -135,7 +135,13 @@ export function CardsTable({ cards }: CardsTableProps) {
         cell: ({ row, getValue }) => {
           const slug = getValue() as string | null;
           const card = row.original;
-          const targetUrl = slug ? `/p/${slug}/${card.token}` : (card.relative_path ?? `/t/${card.token}`);
+          const targetUrl = card.batch?.url_prefix 
+            ? slug 
+              ? `/${card.batch.url_prefix}/${slug}/${card.token}`
+              : `/${card.batch.url_prefix}/${card.token}`
+            : slug 
+              ? `/p/${slug}/${card.token}` 
+              : (card.relative_path ?? `/t/${card.token}`);
           return slug ? (
             <a
               href={targetUrl}
@@ -159,7 +165,13 @@ export function CardsTable({ cards }: CardsTableProps) {
         cell: ({ row }) => {
           const card = row.original;
           const fullUrl = getCardFullUrl(card.relative_path, card.token);
-          const profileUrl = card.profile?.slug ? `/p/${card.profile.slug}/${card.token}` : (card.relative_path ?? `/t/${card.token}`);
+          const profileUrl = card.batch?.url_prefix 
+            ? card.profile?.slug 
+              ? `/${card.batch.url_prefix}/${card.profile.slug}/${card.token}`
+              : `/${card.batch.url_prefix}/${card.token}`
+            : card.profile?.slug 
+              ? `/p/${card.profile.slug}/${card.token}` 
+              : (card.relative_path ?? `/t/${card.token}`);
           const copyKey = `link-${card.id}`;
           const copied = copiedId === copyKey;
           return (
