@@ -213,16 +213,6 @@ export function CardsTable({ cards }: CardsTableProps) {
                 }
               </button>
 
-              {/* Bloquear/desactivar */}
-              {card.status === 'active' && (
-                <button
-                  id={`block-card-${card.id}`}
-                  title="Bloquear / Desactivar tarjeta"
-                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-sif-border bg-sif-surface-subtle text-sif-muted transition-all hover:border-red-500/30 hover:text-red-400"
-                >
-                  <ShieldOff className="h-3 w-3" />
-                </button>
-              )}
             </div>
           );
         },

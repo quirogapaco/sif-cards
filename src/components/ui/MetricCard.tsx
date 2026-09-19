@@ -8,6 +8,7 @@ interface MetricCardProps {
   icon: LucideIcon;
   trend?: string;
   accent?: Accent;
+  className?: string;
 }
 
 const accentStyles: Record<Accent, { icon: string; badge: string }> = {
@@ -25,11 +26,11 @@ const accentStyles: Record<Accent, { icon: string; badge: string }> = {
   },
 };
 
-export function MetricCard({ title, value, icon: Icon, trend, accent = 'default' }: MetricCardProps) {
+export function MetricCard({ title, value, icon: Icon, trend, accent = 'default', className = '' }: MetricCardProps) {
   const styles = accentStyles[accent];
 
   return (
-    <div className="flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl border border-sif-border bg-sif-surface p-3 sm:p-5 shadow-sm transition-all duration-200 hover:border-sif-gold/20 hover:shadow-md">
+    <div className={`flex items-center gap-3 sm:gap-4 rounded-xl sm:rounded-2xl border border-sif-border bg-sif-surface p-3 sm:p-5 shadow-sm transition-all duration-200 hover:border-sif-gold/20 hover:shadow-md ${className}`}>
       {/* Ícono */}
       <div className={`flex h-8 w-8 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg sm:rounded-xl ${styles.icon}`}>
         <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
