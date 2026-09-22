@@ -26,7 +26,7 @@ export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
     <aside
       className={[
         // ── Posicionamiento base ──
-        'z-30 flex h-full shrink-0 flex-col border-r border-sif-border bg-sif-surface',
+        'z-50 lg:z-30 flex h-full shrink-0 flex-col border-r border-sif-border bg-sif-surface shadow-2xl lg:shadow-none',
         'transition-all duration-300 ease-in-out',
         // ── Mobile: drawer overlay ──
         'fixed inset-y-0 left-0 lg:relative lg:inset-auto',

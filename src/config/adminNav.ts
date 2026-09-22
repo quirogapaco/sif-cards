@@ -24,11 +24,11 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
   },
   {
     id: 'cards',
-    label: 'Lotes & Tarjetas NFC',
+    label: 'Mis SIF Cards',
     path: '/admin/cards',
     icon: Layers,
-    description: 'Gestión de inventario físico y números de serie',
-    allowedRoles: ['superadmin', 'org_admin'],
+    description: 'Gestión de sus tarjetas inteligentes',
+    allowedRoles: ['superadmin', 'org_admin', 'user'],
   },
   {
     id: 'users',

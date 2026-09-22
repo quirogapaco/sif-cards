@@ -65,8 +65,8 @@ export default function App() {
                     <Route path="dashboard" element={<GlobalDashboardPage />} />
                   </Route>
 
-                  {/* Rutas para superadmin y org_admin */}
-                  <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin']} />}>
+                  {/* Rutas para superadmin, org_admin y user */}
+                  <Route element={<ProtectedRoute allowedRoles={['superadmin', 'org_admin', 'user']} />}>
                     <Route path="cards" element={<CardsBatchesPage />} />
                   </Route>
 

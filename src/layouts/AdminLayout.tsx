@@ -29,7 +29,7 @@ export default function AdminLayout() {
       {/* ── Backdrop para móvil (solo visible cuando el drawer está abierto) ── */}
       {expanded && (
         <div
-          className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
           onClick={toggle}
           aria-hidden="true"
         />

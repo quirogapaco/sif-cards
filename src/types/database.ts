@@ -66,14 +66,12 @@ export interface Profile {
   created_at: string;
   updated_at: string;
   subscription_status: SubscriptionStatus;
-  activated_at: string | null;
   expires_at: string | null;
 }
 
 export interface Batch {
   id: string;
   name: string;
-  card_type: CardPhysicalType | string;
   total_quantity: number;
   notes: string | null;
   created_at: string;
@@ -92,6 +90,8 @@ export interface Card {
   batch_id: string | null;
   serial_number: string | null;
   relative_path: string | null;
+  card_type: CardPhysicalType | string;
+  activated_at: string | null;
   batch?: Batch | null;
   profile?: Profile | null;
   user?: User | null;

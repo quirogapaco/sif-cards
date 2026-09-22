@@ -4,6 +4,7 @@ import { MetricCard } from '../../../components/ui/MetricCard';
 import { BatchesTable } from '../../../components/batches/BatchesTable';
 import { CardsTable } from '../../../components/batches/CardsTable';
 import { CreateBatchModal } from '../../../components/batches/CreateBatchModal';
+import { UserWalletCardsView } from '../../../components/wallet/UserWalletCardsView';
 import { batchService, type BatchSummary } from '../../../services/batchService';
 import type { Card } from '../../../types/database';
 import { useAuth } from '../../../context/AuthContext';
@@ -120,14 +121,20 @@ export default function CardsBatchesPage() {
     );
   }
 
+  if (userRole === 'user') {
+    return <UserWalletCardsView />;
+  }
+
   return (
     <div className="flex flex-col gap-6 p-6">
       {/* ── Encabezado de página ── */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-sif-text">Lotes &amp; Tarjetas NFC</h1>
+          <h1 className="text-xl font-bold text-sif-text">Mis SIF Cards</h1>
           <p className="mt-0.5 text-sm text-sif-muted">
-            Gestión de inventario físico, lotes de producción y números de serie
+            {userRole === 'superadmin' 
+              ? 'Gestión central de lotes, producción y números de serie NFC'
+              : 'Administre su inventario de tarjetas, estados y perfiles vinculados'}
           </p>
         </div>
 
@@ -181,28 +188,28 @@ export default function CardsBatchesPage() {
       {/* ── Barra de KPIs ── */}
       <div className="grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4">
         <MetricCard
-          title="Total Fabricadas"
+          title={userRole === 'superadmin' ? "Total Fabricadas" : "Número total de tarjetas"}
           value={kpis.total.toLocaleString('es-EC')}
           icon={Layers}
-          trend={`${batches.length} lote${batches.length !== 1 ? 's' : ''}`}
+          trend={userRole === 'superadmin' ? `${batches.length} lote${batches.length !== 1 ? 's' : ''}` : '—'}
           accent="default"
         />
         <MetricCard
-          title="Inactivas en Bodega"
+          title={userRole === 'superadmin' ? "Inactivas en Bodega" : "Tarjetas inactivas"}
           value={kpis.inactive.toLocaleString('es-EC')}
           icon={Package2}
           trend={kpis.total > 0 ? `${Math.round((kpis.inactive / kpis.total) * 100)}% del stock` : '—'}
           accent="silver"
         />
         <MetricCard
-          title="Activas en la Calle"
+          title={userRole === 'superadmin' ? "Activas en la Calle" : "Tarjetas activas"}
           value={kpis.active.toLocaleString('es-EC')}
           icon={Wifi}
           trend={kpis.total > 0 ? `${Math.round((kpis.active / kpis.total) * 100)}% activadas` : '—'}
           accent="gold"
         />
         <MetricCard
-          title="Bloqueadas"
+          title={userRole === 'superadmin' ? "Bloqueadas" : "Tarjetas bloqueadas"}
           value={kpis.blocked.toLocaleString('es-EC')}
           icon={WifiOff}
           trend={kpis.blocked > 0 ? 'Requieren revisión' : 'Sin bloqueos'}
