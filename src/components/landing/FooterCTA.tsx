@@ -28,11 +28,8 @@ export const FooterCTA: React.FC = () => {
               <img
                 src={sifGold}
                 alt="SIF Cards Logo"
-                className="h-16 sm:h-20 w-auto object-contain transition-transform duration-300 hover:scale-105"
+                className="h-24 sm:h-32 w-auto object-contain transition-transform duration-300 hover:scale-105"
               />
-              <span className="dark:text-white text-slate-900 font-semibold text-lg tracking-tight">
-                SIF Cards
-              </span>
             </a>
 
             <h3 className="text-xl sm:text-2xl font-semibold dark:text-white text-slate-900 tracking-tight leading-snug mb-1">

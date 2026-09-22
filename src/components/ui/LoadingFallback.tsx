@@ -1,3 +1,5 @@
+import sifGold from '../../assets/sif_gold.png';
+
 /**
  * Fallback de carga minimalista en tono deep matte (#09090b)
  * Diseñado para evitar Layout Shifts (CLS) durante la carga diferida de rutas.
@@ -22,10 +24,8 @@ export default function LoadingFallback() {
           <div className="w-10 h-10 rounded-full border-2 border-white/10 border-t-[#ddb225] animate-spin" />
         </div>
 
-        {/* Texto sutil de marca opcional */}
-        <span className="text-[11px] font-medium tracking-widest uppercase text-white/40 animate-pulse">
-          SIF Cards
-        </span>
+        {/* Logo sutil de marca */}
+        <img src={sifGold} alt="SIF Cards" className="h-20 w-auto object-contain opacity-50 animate-pulse" />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { ADMIN_NAV_ITEMS } from '../../config/adminNav';
 import { useAuth } from '../../context/AuthContext';
+import sifGold from '../../assets/sif_gold.png';
 
 interface AdminSidebarProps {
   expanded: boolean;
@@ -26,54 +27,35 @@ export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
     <aside
       className={[
         // ── Posicionamiento base ──
-        'z-50 lg:z-30 flex h-full shrink-0 flex-col border-r border-sif-border bg-sif-surface shadow-2xl lg:shadow-none',
+        'z-[100] lg:z-30 flex h-full shrink-0 flex-col border-r border-sif-border bg-sif-surface shadow-2xl lg:shadow-none',
         'transition-all duration-300 ease-in-out',
         // ── Mobile: drawer overlay ──
         'fixed inset-y-0 left-0 lg:relative lg:inset-auto',
         // ── Ancho según estado ──
-        expanded ? 'w-60' : '-translate-x-full lg:translate-x-0 lg:w-14',
+        expanded ? 'w-[280px] sm:w-72' : '-translate-x-full lg:translate-x-0 lg:w-14',
       ]
         .filter(Boolean)
         .join(' ')}
     >
       {/* ── Logo / Branding ── */}
-      <div className="flex h-14 items-center border-b border-sif-border px-3">
-        {/* Monograma — siempre visible */}
-        <div
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-sif-border"
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(212,175,55,0.20) 0%, rgba(226,232,240,0.08) 100%)',
-          }}
-        >
-          <span
-            className="font-serif text-sm font-bold"
-            style={{ color: 'var(--sif-gold)' }}
-          >
-            S
-          </span>
+      <div className="flex h-24 items-center border-b border-sif-border px-3">
+        {/* Logo único pegado a la izquierda */}
+        <div className="flex shrink-0 items-center justify-center h-20 w-20 -ml-2">
+          <img src={sifGold} alt="SIF Cards" className="h-full w-full object-contain" />
         </div>
 
-        {/* Texto — solo cuando está expandido */}
+        {/* Texto SHARING IS FAST (Montserrat) */}
         <div
-          className={`ml-3 min-w-0 overflow-hidden transition-all duration-200 ${
+          className={`ml-3 min-w-0 overflow-hidden transition-all duration-200 flex items-center ${
             expanded ? 'max-w-xs opacity-100' : 'max-w-0 opacity-0 lg:invisible'
           }`}
         >
-          <p
-            className="whitespace-nowrap font-serif text-sm font-bold tracking-tight"
-            style={{
-              background:
-                'linear-gradient(90deg, var(--sif-gold) 0%, var(--sif-silver) 70%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
+          <span 
+            className="whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.15em]" 
+            style={{ fontFamily: '"Montserrat", sans-serif', color: 'var(--sif-gold)' }}
           >
-            SIF
-          </p>
-          <p className="whitespace-nowrap text-[9px] font-medium uppercase tracking-widest text-sif-muted">
-            Sharing is Fast
-          </p>
+            SHARING IS FAST
+          </span>
         </div>
 
         {/* Botón cerrar — solo mobile */}
@@ -160,15 +142,25 @@ export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
       {/* ── Footer del sidebar (solo expandido) ── */}
       <div className="mt-auto border-t border-sif-border p-3">
         <div className={`flex items-center ${expanded ? 'gap-2.5' : 'justify-center'}`}>
-          <div
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-sif-border text-[11px] font-bold text-sif-text"
-            style={{
-              background:
-                'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(226,232,240,0.12))',
-            }}
-          >
-            SA
-          </div>
+          {user?.user_metadata?.avatar_url ? (
+            <img
+              src={user.user_metadata.avatar_url}
+              alt={user.user_metadata?.full_name || 'Usuario'}
+              className="h-8 w-8 shrink-0 rounded-full object-cover border border-sif-gold/50"
+            />
+          ) : (
+            <div
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-sif-border text-[11px] font-bold text-sif-text uppercase"
+              style={{
+                background:
+                  'linear-gradient(135deg, rgba(212,175,55,0.25), rgba(226,232,240,0.12))',
+              }}
+            >
+              {user?.user_metadata?.full_name
+                ? user.user_metadata.full_name.charAt(0)
+                : user?.email?.charAt(0) || 'U'}
+            </div>
+          )}
           {expanded && user && (
             <div className="min-w-0 overflow-hidden">
               <p className="truncate text-xs font-semibold text-sif-text">

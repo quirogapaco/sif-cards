@@ -253,25 +253,25 @@ export function CardsTable({ cards }: CardsTableProps) {
             return (
               <div className="flex items-center gap-2">
                 {slug ? (
-                  <button
-                    onClick={() => navigate('/admin/profile', { state: { batchId: card.batch_id, profileId: card.profile_id } })}
-                    title={`Ir al perfil @${slug} seteado`}
-                    className="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-sif-text hover:text-sif-gold hover:underline transition-colors"
+                  <span
+                    className="inline-flex items-center gap-1 font-mono text-[11px] font-semibold text-sif-text"
                   >
                     @{slug}
-                    <ExternalLink className="h-2.5 w-2.5 opacity-60" />
-                  </button>
+                  </span>
                 ) : (
                   <span className="text-sif-muted italic text-[11px]">Sin asignar</span>
                 )}
-                {/* Opción para cambiar de perfil (o asignar uno nuevo) */}
-                <button
-                   onClick={() => navigate('/admin/profile', { state: { assignCardId: card.id, batchId: card.batch_id, profileId: card.profile_id } })}
-                   title={slug ? "Cambiar de perfil" : "Asignar perfil"}
-                   className="flex h-6 w-6 items-center justify-center rounded border border-sif-border bg-sif-surface text-sif-muted hover:text-sif-gold hover:border-sif-gold/40 transition-colors ml-2"
-                >
-                   <Edit className="h-3 w-3" />
-                </button>
+                
+                {/* Botón de edición que SOLO aparece si tiene perfil */}
+                {slug && (
+                  <button
+                     onClick={() => navigate('/admin/profile', { state: { batchId: card.batch_id, profileId: card.profile_id } })}
+                     title="Editar perfil"
+                     className="flex h-6 w-6 items-center justify-center rounded border border-sif-border bg-sif-surface text-sif-muted hover:text-sif-gold hover:border-sif-gold/40 transition-colors ml-2"
+                  >
+                     <Edit className="h-3 w-3" />
+                  </button>
+                )}
               </div>
             );
           },

@@ -19,7 +19,7 @@ import type { Card } from '../../types/database';
 import GoldDarkCard from '../../assets/cards/Gold_Dark_cards.png';
 import SilverDarkCard from '../../assets/cards/Silver_Dark_cards.png';
 
-const DOMAIN = import.meta.env.VITE_APP_DOMAIN || 'https://sif.link';
+const DOMAIN = import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com';
 
 export function UserWalletCardsView() {
   const { user } = useAuth();
@@ -44,7 +44,7 @@ export function UserWalletCardsView() {
   const dragStartY = useRef<number | null>(null);
   const dragStartTime = useRef<number>(0);
   const dragDeltaY = useRef<number>(0);
-  const settleTimer = useRef<NodeJS.Timeout | null>(null);
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const loadData = useCallback(async () => {
     if (!user) return;

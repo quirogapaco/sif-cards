@@ -208,7 +208,6 @@ export default function ActivateCardPage() {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     subscription_status: 'active',
-    activated_at: new Date().toISOString(),
     expires_at: null,
   };
 
@@ -261,7 +260,7 @@ export default function ActivateCardPage() {
               Enlace de tu Perfil Público:
             </p>
             <p className="text-sm font-mono font-bold text-sif-gold truncate">
-              {import.meta.env.VITE_APP_DOMAIN || 'https://sif.link'}/t/{token}
+              {import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com'}/t/{token}
             </p>
           </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Download, Phone, Mail, MapPin, ExternalLink, Share2, Globe, BookOpen } from 'lucide-react';
+import sifGold from '../../assets/sif_gold.png';
 
 type ThemeMode = 'dark' | 'light';
 type PaletteKey = 'gold' | 'purple' | 'monochrome' | 'sapphire' | 'emerald' | 'wine';
@@ -435,13 +436,11 @@ export const PlaygroundSection: React.FC = () => {
                 </article>
 
                 {/* Footer SIF */}
-                <div className="mt-2.5 border-t border-card-border pt-2 text-center transition-colors duration-500">
-                  <span className="inline-flex items-center gap-1 text-[8.5px] tracking-wide text-card-muted font-card-body">
-                    Powered by <strong className="font-bold text-card-text">SIF</strong>
-                    <span>·</span>
-                    <span className="italic">Sharing is Fast</span>
-                    <ExternalLink className="h-2 w-2" />
-                  </span>
+                <div className="mt-2.5 border-t border-card-border pt-2 flex justify-center transition-colors duration-500">
+                  <a href={import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com'} target="_blank" rel="noopener noreferrer" className="inline-flex flex-col items-center gap-1.5 hover:opacity-80 transition-opacity">
+                    <span className="text-[7.5px] tracking-wide text-card-muted font-card-body uppercase">Powered by</span>
+                    <img src={sifGold} alt="SIF Cards" className="h-16 w-auto object-contain opacity-90" />
+                  </a>
                 </div>
               </div>
             </div>

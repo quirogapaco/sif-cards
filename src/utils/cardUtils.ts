@@ -1,6 +1,6 @@
 // src/utils/cardUtils.ts
 
-const DOMAIN = import.meta.env.VITE_APP_DOMAIN || 'https://sif.link';
+const DOMAIN = import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com';
 
 /**
  * Calcula la URL completa a grabar en el chip NFC / QR

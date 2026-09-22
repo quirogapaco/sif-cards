@@ -46,6 +46,9 @@ export default function EditProfiles() {
   const [isMemberDropdownOpen, setIsMemberDropdownOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
+  const [memberSearchQuery, setMemberSearchQuery] = useState('');
+  const [profileSearchQuery, setProfileSearchQuery] = useState('');
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -320,14 +323,15 @@ export default function EditProfiles() {
           
           {/* Selector de Colaborador (Sólo si hay más de 0, típicamente org_admin) */}
           {teamMembers.length > 0 && (
-            <div className="flex items-center gap-2.5 w-full sm:w-auto relative">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 whitespace-nowrap hidden sm:block">Colaborador</span>
+            <div className="flex flex-col items-start gap-1 w-full sm:w-auto relative">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 whitespace-nowrap">Colaborador</span>
               <div className="relative w-full sm:min-w-[180px]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsMemberDropdownOpen(!isMemberDropdownOpen);
                     setIsProfileDropdownOpen(false);
+                    if (!isMemberDropdownOpen) setMemberSearchQuery('');
                   }}
                   className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner"
                 >
@@ -339,29 +343,47 @@ export default function EditProfiles() {
                   <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isMemberDropdownOpen ? 'rotate-180 text-white' : ''}`} />
                 </button>
                 {isMemberDropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl p-1.5 space-y-1 max-h-44 overflow-y-auto">
-                    {teamMembers.map((m) => {
-                      const isCurrent = m.id === selectedMemberId;
-                      return (
-                        <button
-                          key={m.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedMemberId(m.id);
-                            loadProfilesForMember(teamMembers, m.id);
-                            setIsMemberDropdownOpen(false);
-                          }}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
-                            isCurrent
-                              ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
-                              : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                          }`}
-                        >
-                          <span className="truncate">{getMemberDisplayName(m)}</span>
-                          {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
-                        </button>
-                      );
-                    })}
+                  <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                    <div className="p-2 border-b border-white/10 bg-[#121215]">
+                      <input 
+                        type="text" 
+                        autoFocus
+                        placeholder="Buscar colaborador..."
+                        value={memberSearchQuery}
+                        onChange={(e) => setMemberSearchQuery(e.target.value)}
+                        className="w-full bg-[#1f1f24] text-white text-xs px-3 py-1.5 rounded-lg border border-white/5 focus:border-[#ddb225]/50 focus:outline-none placeholder-slate-500"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </div>
+                    <div className="p-1.5 space-y-1 max-h-44 overflow-y-auto">
+                      {teamMembers
+                        .filter(m => getMemberDisplayName(m).toLowerCase().includes(memberSearchQuery.toLowerCase()))
+                        .map((m) => {
+                          const isCurrent = m.id === selectedMemberId;
+                          return (
+                            <button
+                              key={m.id}
+                              type="button"
+                              onClick={() => {
+                                setSelectedMemberId(m.id);
+                                loadProfilesForMember(teamMembers, m.id);
+                                setIsMemberDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
+                                isCurrent
+                                  ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
+                                  : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                              }`}
+                            >
+                              <span className="truncate">{getMemberDisplayName(m)}</span>
+                              {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
+                            </button>
+                          );
+                      })}
+                      {teamMembers.filter(m => getMemberDisplayName(m).toLowerCase().includes(memberSearchQuery.toLowerCase())).length === 0 && (
+                        <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -370,14 +392,15 @@ export default function EditProfiles() {
 
           {/* Selector de perfiles */}
           {profileOptions.length > 0 && (
-            <div className="flex items-center gap-2.5 w-full sm:w-auto relative">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 whitespace-nowrap hidden sm:block">Perfil</span>
+            <div className="flex flex-col items-start gap-1 w-full sm:w-auto relative">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 whitespace-nowrap">Perfil Vinculado</span>
               <div className="relative w-full sm:min-w-[200px]">
                 <button
                   type="button"
                   onClick={() => {
                     setIsProfileDropdownOpen(!isProfileDropdownOpen);
                     setIsMemberDropdownOpen(false);
+                    if (!isProfileDropdownOpen) setProfileSearchQuery('');
                   }}
                   className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner"
                 >
@@ -392,31 +415,49 @@ export default function EditProfiles() {
                   <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180 text-white' : ''}`} />
                 </button>
                 {isProfileDropdownOpen && (
-                  <div className="absolute top-full right-0 sm:left-auto sm:right-0 mt-2 w-full sm:min-w-[240px] z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl p-1.5 space-y-1 max-h-44 overflow-y-auto">
-                    {profileOptions.map((p) => {
-                      const isCurrent = p.id === activeProfile?.id;
-                      return (
-                        <button
-                          key={p.id}
-                          type="button"
-                          onClick={() => {
-                            handleProfileSelect(p.id);
-                            setIsProfileDropdownOpen(false);
-                          }}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
-                            isCurrent
-                              ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
-                              : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2 truncate">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225]" />
-                            <span className="truncate">{p.display_name || 'Perfil sin nombre'}</span>
-                          </div>
-                          {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
-                        </button>
-                      );
-                    })}
+                  <div className="absolute top-full right-0 sm:left-auto sm:right-0 mt-2 w-full sm:min-w-[240px] z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                    <div className="p-2 border-b border-white/10 bg-[#121215]">
+                      <input 
+                        type="text" 
+                        autoFocus
+                        placeholder="Buscar perfil..."
+                        value={profileSearchQuery}
+                        onChange={(e) => setProfileSearchQuery(e.target.value)}
+                        className="w-full bg-[#1f1f24] text-white text-xs px-3 py-1.5 rounded-lg border border-white/5 focus:border-[#ddb225]/50 focus:outline-none placeholder-slate-500"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </div>
+                    <div className="p-1.5 space-y-1 max-h-44 overflow-y-auto">
+                      {profileOptions
+                        .filter(p => (p.display_name || '').toLowerCase().includes(profileSearchQuery.toLowerCase()))
+                        .map((p) => {
+                          const isCurrent = p.id === activeProfile?.id;
+                          return (
+                            <button
+                              key={p.id}
+                              type="button"
+                              onClick={() => {
+                                handleProfileSelect(p.id);
+                                setIsProfileDropdownOpen(false);
+                              }}
+                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
+                                isCurrent
+                                  ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
+                                  : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2 truncate">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225]" />
+                                <span className="truncate">{p.display_name || 'Perfil sin nombre'}</span>
+                              </div>
+                              {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
+                            </button>
+                          );
+                      })}
+                      {profileOptions.filter(p => (p.display_name || '').toLowerCase().includes(profileSearchQuery.toLowerCase())).length === 0 && (
+                        <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

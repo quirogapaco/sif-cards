@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Download, Phone, Mail, MapPin, ExternalLink } from 'lucide-react';
 import type { ProfileData } from '../../types/profile';
+import sifGold from '../../assets/sif_gold.png';
 
 interface CardPreviewProps {
   profile: ProfileData;
@@ -130,16 +131,18 @@ export default function CardPreview({ profile }: CardPreviewProps) {
         </div>
 
         {/* Footer — SIF Branding */}
-        <div className="mt-6 border-t border-card-border pt-4 text-center transition-colors duration-500">
-          <span
-            className="inline-flex items-center gap-1 text-[11px] tracking-wide text-card-muted font-card-body"
+        <div className="mt-6 border-t border-card-border pt-4 flex justify-center transition-colors duration-500">
+          <a
+            href={import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex flex-col items-center gap-2 hover:opacity-80 transition-opacity"
           >
-            Powered by{' '}
-            <strong className="font-bold text-card-text">SIF</strong>
-            <span className="mx-0.5">·</span>
-            <span className="italic">Sharing is Fast</span>
-            <ExternalLink className="h-2.5 w-2.5" />
-          </span>
+            <span className="text-[10px] tracking-wide text-card-muted font-card-body uppercase">
+              Powered by
+            </span>
+            <img src={sifGold} alt="SIF Cards" className="h-20 w-auto object-contain opacity-90" />
+          </a>
         </div>
       </div>
     </div>

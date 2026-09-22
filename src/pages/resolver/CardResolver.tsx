@@ -217,10 +217,8 @@ export default function CardResolver() {
               SIF
             </span>
           </div>
-          <div className="text-center space-y-1">
-            <h1 className="text-sm font-semibold text-sif-text tracking-wide">
-              Sharing is Fast
-            </h1>
+          <div className="text-center space-y-2 flex flex-col items-center">
+            <img src={sifGold} alt="SIF Cards" className="h-20 w-auto object-contain mb-3" />
             <p className="text-xs text-sif-muted animate-pulse">
               Consultando tarjeta NFC...
             </p>
@@ -300,7 +298,9 @@ export default function CardResolver() {
               <Sparkles className="h-4 w-4 text-sif-gold" />
               <span>Tarjeta Lista para Activación</span>
             </h2>
-            <p className="text-xs text-sif-muted">SIF • Sharing is Fast</p>
+            <p className="flex justify-center mt-2">
+              <img src={sifGold} alt="SIF Cards" className="h-7 w-auto object-contain opacity-60" />
+            </p>
           </div>
         </div>
 
@@ -369,8 +369,8 @@ export default function CardResolver() {
 
         {/* Footer / Branding */}
         <div className="w-full border-t border-sif-border pt-5 flex items-center justify-between text-xs text-sif-muted">
-          <span>
-            Powered by <strong className="text-sif-text">SIF</strong>
+          <span className="flex items-center gap-1.5">
+            Powered by <img src={sifGold} alt="SIF Cards" className="h-10 w-auto object-contain opacity-80" />
           </span>
           <Link
             to="/admin"

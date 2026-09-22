@@ -65,21 +65,17 @@ export const Navbar: React.FC<NavbarProps> = ({ edition }) => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full dark:bg-[#09090b]/85 bg-white/85 backdrop-blur-md dark:border-white/[0.08] border-slate-200/80 transition-colors duration-300 shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 h-24 flex items-center justify-between">
         
         {/* ── Izquierda: Logotipo + Tagline ── */}
         <div className="flex items-center gap-4">
           <a href="#" className="flex items-center group focus:outline-none">
             <img
               src={currentLogo}
-              alt="SIF - Sharing is Fast"
-              className="h-11 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              alt="SIF Cards"
+              className="h-20 sm:h-24 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
             />
           </a>
-          <span className="h-6 w-px dark:bg-white/10 bg-slate-300 hidden sm:block" />
-          <span className="dark:text-slate-400 text-slate-500 tracking-[0.2em] text-xs uppercase font-mono hidden sm:inline-block font-medium">
-            SHARING IS FAST
-          </span>
         </div>
 
         {/* ── Centro: Enlaces de navegación desktop con scroll suave ── */}
