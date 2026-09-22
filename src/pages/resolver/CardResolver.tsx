@@ -270,7 +270,7 @@ export default function CardResolver() {
             <div className="flex justify-between items-start">
               <img src={sifGold} alt="SIF" className="h-8 w-auto object-contain" />
               <span className="text-[10px] font-mono tracking-widest text-sif-gold border border-sif-gold/30 px-2.5 py-0.5 rounded-full bg-sif-gold/10">
-                TARJETA VIRGEN
+                TARJETA SIN ACTIVAR
               </span>
             </div>
 
