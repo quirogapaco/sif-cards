@@ -6,7 +6,7 @@ import { getCardFullUrl } from './cardUtils';
 export function exportBatchToExcel(batchName: string, cardType: string, cards: Card[]): void {
   const rows = cards.map((card) => ({
     'Numero_Serie': card.serial_number || '',
-    'Tipo_Tarjeta': card.batch?.card_type || cardType || '',
+    'Tipo_Tarjeta': card.card_type || cardType || '',
     'URL_NFC_QR': getCardFullUrl(card.relative_path, card.token),
   }));
 

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { FileText, ChevronUp, ChevronDown } from 'lucide-react';
 import type { ProfileFormData } from './ProfileForm';
 
 interface AboutAndLanguagesProps {

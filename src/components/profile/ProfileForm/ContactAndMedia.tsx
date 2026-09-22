@@ -1,4 +1,4 @@
-import { Share2, ChevronUp, ChevronDown, Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import SocialIcon from '../../ui/SocialIcon';
 import type { ProfileFormData } from './ProfileForm';
 

@@ -14,6 +14,7 @@ export interface BatchSummary extends Batch {
   cards_count?: number;
   active_count?: number;
   inactive_count?: number;
+  card_type?: string;
 }
 
 export const batchService = {

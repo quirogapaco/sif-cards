@@ -87,7 +87,7 @@ export default function CardResolver() {
         }
 
         const p = card.profile;
-        if (p.subscription_status === 'expired' || p.subscription_status === 'suspended') {
+        if (p && (p.subscription_status === 'expired' || p.subscription_status === 'suspended')) {
           setErrorType('subscription_expired');
           setErrorMessage(
             'Membresía anual vencida. Este perfil se encuentra temporalmente suspendido hasta su renovación.'
@@ -95,7 +95,7 @@ export default function CardResolver() {
         } else {
           setIsNfcSource(false); // Acceso web directo
           setResolvedToken(token);
-          setProfile(p);
+          setProfile(p ?? null);
         }
         setLoading(false);
         return;

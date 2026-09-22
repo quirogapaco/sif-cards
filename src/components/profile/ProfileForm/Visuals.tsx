@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Palette, ChevronUp, ChevronDown, Check, Camera } from 'lucide-react';
+import { Check, Camera } from 'lucide-react';
 import { CARD_THEME_FAMILIES } from '../../../config/cardThemes';
 import { BANNER_PRESETS } from '../../../config/bannerPresets';
 import type { ProfileFormData } from './ProfileForm';

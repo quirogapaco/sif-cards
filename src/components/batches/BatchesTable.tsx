@@ -33,7 +33,7 @@ export function BatchesTable({ batches, onFilterByBatch }: BatchesTableProps) {
     try {
       setDownloadingId(batch.id);
       const cards = await batchService.getCardsByBatchId(batch.id);
-      exportBatchToExcel(batch.name, batch.card_type, cards);
+      exportBatchToExcel(batch.name, batch.card_type || '', cards);
     } catch (err) {
       console.error('Error al exportar Excel:', err);
     } finally {

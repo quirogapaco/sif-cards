@@ -11,7 +11,7 @@ export function exportBatchToCsv(batchName: string, cardType: string, cards: Car
 
   const rows = cards.map((card) => [
     card.serial_number || '',
-    card.batch?.card_type || cardType || '',
+    card.card_type || cardType || '',
     getCardFullUrl(card.relative_path, card.token),
   ]);
 

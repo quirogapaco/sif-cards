@@ -1,4 +1,3 @@
-import { ExternalLink } from 'lucide-react';
 import sifGold from '../../assets/sif_gold.png';
 
 /**

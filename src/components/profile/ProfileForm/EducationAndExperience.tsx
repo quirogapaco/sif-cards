@@ -1,4 +1,4 @@
-import { Briefcase, ChevronUp, ChevronDown, GraduationCap, Building2, Plus, Trash2 } from 'lucide-react';
+import { GraduationCap, Building2, Plus, Trash2 } from 'lucide-react';
 import type { ProfileFormData } from './ProfileForm';
 
 interface EducationAndExperienceProps {

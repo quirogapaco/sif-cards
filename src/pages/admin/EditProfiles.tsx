@@ -20,7 +20,6 @@ const getMemberDisplayName = (m: TeamMember) => {
 export default function EditProfiles() {
   const { user } = useAuth();
   const location = useLocation();
-  const initialBatchId = location.state?.batchId;
   const initialProfileId = location.state?.profileId;
 
   // Opciones simplificadas para el selector de perfiles
