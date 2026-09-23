@@ -15,7 +15,7 @@ const features: FeatureItem[] = [
     id: 'zero-requirements',
     index: '01',
     title: 'Cero fricción.',
-    description: 'La otra persona no instala nada ni necesita una tarjeta propia; basta con aproximar su teléfono para recibir tus datos.',
+    description: 'Basta con aproximar el teléfono de tu cliente a tu tarjeta para compartir tu información.',
     tag: 'Sin barreras técnicas',
     icon: (
       <svg className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-current" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" viewBox="0 0 24 24">
@@ -28,7 +28,7 @@ const features: FeatureItem[] = [
     id: 'native-compatibility',
     index: '02',
     title: 'Compatibilidad nativa.',
-    description: 'Lectura instantánea por chip NFC y respaldo con código QR dinámico nítido.',
+    description: 'Lectura instantánea por chip NFC y respaldo con código QR.',
     tag: 'iOS & Android',
     icon: (
       <svg className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-current" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" viewBox="0 0 24 24">
@@ -40,11 +40,11 @@ const features: FeatureItem[] = [
     ),
   },
   {
-    id: 'zero-apps',
+    id: 'personalization',
     index: '03',
-    title: 'Cero apps requeridas.',
-    description: 'Tu perfil abre en el navegador web y guarda tu vCard en la nube.',
-    tag: 'Descarga de vCard',
+    title: 'Personalización.',
+    description: 'Decide qué cara quieres mostrar.',
+    tag: 'Control total',
     icon: (
       <svg className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-current" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10" />
@@ -57,7 +57,7 @@ const features: FeatureItem[] = [
     id: 'cloud-architecture',
     index: '04',
     title: 'Arquitectura en la nube.',
-    description: 'Conectada a un ecosistema digital activo que mantiene tus canales y datos siempre al día.',
+    description: 'Tu perfil está disponible 24/7 en la nube.',
     tag: 'Disponibilidad continua',
     isAccent: true,
     icon: (
@@ -88,14 +88,14 @@ export const FeaturesBar: React.FC = () => {
           id="features-heading"
           className="text-xl sm:text-3xl lg:text-4xl font-semibold dark:text-white text-slate-900 tracking-tight leading-tight mb-2"
         >
-          <span className="block">Diseñada para impresionar.</span>
+          <span className="block">Diseñada para impresionar</span>
           <span className="block font-serif italic font-normal dark:text-slate-200 text-slate-700">
             Optimizada para conectar.
           </span>
         </h2>
 
         <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 max-w-md leading-relaxed">
-          Todo lo necesario para proyectar autoridad profesional.
+          Todo lo necesario para tu presencia profesional.
         </p>
       </div>
 

@@ -27,7 +27,7 @@ export const EditionsSection: React.FC = () => {
           <div className="inline-flex items-center gap-2 border dark:border-white/10 border-slate-200 dark:bg-white/[0.03] bg-white backdrop-blur-md px-3 py-1 rounded-full mb-3.5 shadow-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225] animate-pulse" />
             <span className="dark:text-slate-400 text-slate-600 font-mono text-[10px] sm:text-[11px] uppercase tracking-widest font-medium">
-              ✦ ADQUISICIÓN Y TIRAJES
+              ✦ ADQUIERE TU SIF CARD
             </span>
           </div>
 
@@ -36,7 +36,7 @@ export const EditionsSection: React.FC = () => {
           </h2>
 
           <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 max-w-md mx-auto mt-2.5 leading-relaxed">
-            Tarjetas individuales de acabado premium o soluciones corporativas a medida para elevar tu firma.
+            Tarjetas individuales con acabados elegantes o soluciones corporativas personalizadas para elevar tu firma.
           </p>
         </header>
 
@@ -62,12 +62,15 @@ export const EditionsSection: React.FC = () => {
                   SIF Signature
                 </h3>
                 <div className="text-right">
-                  <div className="flex items-baseline gap-1">
+                  <div className="flex items-baseline justify-end gap-1">
                     <span className="text-2xl sm:text-3xl font-bold dark:text-white text-slate-900 tracking-tight">$10</span>
                     <span className="text-[10px] font-mono dark:text-slate-500 text-slate-600 font-medium">USD</span>
                   </div>
-                  <span className="block text-[8.5px] font-mono dark:text-slate-600 text-slate-600 -mt-0.5 tracking-tight font-medium">
+                  <span className="block text-[8.5px] font-mono dark:text-slate-600 text-slate-600 mt-0.5 tracking-tight font-medium">
                     *renovación anual
+                  </span>
+                  <span className="block text-[8.5px] font-mono dark:text-slate-500 text-slate-500 mt-0.5 tracking-tight font-medium">
+                    *Costo de tarjeta: $5
                   </span>
                 </div>
               </div>
@@ -98,8 +101,7 @@ export const EditionsSection: React.FC = () => {
                 {[
                   'Tarjeta física mate con logo SIF en foil reflectivo',
                   'Chip NFC integrado + QR dinámico de alta definición',
-                  'Perfil digital interactivo con edición remota ilimitada',
-                  'Descarga directa de vCard a la agenda en un solo tap',
+                  'Perfil digital con edición remota ilimitada',
                   'Panel de control y dashboard con métricas de taps, guardados y clics',
                 ].map((feature, i) => (
                   <div key={i} className="flex items-start gap-2.5 text-xs sm:text-[13px] dark:text-slate-300 text-slate-800 font-medium leading-normal">
@@ -127,7 +129,7 @@ export const EditionsSection: React.FC = () => {
               </a>
               <div className="text-center mt-2.5">
                 <span className="text-[10px] font-mono dark:text-slate-500 text-slate-600 font-medium">
-                  Envío express y configuración en 60 seg
+                  Entrega rápida y configuración en minutos
                 </span>
               </div>
             </div>
@@ -139,14 +141,19 @@ export const EditionsSection: React.FC = () => {
             <div className="absolute top-0 right-0 w-28 h-28 bg-[#ddb225]/[0.05] blur-2xl pointer-events-none rounded-full" />
 
             <div>
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-[#ddb225] font-mono text-[10px] sm:text-[11px] tracking-wider uppercase font-semibold flex items-center gap-1.5">
+              <div className="flex items-start justify-between gap-2 mb-2">
+                <span className="text-[#ddb225] font-mono text-[10px] sm:text-[11px] tracking-wider uppercase font-semibold flex items-center gap-1.5 mt-1">
                   <span className="w-1 h-1 rounded-full bg-[#ddb225]" />
                   EMPRESAS Y EQUIPOS
                 </span>
-                <span className="text-[9px] sm:text-[10px] font-mono text-[#ddb225] border border-[#ddb225]/30 bg-[#ddb225]/[0.08] px-2 py-0.5 rounded uppercase font-semibold">
-                  A Medida
-                </span>
+                <div className="text-right">
+                  <span className="inline-block text-[9px] sm:text-[10px] font-mono text-[#ddb225] border border-[#ddb225]/30 bg-[#ddb225]/[0.08] px-2 py-0.5 rounded uppercase font-semibold">
+                    A Medida
+                  </span>
+                  <span className="block text-[8.5px] font-mono dark:text-slate-500 text-slate-500 mt-1 tracking-tight font-medium">
+                    *cotización personalizada
+                  </span>
+                </div>
               </div>
 
               <h3 className="dark:text-[#EBF1F9] text-slate-900 text-xl sm:text-2xl font-semibold tracking-tight">
@@ -160,11 +167,11 @@ export const EditionsSection: React.FC = () => {
               {/* Resalte de personalización */}
               <div className="mt-4 pt-3.5 border-t dark:border-white/[0.06] border-slate-200/80">
                 <span className="block text-[9px] sm:text-[10px] font-mono dark:text-slate-500 text-slate-700 tracking-wider uppercase mb-2 font-medium">
-                  Personalización total de firma:
+                  Personalización total:
                 </span>
                 <div className="inline-flex items-center gap-2 dark:bg-[#09090b] bg-slate-900 border border-[#ddb225]/40 px-3 py-1 rounded-full text-[11px] font-medium text-white shadow-xs">
                   <span className="text-[#ddb225] text-xs">✦</span>
-                  <span>vCard con Logotipo y Colores de tu Marca</span>
+                  <span>SIF-card con Logotipo y Colores de tu Marca</span>
                 </div>
               </div>
 
@@ -173,10 +180,10 @@ export const EditionsSection: React.FC = () => {
                 {[
                   'Diseño personalizado de tarjeta con el branding oficial de tu firma',
                   'Chip NFC integrado + QR dinámico enlazado a perfiles corporativos',
-                  'vCard corporativa con identidad y paleta de colores de tu empresa',
+                  'Subdominio personalizado con el nombre de tu empresa',
                   'Panel de control centralizado para administrar tarjetas, perfiles e información',
-                  'Dashboard general con estadísticas consolidadas del equipo comercial',
-                  'Cotización flexible adaptada a la escala de tus ejecutivos',
+                  'Dashboard general con estadísticas consolidadas de tu equipo',
+                  'Cotización flexible adaptada a la escala de tu empresa',
                 ].map((feature, i) => (
                   <div key={i} className="flex items-start gap-2.5 text-xs sm:text-[13px] dark:text-slate-300 text-slate-800 font-medium leading-normal">
                     <svg className="w-3.5 h-3.5 text-[#ddb225] mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
@@ -201,7 +208,7 @@ export const EditionsSection: React.FC = () => {
               </a>
               <div className="text-center mt-2.5">
                 <span className="text-[10px] font-mono dark:text-slate-500 text-slate-600 font-medium">
-                  Muestras físicas y render digital previo disponibles
+                  Diseño digital previo y muestras físicas disponibles
                 </span>
               </div>
             </div>
@@ -221,7 +228,7 @@ export const EditionsSection: React.FC = () => {
             {/* Ítem 2 */}
             <div className="flex flex-col items-center justify-center gap-1 border-r dark:border-white/[0.06] border-slate-200/80 px-1 sm:px-2">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-500 mb-0.5" />
-              <span className="leading-tight dark:text-slate-300 text-slate-900">Garantía chip</span>
+              <span className="leading-tight dark:text-slate-300 text-slate-900">Soporte</span>
               <span className="dark:text-slate-500 text-slate-600 leading-tight">de por vida</span>
             </div>
 

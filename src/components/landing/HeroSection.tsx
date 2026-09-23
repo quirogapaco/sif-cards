@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { SpinningCard3D } from './SpinningCard3D';
 
-import goldFront   from '../../assets/cards/Gold_Dark_cards.png';
-import goldBack    from '../../assets/cards/Gold_Dark_back_cards.png';
+import goldFront from '../../assets/cards/Gold_Dark_cards.png';
+import goldBack from '../../assets/cards/Gold_Dark_back_cards.png';
 import silverFront from '../../assets/cards/Silver_Dark_cards.png';
-import silverBack  from '../../assets/cards/Silver_Dark_back_cards.png';
+import silverBack from '../../assets/cards/Silver_Dark_back_cards.png';
 
 interface HeroSectionProps {
   edition: 'gold' | 'silver';
@@ -70,24 +70,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       {/* ── 2. Contenedor Principal Espacioso ── */}
       <div className="max-w-6xl mx-auto w-full px-6 sm:px-10 lg:px-14 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-        
+
         {/* Columna Izquierda: Tipografía Editorial Resend */}
         <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left z-10 max-w-xl lg:max-w-none mx-auto">
-          
+
           {/* Pill Kicker minimalista */}
           <div className="relative inline-flex p-[1px] rounded-full overflow-hidden mb-6 sm:mb-8 shadow-sm">
             <span className="absolute inset-0 rounded-full border dark:border-white/10 border-slate-200" />
             <div className="absolute inset-[-150%] single-sparkle-beam bg-[conic-gradient(from_0deg,transparent_0deg,transparent_340deg,rgba(255,255,255,0.9)_352deg,#ddb225_357deg,transparent_360deg)] opacity-80 pointer-events-none" />
             <div className="relative px-3.5 py-1 rounded-full dark:bg-[#09090b]/90 bg-white/90 backdrop-blur-md flex items-center gap-2">
               <span className="text-[10px] dark:text-slate-400 text-slate-600 font-mono tracking-wider">
-                ✦ El nuevo estándar del Networking
+                ✦ La nueva era del Networking
               </span>
             </div>
           </div>
 
           {/* Titular: Tipografía Newsreader serif elegante con tamaño calibrado */}
           <h1 className="font-serif font-normal dark:text-white text-slate-900 text-[38px] sm:text-[46px] lg:text-[54px] tracking-[-0.025em] leading-[1.08] mb-6">
-            Tu primera impresión.{' '}
+            Tu primera impresión{' '}
             <span className="italic block mt-1 dark:text-slate-200 text-slate-700">
               A tan solo un Tap.
             </span>
@@ -95,7 +95,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
           {/* Subtítulo espaciado y sintetizado (estilo Resend) */}
           <p className="dark:text-slate-400 text-slate-600 text-xs sm:text-[13px] lg:text-[14px] font-normal leading-relaxed max-w-md lg:max-w-lg mb-8 tracking-normal">
-            Eleva tu presencia profesional transfiriendo tu perfil corporativo, redes y canales directos a la agenda de cualquier smartphone al instante. Sin aplicaciones intermedias y con edición en tiempo real.
+            Eleva tu presencia profesional transfiriendo tu perfil corporativo, redes, experticia, experiencia y canales de comunicación directo a la agenda de cualquier smartphone. Sin necesidad de tarjetas de cartón impresas.
           </p>
 
           {/* Acción principal única: Redirige a las tarjetas (#modelos) */}
@@ -113,7 +113,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="mt-12 sm:mt-14 pt-6 border-t dark:border-white/[0.07] border-slate-200 grid grid-cols-3 gap-6 text-left w-full max-w-xs sm:max-w-sm">
             <div>
               <div className="text-[9px] font-mono dark:text-slate-500 text-slate-600 uppercase tracking-widest mb-1">Hardware</div>
-              <div className="text-xs font-semibold dark:text-slate-200 text-slate-900">NFC + Dynamic QR</div>
+              <div className="text-xs font-semibold dark:text-slate-200 text-slate-900">NFC + QR</div>
             </div>
             <div>
               <div className="text-[9px] font-mono dark:text-slate-500 text-slate-600 uppercase tracking-widest mb-1">Compatibilidad</div>
@@ -147,11 +147,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <button
               onClick={() => handleSelectEdition('gold')}
               aria-selected={edition === 'gold'}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-wide transition-all duration-300 ${
-                edition === 'gold'
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-wide transition-all duration-300 ${edition === 'gold'
                   ? 'bg-white/15 text-white shadow-sm border border-white/20'
                   : 'text-slate-400 hover:text-slate-200 border border-transparent'
-              }`}
+                }`}
               role="tab"
             >
               <span className="w-2 h-2 rounded-full bg-[#ddb225] ring-2 ring-[#ddb225]/40" />
@@ -161,11 +160,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <button
               onClick={() => handleSelectEdition('silver')}
               aria-selected={edition === 'silver'}
-              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-wide transition-all duration-300 ${
-                edition === 'silver'
+              className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-wide transition-all duration-300 ${edition === 'silver'
                   ? 'bg-white/15 text-white shadow-sm border border-white/20'
                   : 'text-slate-400 hover:text-slate-200 border border-transparent'
-              }`}
+                }`}
               role="tab"
             >
               <span className="w-2 h-2 rounded-full bg-slate-400 ring-2 ring-slate-400/40" />
