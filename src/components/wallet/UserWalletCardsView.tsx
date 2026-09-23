@@ -270,11 +270,10 @@ export function UserWalletCardsView() {
                 setSelectedIndex(i);
                 setIsSelectDropdownOpen(false);
               }}
-              className={`transition-all rounded-full ${
-                i === selectedIndex
-                  ? 'w-4 h-1.5 bg-[#ddb225]'
-                  : 'w-1.5 h-1.5 bg-white/20 hover:bg-white/40'
-              }`}
+              className={`transition-all rounded-full ${i === selectedIndex
+                ? 'w-4 h-1.5 bg-[#ddb225]'
+                : 'w-1.5 h-1.5 bg-white/20 hover:bg-white/40'
+                }`}
               title={`Ir a tarjeta ${i + 1}`}
             />
           ))}
@@ -352,9 +351,8 @@ export function UserWalletCardsView() {
 
                 <div className="absolute bottom-2.5 right-2 px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/10 text-[9px] font-mono text-slate-200 flex items-center gap-1.5 shadow-md">
                   <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      card.status === 'active' ? 'bg-emerald-400' : 'bg-amber-400'
-                    }`}
+                    className={`w-1.5 h-1.5 rounded-full ${card.status === 'active' ? 'bg-emerald-400' : 'bg-amber-400'
+                      }`}
                   />
                   <span>{card.serial_number || 'SIF'}</span>
                 </div>
@@ -366,7 +364,7 @@ export function UserWalletCardsView() {
 
       {/* ── 3. PANEL DE INFORMACIÓN CON SKELETON / LOADING DURANTE EL CAMBIO ── */}
       <div className="w-full bg-[#121215] border border-white/10 rounded-3xl p-4 sm:p-5 shadow-2xl space-y-3 mt-1 mb-2">
-        
+
         {/* Fila 1: Estado y Fecha de Activación */}
         <div className="grid grid-cols-2 gap-2.5">
           <div className="p-2.5 rounded-2xl bg-black/40 border border-white/[0.06]">
@@ -378,14 +376,12 @@ export function UserWalletCardsView() {
             ) : (
               <div className="flex items-center gap-1.5">
                 <span
-                  className={`w-2 h-2 rounded-full ${
-                    activeCard?.status === 'active' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
-                  }`}
+                  className={`w-2 h-2 rounded-full ${activeCard?.status === 'active' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+                    }`}
                 />
                 <span
-                  className={`text-xs font-mono font-semibold uppercase ${
-                    activeCard?.status === 'active' ? 'text-emerald-400' : 'text-amber-400'
-                  }`}
+                  className={`text-xs font-mono font-semibold uppercase ${activeCard?.status === 'active' ? 'text-emerald-400' : 'text-amber-400'
+                    }`}
                 >
                   {activeCard?.status === 'active' ? 'Activa' : 'Inactiva'}
                 </span>
@@ -436,9 +432,8 @@ export function UserWalletCardsView() {
                 href={activeCard && !isStabilizing ? getCanonicalUrl(activeCard) : '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`p-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 hover:text-white transition ${
-                  isStabilizing ? 'pointer-events-none opacity-40' : ''
-                }`}
+                className={`p-1.5 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 hover:text-white transition ${isStabilizing ? 'pointer-events-none opacity-40' : ''
+                  }`}
                 title="Abrir perfil"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -478,9 +473,8 @@ export function UserWalletCardsView() {
                   <Loader2 className="w-3.5 h-3.5 animate-spin text-[#ddb225]" />
                 ) : (
                   <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      isSelectDropdownOpen ? 'rotate-180 text-white' : ''
-                    }`}
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${isSelectDropdownOpen ? 'rotate-180 text-white' : ''
+                      }`}
                   />
                 )}
               </div>
@@ -496,11 +490,10 @@ export function UserWalletCardsView() {
                       key={p.id}
                       type="button"
                       onClick={() => handleProfileChange(activeCard.id, p.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
-                        isCurrent
-                          ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
-                          : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                      }`}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
+                        ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
+                        : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                        }`}
                     >
                       <div className="flex items-center gap-2 truncate">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225]" />

@@ -179,7 +179,6 @@ export const activationService = {
           template_type: 'standard_bcard',
           theme_palette: themePalette,
           subscription_status: 'active',
-          activated_at: now.toISOString(),
           expires_at: oneYearLater.toISOString(),
           data: cleanedData,
         })

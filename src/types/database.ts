@@ -4,10 +4,10 @@ export type SubscriptionStatus = 'active' | 'grace_period' | 'expired' | 'suspen
 
 export type CardStatus = 'inactive' | 'active' | 'blocked';
 
-export type CardPhysicalType = 
-  | 'matte-black-gold' 
-  | 'matte-black-silver' 
-  | 'matte-white-gold' 
+export type CardPhysicalType =
+  | 'matte-black-gold'
+  | 'matte-black-silver'
+  | 'matte-white-gold'
   | 'matte-white-silver';
 
 export interface ProfileData {

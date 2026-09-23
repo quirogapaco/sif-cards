@@ -226,6 +226,10 @@ export default function ActivateCardPage() {
 
   // Render Celebración / Éxito
   if (isActivatedSuccess) {
+    const publicProfilePath = cardData?.batch?.url_prefix
+      ? `/${cardData.batch.url_prefix}/${formData.slug}/${token}`
+      : `/p/${formData.slug}/${token}`;
+
     return (
       <div className="min-h-screen w-full bg-sif-bg flex flex-col items-center justify-center p-4 relative overflow-hidden">
         <div
@@ -260,13 +264,13 @@ export default function ActivateCardPage() {
               Enlace de tu Perfil Público:
             </p>
             <p className="text-sm font-mono font-bold text-sif-gold truncate">
-              {import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com'}/t/{token}
+              {(import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com').replace(/\/$/, '')}{publicProfilePath}
             </p>
           </div>
 
           <div className="w-full flex flex-col gap-3">
             <Link
-              to={`/t/${token}`}
+              to={publicProfilePath}
               className="flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold text-black transition-all hover:opacity-90 active:scale-95 shadow-xl"
               style={{
                 background:
@@ -293,6 +297,12 @@ export default function ActivateCardPage() {
 
   // Render Advertencia de Tarjeta Ya Activa
   if (cardData && cardData.status === 'active') {
+    const activeProfilePath = cardData.profile?.slug
+      ? (cardData.batch?.url_prefix
+        ? `/${cardData.batch.url_prefix}/${cardData.profile.slug}/${token}`
+        : `/p/${cardData.profile.slug}/${token}`)
+      : `/t/${token}`;
+
     return (
       <div className="min-h-screen w-full bg-sif-bg flex items-center justify-center p-4">
         <div className="w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-8 shadow-2xl text-center flex flex-col items-center">
@@ -302,7 +312,7 @@ export default function ActivateCardPage() {
             Esta tarjeta física ya fue reclamada y activada previamente. Si eres el dueño de esta tarjeta, puedes editar su perfil iniciando sesión.
           </p>
           <Link
-            to={`/t/${token}`}
+            to={activeProfilePath}
             className="w-full rounded-full bg-sif-gold py-3 text-xs font-semibold text-black hover:opacity-90 transition-all"
           >
             Ver tarjeta activa &rarr;

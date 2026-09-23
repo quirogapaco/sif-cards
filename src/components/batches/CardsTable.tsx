@@ -138,12 +138,12 @@ export function CardsTable({ cards }: CardsTableProps) {
           cell: ({ row, getValue }) => {
             const slug = getValue() as string | null;
             const card = row.original;
-            const targetUrl = card.batch?.url_prefix 
-              ? slug 
+            const targetUrl = card.batch?.url_prefix
+              ? slug
                 ? `/${card.batch.url_prefix}/${slug}/${card.token}`
                 : `/${card.batch.url_prefix}/${card.token}`
-              : slug 
-                ? `/p/${slug}/${card.token}` 
+              : slug
+                ? `/p/${slug}/${card.token}`
                 : (card.relative_path ?? `/t/${card.token}`);
             return slug ? (
               <a
@@ -168,12 +168,12 @@ export function CardsTable({ cards }: CardsTableProps) {
           cell: ({ row }) => {
             const card = row.original;
             const fullUrl = getCardFullUrl(card.relative_path, card.token);
-            const profileUrl = card.batch?.url_prefix 
-              ? card.profile?.slug 
+            const profileUrl = card.batch?.url_prefix
+              ? card.profile?.slug
                 ? `/${card.batch.url_prefix}/${card.profile.slug}/${card.token}`
                 : `/${card.batch.url_prefix}/${card.token}`
-              : card.profile?.slug 
-                ? `/p/${card.profile.slug}/${card.token}` 
+              : card.profile?.slug
+                ? `/p/${card.profile.slug}/${card.token}`
                 : (card.relative_path ?? `/t/${card.token}`);
             const copyKey = `link-${card.id}`;
             const copied = copiedId === copyKey;
@@ -190,7 +190,7 @@ export function CardsTable({ cards }: CardsTableProps) {
                 >
                   <ExternalLink className="h-3 w-3" />
                 </a>
-  
+
                 {/* Editar Perfil */}
                 {card.profile_id && (
                   <button
@@ -202,7 +202,7 @@ export function CardsTable({ cards }: CardsTableProps) {
                     <Edit className="h-3 w-3" />
                   </button>
                 )}
-  
+
                 {/* Copiar enlace de activación */}
                 <button
                   id={`copy-link-${card.id}`}
@@ -215,7 +215,7 @@ export function CardsTable({ cards }: CardsTableProps) {
                     : <Link2 className="h-3 w-3" />
                   }
                 </button>
-  
+
               </div>
             );
           },
@@ -249,7 +249,7 @@ export function CardsTable({ cards }: CardsTableProps) {
           cell: ({ row }) => {
             const card = row.original;
             const slug = card.profile?.slug;
-            
+
             return (
               <div className="flex items-center gap-2">
                 {slug ? (
@@ -261,15 +261,15 @@ export function CardsTable({ cards }: CardsTableProps) {
                 ) : (
                   <span className="text-sif-muted italic text-[11px]">Sin asignar</span>
                 )}
-                
+
                 {/* Botón de edición que SOLO aparece si tiene perfil */}
                 {slug && (
                   <button
-                     onClick={() => navigate('/admin/profile', { state: { batchId: card.batch_id, profileId: card.profile_id } })}
-                     title="Editar perfil"
-                     className="flex h-6 w-6 items-center justify-center rounded border border-sif-border bg-sif-surface text-sif-muted hover:text-sif-gold hover:border-sif-gold/40 transition-colors ml-2"
+                    onClick={() => navigate('/admin/profile', { state: { batchId: card.batch_id, profileId: card.profile_id } })}
+                    title="Editar perfil"
+                    className="flex h-6 w-6 items-center justify-center rounded border border-sif-border bg-sif-surface text-sif-muted hover:text-sif-gold hover:border-sif-gold/40 transition-colors ml-2"
                   >
-                     <Edit className="h-3 w-3" />
+                    <Edit className="h-3 w-3" />
                   </button>
                 )}
               </div>
@@ -284,7 +284,7 @@ export function CardsTable({ cards }: CardsTableProps) {
             const fullUrl = getCardFullUrl(card.relative_path, card.token);
             const copyKey = `path-${card.id}`;
             const copied = copiedId === copyKey;
-            
+
             return (
               <div className="flex items-center gap-2">
                 <a href={fullUrl} target="_blank" rel="noopener noreferrer" className="max-w-[200px] truncate font-mono text-[10px] text-sif-muted hover:text-sif-gold hover:underline">
