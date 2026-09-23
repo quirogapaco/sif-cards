@@ -57,7 +57,7 @@ export const PlaygroundSection: React.FC = () => {
         <header className="text-center max-w-xl mx-auto mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border dark:border-white/10 border-slate-200 dark:bg-white/[0.02] bg-white dark:text-slate-400 text-slate-600 font-mono text-[10px] sm:text-xs tracking-widest uppercase mb-3 shadow-sm backdrop-blur-sm">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>PERSONALIZACIÓN EN TIEMPO REAL</span>
+            <span>HECHA UN VISTAZO ANTES DE COMPRAR</span>
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight dark:text-[#EBF1F9] text-slate-900 leading-tight">
@@ -66,7 +66,7 @@ export const PlaygroundSection: React.FC = () => {
           </h2>
 
           <p className="text-xs sm:text-sm dark:text-slate-400 text-slate-600 max-w-md mx-auto mt-2 leading-relaxed">
-            Personaliza el tema y modo en vivo. Cada tarjeta física sincroniza su perfil digital de manera independiente.
+            Hecha un vistazo a todas las opciones de personalización.
           </p>
         </header>
 
@@ -148,7 +148,7 @@ export const PlaygroundSection: React.FC = () => {
                 </span>
               </div>
               <p className="dark:text-slate-400 text-slate-600 text-[11px] mb-4">
-                Los cambios solo afectan la vista de tu perfil.
+                Esta es una simulación en tiempo real.
               </p>
 
               {/* Selector Dark / Light */}
