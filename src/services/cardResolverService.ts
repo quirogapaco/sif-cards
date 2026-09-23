@@ -20,7 +20,22 @@ export const cardResolverService = {
     try {
       const { data, error } = await supabase
         .from('cards')
-        .select('*, batch:batches(*), profile:profiles(*)')
+        .select(`
+          *,
+          batch:batches(*),
+          profile:profiles(
+            id,
+            user_id,
+            slug,
+            template_type,
+            theme_palette,
+            data,
+            created_at,
+            updated_at,
+            subscription_status,
+            expires_at
+          )
+        `)
         .eq('token', token)
         .maybeSingle();
 

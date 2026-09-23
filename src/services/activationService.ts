@@ -23,7 +23,21 @@ export const activationService = {
     try {
       const { data, error } = await supabase
         .from('cards')
-        .select('*, profile:profiles(*)')
+        .select(`
+          *,
+          profile:profiles(
+            id,
+            user_id,
+            slug,
+            template_type,
+            theme_palette,
+            data,
+            created_at,
+            updated_at,
+            subscription_status,
+            expires_at
+          )
+        `)
         .eq('token', token)
         .maybeSingle();
 
