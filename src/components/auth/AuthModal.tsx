@@ -241,14 +241,14 @@ export default function AuthModal({
       aria-modal="true"
       aria-label={displayTitle}
       onClick={handleBackdropClick}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 dark:bg-black/75 bg-slate-900/40 backdrop-blur-md transition-colors duration-200"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 dark:bg-black/75 bg-slate-900/40 backdrop-blur-md transition-colors duration-200"
       style={{
         animation: 'sif-fade-in 0.18s ease',
       }}
     >
       {/* Contenedor del modal */}
       <div
-        className="relative w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-6 shadow-2xl sm:p-8 text-sif-text transition-all duration-200"
+        className="relative w-full max-w-md max-h-[95vh] overflow-y-auto rounded-3xl border border-sif-border bg-sif-surface p-5 sm:p-6 shadow-2xl text-sif-text transition-all duration-200 custom-scrollbar"
         style={{ animation: 'sif-slide-up 0.22s cubic-bezier(0.22, 1, 0.36, 1)' }}
         role="document"
       >
@@ -276,15 +276,15 @@ export default function AuthModal({
         </button>
 
         {/* ── Cabecera con imagotipo destacado ── */}
-        <div className="mb-6 flex flex-col items-center gap-3">
+        <div className="mb-5 flex flex-col items-center gap-2">
           <img
             src={logoSrc}
             alt="SIF – Sharing is Fast"
-            className="h-14 sm:h-16 w-auto object-contain drop-shadow-md mx-auto block transition-transform duration-300 hover:scale-105"
+            className="h-10 sm:h-12 w-auto object-contain drop-shadow-md mx-auto block transition-transform duration-300 hover:scale-105"
             draggable={false}
           />
           <div className="text-center">
-            <h1 className="text-xl font-semibold tracking-tight text-sif-text">
+            <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-sif-text">
               {displayTitle}
             </h1>
             <p className="mt-1 text-xs text-sif-muted">
@@ -315,7 +315,7 @@ export default function AuthModal({
         </div>
 
         {/* ── Formulario ── */}
-        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3">
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-2.5">
           {/* Nombre (Solo en modo registro) */}
           {mode === 'register' && (
             <div className="flex flex-col gap-1">

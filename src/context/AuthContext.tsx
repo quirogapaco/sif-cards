@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
 import { userService } from '../services/userService';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
-import type { UserRole } from '../types/database';
+import type { UserRole, User as PublicUser } from '../types/database';
 
 export type AuthMode = 'login' | 'register';
 
@@ -11,6 +11,7 @@ interface AuthContextValue {
   session: Session | null;
   user: SupabaseUser | null;
   userRole: UserRole | null;
+  orgId: string | null;
   loading: boolean;
   isAuthModalOpen: boolean;
   authModalMode: AuthMode;
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextValue>({
   session: null,
   user: null,
   userRole: null,
+  orgId: null,
   loading: true,
   isAuthModalOpen: false,
   authModalMode: 'login',
@@ -41,6 +43,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
+  const [orgId, setOrgId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   // ── Estado global del modal de autenticación ──
@@ -68,6 +71,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setSession(null);
       setUser(null);
       setUserRole(null);
+      setOrgId(null);
       try {
         localStorage.clear();
         sessionStorage.clear();
@@ -89,8 +93,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         
         if (initialSession?.user) {
           await userService.ensureUserRecord(initialSession.user.id);
-          const role = await userService.getUserRole(initialSession.user.id);
-          if (mounted) setUserRole(role);
+          const record = await userService.getUserRecord(initialSession.user.id);
+          if (mounted) {
+            setUserRole(record?.role as UserRole | null);
+            setOrgId(record?.org_id || null);
+          }
         }
         
         setLoading(false);
@@ -105,10 +112,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (newSession?.user) {
         await userService.ensureUserRecord(newSession.user.id);
-        const role = await userService.getUserRole(newSession.user.id);
-        setUserRole(role);
+        const record = await userService.getUserRecord(newSession.user.id);
+        setUserRole(record?.role as UserRole | null);
+        setOrgId(record?.org_id || null);
       } else {
         setUserRole(null);
+        setOrgId(null);
       }
       setLoading(false);
     });
@@ -125,6 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         session,
         user,
         userRole,
+        orgId,
         loading,
         isAuthModalOpen,
         authModalMode,
