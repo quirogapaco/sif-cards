@@ -24,7 +24,7 @@ export default function AdminLayout() {
   const toggle = () => setExpanded((prev) => !prev);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-sif-bg text-sif-text transition-colors duration-300">
+    <div className="flex h-dvh overflow-hidden bg-sif-bg text-sif-text transition-colors duration-300">
 
       {/* ── Backdrop para móvil (solo visible cuando el drawer está abierto) ── */}
       {expanded && (

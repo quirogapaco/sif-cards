@@ -209,7 +209,7 @@ export default function CardResolver() {
   // 1. Estado de Carga (Loading)
   if (loading) {
     return (
-      <div className="min-h-screen w-full bg-sif-bg flex flex-col items-center justify-center p-4">
+      <div className="min-h-dvh w-full bg-sif-bg flex flex-col items-center justify-center p-4">
         <div className="flex flex-col items-center gap-4">
           <div className="relative flex items-center justify-center">
             <div className="h-16 w-16 rounded-full border-2 border-sif-border border-t-sif-gold animate-spin" />
@@ -236,7 +236,7 @@ export default function CardResolver() {
   // 3. Vista especial para Tarjeta Virgen / Inactiva
   if (errorType === 'inactive') {
     return (
-      <div className="min-h-screen w-full bg-sif-bg flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-dvh w-full bg-sif-bg flex items-center justify-center p-4 relative overflow-hidden">
         {/* Luz ambiental dorada de fondo */}
         <div
           aria-hidden="true"
@@ -336,7 +336,7 @@ export default function CardResolver() {
 
   // 4. Renderizado de otras vistas de error (404, blocked, subscription_expired, no_profile)
   return (
-    <div className="min-h-screen w-full bg-sif-bg flex items-center justify-center p-4 sm:p-6">
+    <div className="min-h-dvh w-full bg-sif-bg flex items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-8 shadow-2xl backdrop-blur-md flex flex-col items-center text-center">
         {/* Icono temático */}
         <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-sif-border bg-sif-surface-subtle shadow-inner">

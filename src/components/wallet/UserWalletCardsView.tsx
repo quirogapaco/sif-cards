@@ -232,7 +232,7 @@ export function UserWalletCardsView() {
   const selectedProfileObj = profileOptions.find((p) => p.id === activeCard?.profile_id);
 
   return (
-    <div className="relative isolate z-0 w-full max-w-md sm:max-w-xl mx-auto min-h-[calc(100vh-4.5rem)] flex flex-col justify-between px-3.5 sm:px-6 py-2 select-none overflow-x-hidden">
+    <div className="relative isolate z-0 w-full max-w-md sm:max-w-xl mx-auto min-h-[calc(100dvh-4.5rem)] flex flex-col justify-between px-3.5 sm:px-6 py-2 select-none overflow-x-hidden">
       {/* Toast Flotante */}
       {successToast && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 rounded-full border border-emerald-500/40 bg-black/95 px-4 py-2 text-xs font-mono text-emerald-300 shadow-2xl backdrop-blur-md animate-bounce">

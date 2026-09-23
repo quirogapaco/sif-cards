@@ -7,7 +7,7 @@ import sifGold from '../../assets/sif_gold.png';
 export default function LoadingFallback() {
   return (
     <div
-      className="min-h-screen w-full bg-[#09090b] flex flex-col items-center justify-center relative overflow-hidden select-none"
+      className="min-h-dvh w-full bg-[#09090b] flex flex-col items-center justify-center relative overflow-hidden select-none"
       role="status"
       aria-label="Cargando contenido..."
     >

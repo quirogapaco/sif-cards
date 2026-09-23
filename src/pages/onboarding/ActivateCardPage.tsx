@@ -214,7 +214,7 @@ export default function ActivateCardPage() {
   // Render Carga Inicial
   if (initLoading) {
     return (
-      <div className="min-h-screen w-full bg-sif-bg flex flex-col items-center justify-center p-4">
+      <div className="min-h-dvh w-full bg-sif-bg flex flex-col items-center justify-center p-4">
         <div className="relative flex items-center justify-center">
           <div className="h-16 w-16 rounded-full border-2 border-sif-border border-t-sif-gold animate-spin" />
           <span className="absolute font-bold text-xs tracking-wider text-sif-gold">SIF</span>
@@ -231,7 +231,7 @@ export default function ActivateCardPage() {
       : `/p/${formData.slug}/${token}`;
 
     return (
-      <div className="min-h-screen w-full bg-sif-bg flex flex-col items-center justify-center p-4 relative overflow-hidden">
+      <div className="min-h-dvh w-full bg-sif-bg flex flex-col items-center justify-center p-4 relative overflow-hidden">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-[600px] w-[600px] rounded-full opacity-20 blur-3xl"
@@ -304,7 +304,7 @@ export default function ActivateCardPage() {
       : `/t/${token}`;
 
     return (
-      <div className="min-h-screen w-full bg-sif-bg flex items-center justify-center p-4">
+      <div className="min-h-dvh w-full bg-sif-bg flex items-center justify-center p-4">
         <div className="w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-8 shadow-2xl text-center flex flex-col items-center">
           <ShieldAlert className="h-12 w-12 text-amber-400 mb-4" />
           <h2 className="text-lg font-bold text-sif-text mb-2">Tarjeta Ya Activada</h2>
@@ -323,7 +323,7 @@ export default function ActivateCardPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-sif-bg text-sif-text">
+    <div className="min-h-dvh w-full bg-sif-bg text-sif-text">
       {/* ── HEADER DE BIENVENIDA SIF ── */}
       <header className="sticky top-0 z-30 border-b border-sif-border bg-sif-surface/90 px-4 py-4 backdrop-blur-md sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">

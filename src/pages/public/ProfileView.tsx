@@ -102,7 +102,7 @@ export default function ProfileView({ profile, isNfcSource = false, token, prefi
   return (
     <div
       data-card-theme={theme}
-      className="min-h-screen w-full font-card-body transition-colors duration-300 overscroll-y-none"
+      className="min-h-dvh w-full font-card-body transition-colors duration-300 overscroll-y-none"
       style={{ backgroundColor: 'var(--card-surface)', color: 'var(--card-text-main)' }}
     >
       {/* ── 1. Banner Superior ─────────────────────────────────────────────── */}
