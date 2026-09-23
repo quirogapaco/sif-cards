@@ -210,6 +210,7 @@ export const activationService = {
         .from('cards')
         .update({
           status: 'active',
+          activated_at: now.toISOString(),
           user_id: user.id,
           profile_id: profileRow.id,
         })
