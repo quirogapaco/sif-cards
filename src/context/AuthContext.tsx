@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { supabase } from '../lib/supabase';
 import { userService } from '../services/userService';
 import type { User as SupabaseUser, Session } from '@supabase/supabase-js';
-import type { UserRole, User as PublicUser } from '../types/database';
+import type { UserRole } from '../types/database';
 
 export type AuthMode = 'login' | 'register';
 

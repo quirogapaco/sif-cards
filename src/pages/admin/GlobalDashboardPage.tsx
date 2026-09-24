@@ -3,7 +3,7 @@ import KpiGrid from '../../components/dashboard/KpiGrid';
 import TrafficChart from '../../components/dashboard/TrafficChart';
 import SocialDistribution from '../../components/dashboard/SocialDistribution';
 import DirectLinks from '../../components/dashboard/DirectLinks';
-import DeviceStats from '../../components/dashboard/DeviceStats';
+
 import ConversionFunnel from '../../components/dashboard/ConversionFunnel';
 import TopBarFilters, { type DashboardFilters } from '../../components/dashboard/TopBarFilters';
 import { useState, useCallback } from 'react';
@@ -47,7 +47,7 @@ const mockDashboardData: DashboardMetrics = {
 };
 
 export default function GlobalDashboardPage() {
-  const [filters, setFilters] = useState<DashboardFilters | null>(null);
+  const [, setFilters] = useState<DashboardFilters | null>(null);
 
   const handleFilterChange = useCallback((newFilters: DashboardFilters) => {
     setFilters((prev) => {

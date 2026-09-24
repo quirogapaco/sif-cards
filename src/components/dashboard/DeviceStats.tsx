@@ -1,4 +1,4 @@
-import { Apple, Smartphone, Clock, ShieldCheck } from 'lucide-react';
+import { Apple, Smartphone, Clock } from 'lucide-react';
 import type { DashboardMetrics } from '../../types/dashboard';
 
 interface DeviceStatsProps {
