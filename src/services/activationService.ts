@@ -25,6 +25,7 @@ export const activationService = {
         .from('cards')
         .select(`
           *,
+          batch:batches(url_prefix),
           profile:profiles(
             id,
             user_id,
