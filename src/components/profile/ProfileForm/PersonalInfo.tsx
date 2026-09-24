@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { Camera, Image as ImageIcon } from 'lucide-react';
 import PhoneInput from 'react-phone-number-input';
+import ImageCropperModal from '../ImageCropperModal';
 import 'react-phone-number-input/style.css';
 import type { ProfileFormData } from './ProfileForm';
 
@@ -10,6 +12,8 @@ interface PersonalInfoProps {
 }
 
 export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: PersonalInfoProps) {
+  const [cropperData, setCropperData] = useState<{ src: string; file: File } | null>(null);
+
   const handleNameChange = (name: string) => {
     const slugified = name
       .toLowerCase()
@@ -54,7 +58,8 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
                   const file = e.target.files?.[0];
                   if (file) {
                     const tempUrl = URL.createObjectURL(file);
-                    onChange({ ...formData, avatar_url: tempUrl, avatar_file: file });
+                    setCropperData({ src: tempUrl, file });
+                    e.target.value = '';
                   }
                 }}
               />
@@ -185,6 +190,21 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
           </label>
         </div>
       </div>
+
+      {cropperData && (
+        <ImageCropperModal
+          imageSrc={cropperData.src}
+          aspect={1}
+          cropShape="round"
+          title="Recortar Foto de Perfil"
+          onClose={() => setCropperData(null)}
+          onCropComplete={(croppedFile) => {
+            const tempUrl = URL.createObjectURL(croppedFile);
+            onChange({ ...formData, avatar_url: tempUrl, avatar_file: croppedFile });
+            setCropperData(null);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -183,10 +183,12 @@ export const profileService = {
    * Sube las imágenes de avatar y banner si están presentes en formData,
    * y retorna el objeto ProfileData final (sin los Files) y un array de 
    * rutas de archivo subidas (útil para rollback).
+   * También elimina las imágenes previas si se proporcionan en oldData.
    */
   async processProfileImages(
     formData: ProfileFormData,
-    identifierPrefix: string
+    identifierPrefix: string,
+    oldData?: { avatar_url?: string; banner_url?: string }
   ): Promise<{
     finalProfileData: ProfileData & { slug: string; theme_palette: string };
     uploadedPaths: string[];
@@ -205,6 +207,19 @@ export const profileService = {
         if (uploadedUrl) {
           finalAvatarUrl = uploadedUrl;
           uploadedPaths.push(path);
+
+          // Eliminar la imagen anterior si existe
+          if (oldData?.avatar_url && oldData.avatar_url.includes(`/${avatarBucket}/`)) {
+            try {
+              const urlObj = new URL(oldData.avatar_url);
+              const pathParts = urlObj.pathname.split(`/${avatarBucket}/`);
+              if (pathParts.length > 1) {
+                await storageService.removeImage(avatarBucket, pathParts[1]);
+              }
+            } catch (e) {
+              console.error('Error al eliminar avatar antiguo:', e);
+            }
+          }
         }
       }
 
@@ -216,6 +231,19 @@ export const profileService = {
         if (uploadedUrl) {
           finalBannerUrl = uploadedUrl;
           uploadedPaths.push(path);
+
+          // Eliminar la imagen anterior si existe
+          if (oldData?.banner_url && oldData.banner_url.includes(`/${bannerBucket}/`)) {
+            try {
+              const urlObj = new URL(oldData.banner_url);
+              const pathParts = urlObj.pathname.split(`/${bannerBucket}/`);
+              if (pathParts.length > 1) {
+                await storageService.removeImage(bannerBucket, pathParts[1]);
+              }
+            } catch (e) {
+              console.error('Error al eliminar banner antiguo:', e);
+            }
+          }
         }
       }
 

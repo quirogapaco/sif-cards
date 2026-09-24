@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Check, Camera } from 'lucide-react';
+import ImageCropperModal from '../ImageCropperModal';
 import { CARD_THEME_FAMILIES } from '../../../config/cardThemes';
 import { BANNER_PRESETS } from '../../../config/bannerPresets';
 import type { ProfileFormData } from './ProfileForm';
@@ -11,6 +12,7 @@ interface VisualsProps {
 
 export default function Visuals({ formData, onChange }: VisualsProps) {
   const [bannerTab, setBannerTab] = useState<'presets' | 'custom'>('presets');
+  const [cropperData, setCropperData] = useState<{ src: string; file: File } | null>(null);
 
   return (
     <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -122,7 +124,8 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
                   const file = e.target.files?.[0];
                   if (file) {
                     const tempUrl = URL.createObjectURL(file);
-                    onChange({ ...formData, banner_url: tempUrl, banner_file: file });
+                    setCropperData({ src: tempUrl, file });
+                    e.target.value = '';
                   }
                 }}
               />
@@ -174,6 +177,21 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
           </div>
         )}
       </div>
+
+      {cropperData && (
+        <ImageCropperModal
+          imageSrc={cropperData.src}
+          aspect={820 / 360}
+          cropShape="rect"
+          title="Recortar Banner"
+          onClose={() => setCropperData(null)}
+          onCropComplete={(croppedFile) => {
+            const tempUrl = URL.createObjectURL(croppedFile);
+            onChange({ ...formData, banner_url: tempUrl, banner_file: croppedFile });
+            setCropperData(null);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -181,7 +181,11 @@ export default function EditProfiles() {
     try {
       const { finalProfileData, error: uploadError } = await profileService.processProfileImages(
         formData,
-        currentProfileId
+        currentProfileId,
+        {
+          avatar_url: activeProfile.data.avatar_url,
+          banner_url: activeProfile.data.banner_url,
+        }
       );
 
       if (uploadError) {
