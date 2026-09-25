@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { CrowdCanvas } from './CrowdCanvas';
 import sifGold from '../../assets/sif_gold.png';
 
@@ -64,7 +65,7 @@ export const FooterCTA: React.FC = () => {
           </div>
 
           {/* Columnas de Navegación */}
-          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 pt-2 md:pt-0">
+          <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 pt-2 md:pt-0">
             {/* Columna Menú */}
             <div>
               <h4 className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest dark:text-slate-400 text-slate-600 font-semibold mb-3">
@@ -125,6 +126,31 @@ export const FooterCTA: React.FC = () => {
                   >
                     Facebook
                   </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Columna Legal */}
+            <div>
+              <h4 className="text-[10px] sm:text-[11px] font-mono uppercase tracking-widest dark:text-slate-400 text-slate-600 font-semibold mb-3">
+                Legal
+              </h4>
+              <ul className="space-y-2 text-xs dark:text-slate-400 text-slate-600">
+                <li>
+                  <Link
+                    to="/terms"
+                    className="dark:hover:text-white hover:text-slate-900 transition-colors"
+                  >
+                    Términos y Condiciones
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/privacy"
+                    className="dark:hover:text-white hover:text-slate-900 transition-colors"
+                  >
+                    Políticas de Privacidad
+                  </Link>
                 </li>
               </ul>
             </div>
