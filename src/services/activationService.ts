@@ -74,6 +74,33 @@ export const activationService = {
   },
 
   /**
+   * Genera un slug único basado en un texto base.
+   */
+  async generateUniqueSlug(baseText: string): Promise<string> {
+    let baseSlug = (baseText || 'mi-perfil')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+      
+    if (!baseSlug) {
+      baseSlug = 'mi-perfil';
+    }
+      
+    let currentSlug = baseSlug;
+    let counter = 1;
+    
+    while (!(await this.isSlugAvailable(currentSlug))) {
+      currentSlug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+    
+    return currentSlug;
+  },
+
+  /**
    * Limpia el objeto ProfileData omitiendo propiedades vacías o arrays sin elementos.
    */
   cleanProfileData(data: ProfileData): ProfileData {
@@ -92,6 +119,13 @@ export const activationService = {
       const contacts: NonNullable<ProfileData['direct_contacts']> = {};
       if (data.direct_contacts.whatsapp?.trim()) contacts.whatsapp = data.direct_contacts.whatsapp.trim();
       if (data.direct_contacts.email?.trim()) contacts.email = data.direct_contacts.email.trim();
+      if (data.direct_contacts.emails && data.direct_contacts.emails.length > 0) {
+        const validEmails = data.direct_contacts.emails.map(e => e.trim()).filter(Boolean);
+        if (validEmails.length > 0) {
+          contacts.emails = validEmails;
+          if (!contacts.email) contacts.email = validEmails[0];
+        }
+      }
       if (data.direct_contacts.phone?.trim()) contacts.phone = data.direct_contacts.phone.trim();
       if (data.direct_contacts.location?.trim()) contacts.location = data.direct_contacts.location.trim();
 

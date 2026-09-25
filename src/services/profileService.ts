@@ -163,6 +163,7 @@ export const profileService = {
       direct_contacts: {
         whatsapp: d.direct_contacts?.whatsapp || '',
         email: d.direct_contacts?.email || '',
+        emails: d.direct_contacts?.emails?.length ? d.direct_contacts.emails : (d.direct_contacts?.email ? [d.direct_contacts.email] : ['']),
         phone: d.direct_contacts?.phone || '',
         location: d.direct_contacts?.location || '',
       },

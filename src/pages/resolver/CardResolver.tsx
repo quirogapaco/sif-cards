@@ -266,7 +266,9 @@ export default function CardResolver() {
             }}
           >
             <div className="flex justify-between items-start">
-              <img src={sifGold} alt="SIF" className="h-8 w-auto object-contain" />
+              <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer">
+                <img src={sifGold} alt="SIF" className="h-8 w-auto object-contain hover:scale-105 transition-transform" />
+              </a>
               <span className="text-[10px] font-mono tracking-widest text-sif-gold border border-sif-gold/30 px-2.5 py-0.5 rounded-full bg-sif-gold/10">
                 TARJETA SIN ACTIVAR
               </span>
@@ -299,7 +301,9 @@ export default function CardResolver() {
               <span>Tarjeta Lista para Activación</span>
             </h2>
             <p className="flex justify-center mt-2">
-              <img src={sifGold} alt="SIF Cards" className="h-7 w-auto object-contain opacity-60" />
+              <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer">
+                <img src={sifGold} alt="SIF Cards" className="h-7 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" />
+              </a>
             </p>
           </div>
         </div>
@@ -370,7 +374,10 @@ export default function CardResolver() {
         {/* Footer / Branding */}
         <div className="w-full border-t border-sif-border pt-5 flex items-center justify-between text-xs text-sif-muted">
           <span className="flex items-center gap-1.5">
-            Powered by <img src={sifGold} alt="SIF Cards" className="h-10 w-auto object-contain opacity-80" />
+            Powered by 
+            <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer">
+              <img src={sifGold} alt="SIF Cards" className="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-opacity" />
+            </a>
           </span>
           <Link
             to="/admin"

@@ -87,167 +87,167 @@
 
 /* ========================================================
    2. TEMAS DE PERFILES (Scope: [data-card-theme="..."])
-   Completamente aislados — nunca afectan el App Shell
+   Tonos Premium Intermedios (Vivos pero Elegantes)
    ======================================================== */
 
-/* ── GOLD ── */
+/* ── GOLD (Oro Cálido / Fondo Café Profundo) ── */
 [data-card-theme="gold-dark"] {
-  --card-primary: #F59E0B;
-  --card-primary-fg: #000000;
-  --card-secondary: #0F172A;
-  --card-surface: #0B1120;
-  --card-surface-card: rgba(15, 23, 42, 0.75);
-  --card-surface-border: rgba(245, 158, 11, 0.25);
-  --card-text-main: #FFFFFF;
-  --card-text-muted: #94A3B8;
+  --card-primary: #D1A769; /* Oro suave con vida */
+  --card-primary-fg: #1C1409;
+  --card-secondary: #362919;
+  --card-surface: #14110C; /* Negro con ligero tinte café */
+  --card-surface-card: rgba(38, 30, 22, 0.75);
+  --card-surface-border: rgba(209, 167, 105, 0.2);
+  --card-text-main: #FDF9F3;
+  --card-text-muted: #B3A491;
   --card-font-headline: 'Inter', sans-serif;
   --card-font-body: 'Inter', sans-serif;
 }
 
 [data-card-theme="gold-light"] {
-  --card-primary: #B45309;
+  --card-primary: #A37E45;
   --card-primary-fg: #FFFFFF;
-  --card-secondary: #FEF3C7;
-  --card-surface: #FFFDF5;
+  --card-secondary: #EADDCD;
+  --card-surface: #FCFAED;
   --card-surface-card: rgba(255, 255, 255, 0.9);
-  --card-surface-border: rgba(180, 83, 9, 0.25);
-  --card-text-main: #451A03;
-  --card-text-muted: #92400E;
+  --card-surface-border: rgba(163, 126, 69, 0.2);
+  --card-text-main: #2E2313;
+  --card-text-muted: #7A664F;
   --card-font-headline: 'Inter', sans-serif;
   --card-font-body: 'Inter', sans-serif;
 }
 
-/* ── PURPLE ── */
+/* ── PURPLE (Lavanda Oscuro / Amatista Suave) ── */
 [data-card-theme="purple-dark"] {
-  --card-primary: #A855F7;
-  --card-primary-fg: #FFFFFF;
-  --card-secondary: #3B0764;
-  --card-surface: #0E0720;
-  --card-surface-card: rgba(28, 15, 58, 0.75);
-  --card-surface-border: rgba(168, 85, 247, 0.25);
-  --card-text-main: #F5F3FF;
-  --card-text-muted: #C4B5FD;
+  --card-primary: #A285C7; /* Morado con suficiente luz */
+  --card-primary-fg: #181021;
+  --card-secondary: #312342;
+  --card-surface: #110D17; /* Negro morado profundo */
+  --card-surface-card: rgba(38, 28, 51, 0.75);
+  --card-surface-border: rgba(162, 133, 199, 0.2);
+  --card-text-main: #F6F2FC;
+  --card-text-muted: #A293B5;
   --card-font-headline: 'Outfit', sans-serif;
   --card-font-body: 'Outfit', sans-serif;
 }
 
 [data-card-theme="purple-light"] {
-  --card-primary: #7C3AED;
+  --card-primary: #6E5394;
   --card-primary-fg: #FFFFFF;
-  --card-secondary: #EDE9FE;
-  --card-surface: #F8F7FF;
+  --card-secondary: #E3DBF0;
+  --card-surface: #F8F6FA;
   --card-surface-card: rgba(255, 255, 255, 0.9);
-  --card-surface-border: rgba(124, 58, 237, 0.22);
-  --card-text-main: #1E1B4B;
-  --card-text-muted: #6D28D9;
+  --card-surface-border: rgba(110, 83, 148, 0.2);
+  --card-text-main: #241A33;
+  --card-text-muted: #5C4A73;
   --card-font-headline: 'Outfit', sans-serif;
   --card-font-body: 'Outfit', sans-serif;
 }
 
-/* ── MONOCHROME ── */
+/* ── MONOCHROME (Gris Acero Limpio) ── */
 [data-card-theme="monochrome-dark"] {
-  --card-primary: #FFFFFF;
-  --card-primary-fg: #000000;
-  --card-secondary: #262626;
-  --card-surface: #0A0A0A;
-  --card-surface-card: rgba(26, 26, 26, 0.8);
-  --card-surface-border: rgba(255, 255, 255, 0.16);
-  --card-text-main: #FFFFFF;
-  --card-text-muted: #A3A3A3;
+  --card-primary: #D1D1D1;
+  --card-primary-fg: #0A0A0A;
+  --card-secondary: #2E2E2E;
+  --card-surface: #0F0F0F;
+  --card-surface-card: rgba(33, 33, 33, 0.75);
+  --card-surface-border: rgba(209, 209, 209, 0.15);
+  --card-text-main: #FAFAFA;
+  --card-text-muted: #9E9E9E;
   --card-font-headline: 'EB Garamond', serif;
   --card-font-body: 'Hanken Grotesk', sans-serif;
 }
 
 [data-card-theme="monochrome-light"] {
-  --card-primary: #171717;
+  --card-primary: #2B2B2B;
   --card-primary-fg: #FFFFFF;
-  --card-secondary: #E5E5E5;
-  --card-surface: #F5F5F5;
-  --card-surface-card: rgba(255, 255, 255, 0.92);
-  --card-surface-border: rgba(0, 0, 0, 0.15);
-  --card-text-main: #0A0A0A;
-  --card-text-muted: #525252;
+  --card-secondary: #E3E3E3;
+  --card-surface: #F7F7F7;
+  --card-surface-card: rgba(255, 255, 255, 0.9);
+  --card-surface-border: rgba(43, 43, 43, 0.15);
+  --card-text-main: #141414;
+  --card-text-muted: #5E5E5E;
   --card-font-headline: 'EB Garamond', serif;
   --card-font-body: 'Hanken Grotesk', sans-serif;
 }
 
-/* ── SAPPHIRE ── */
+/* ── SAPPHIRE (Azul Pizarra - Fiel a la Imagen 3) ── */
 [data-card-theme="sapphire-dark"] {
-  --card-primary: #3B82F6;
-  --card-primary-fg: #FFFFFF;
-  --card-secondary: #0F172A;
-  --card-surface: #060D1A;
-  --card-surface-card: rgba(15, 23, 42, 0.8);
-  --card-surface-border: rgba(59, 130, 246, 0.28);
-  --card-text-main: #F8FAFC;
-  --card-text-muted: #94A3B8;
+  --card-primary: #7697BB; /* Azul vivo pero no eléctrico */
+  --card-primary-fg: #0B131C;
+  --card-secondary: #1F2D40;
+  --card-surface: #0B111A; /* Navy muy profundo */
+  --card-surface-card: rgba(26, 37, 54, 0.75);
+  --card-surface-border: rgba(118, 151, 187, 0.2);
+  --card-text-main: #F0F5FA;
+  --card-text-muted: #8AA0B8;
   --card-font-headline: 'Playfair Display', serif;
   --card-font-body: 'Inter', sans-serif;
 }
 
 [data-card-theme="sapphire-light"] {
-  --card-primary: #1D4ED8;
+  --card-primary: #385E8A;
   --card-primary-fg: #FFFFFF;
-  --card-secondary: #DBEAFE;
-  --card-surface: #F0F6FF;
+  --card-secondary: #D9E5F2;
+  --card-surface: #F3F7FA;
   --card-surface-card: rgba(255, 255, 255, 0.9);
-  --card-surface-border: rgba(29, 78, 216, 0.22);
-  --card-text-main: #0F172A;
-  --card-text-muted: #475569;
+  --card-surface-border: rgba(56, 94, 138, 0.2);
+  --card-text-main: #131E2B;
+  --card-text-muted: #4B637D;
   --card-font-headline: 'Playfair Display', serif;
   --card-font-body: 'Inter', sans-serif;
 }
 
-/* ── EMERALD ── */
+/* ── EMERALD (Verde Salvia - Fiel a la Imagen 2) ── */
 [data-card-theme="emerald-dark"] {
-  --card-primary: #10B981;
-  --card-primary-fg: #002113;
-  --card-secondary: #064E3B;
-  --card-surface: #061510;
-  --card-surface-card: rgba(6, 44, 33, 0.45);
-  --card-surface-border: rgba(16, 185, 129, 0.25);
-  --card-text-main: #F8FAFC;
-  --card-text-muted: #A7F3D0;
+  --card-primary: #709983; /* Verde calmado pero claro */
+  --card-primary-fg: #0E1713;
+  --card-secondary: #1F3328;
+  --card-surface: #0B140F; /* Bosque nocturno */
+  --card-surface-card: rgba(26, 43, 34, 0.75);
+  --card-surface-border: rgba(112, 153, 131, 0.2);
+  --card-text-main: #EFF5F1;
+  --card-text-muted: #8CA899;
   --card-font-headline: 'Playfair Display', serif;
   --card-font-body: 'Inter', sans-serif;
 }
 
 [data-card-theme="emerald-light"] {
-  --card-primary: #047857;
+  --card-primary: #37664F;
   --card-primary-fg: #FFFFFF;
-  --card-secondary: #D1FAE5;
-  --card-surface: #F0FDF4;
+  --card-secondary: #D7E8DF;
+  --card-surface: #F2F7F4;
   --card-surface-card: rgba(255, 255, 255, 0.9);
-  --card-surface-border: rgba(4, 120, 87, 0.22);
-  --card-text-main: #064E3B;
-  --card-text-muted: #047857;
+  --card-surface-border: rgba(55, 102, 79, 0.2);
+  --card-text-main: #13241C;
+  --card-text-muted: #476957;
   --card-font-headline: 'Playfair Display', serif;
   --card-font-body: 'Inter', sans-serif;
 }
 
-/* ── WINE ── */
+/* ── WINE (Rosa Vino - Fiel a la Imagen 1) ── */
 [data-card-theme="wine-dark"] {
-  --card-primary: #FB7185;
-  --card-primary-fg: #4C0519;
-  --card-secondary: #4C0519;
-  --card-surface: #14050A;
-  --card-surface-card: rgba(48, 10, 22, 0.6);
-  --card-surface-border: rgba(251, 113, 133, 0.25);
-  --card-text-main: #FFF1F2;
-  --card-text-muted: #FECDD3;
+  --card-primary: #C7838E; /* Rosa oscuro con vitalidad */
+  --card-primary-fg: #1F1113;
+  --card-secondary: #3D2227;
+  --card-surface: #1A0D0F; /* Vino ultra oscuro */
+  --card-surface-card: rgba(48, 28, 32, 0.75);
+  --card-surface-border: rgba(199, 131, 142, 0.2);
+  --card-text-main: #FCF5F6;
+  --card-text-muted: #B5989C;
   --card-font-headline: 'EB Garamond', serif;
   --card-font-body: 'Montserrat', sans-serif;
 }
 
 [data-card-theme="wine-light"] {
-  --card-primary: #881337;
+  --card-primary: #8C4753;
   --card-primary-fg: #FFFFFF;
-  --card-secondary: #FFE4E6;
-  --card-surface: #FFF5F7;
+  --card-secondary: #EDD8DC;
+  --card-surface: #FBF6F7;
   --card-surface-card: rgba(255, 255, 255, 0.9);
-  --card-surface-border: rgba(136, 19, 55, 0.22);
-  --card-text-main: #4C0519;
-  --card-text-muted: #9F1239;
+  --card-surface-border: rgba(140, 71, 83, 0.2);
+  --card-text-main: #2E151A;
+  --card-text-muted: #7A535A;
   --card-font-headline: 'EB Garamond', serif;
   --card-font-body: 'Montserrat', sans-serif;
 }

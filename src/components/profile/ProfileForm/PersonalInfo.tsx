@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Camera, Image as ImageIcon } from 'lucide-react';
+import { Camera, Image as ImageIcon, Info } from 'lucide-react';
 import PhoneInput from 'react-phone-number-input';
 import ImageCropperModal from '../ImageCropperModal';
 import 'react-phone-number-input/style.css';
 import type { ProfileFormData } from './ProfileForm';
+import LabelWithHint from './LabelWithHint';
 
 interface PersonalInfoProps {
   formData: ProfileFormData;
@@ -15,18 +16,9 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
   const [cropperData, setCropperData] = useState<{ src: string; file: File } | null>(null);
 
   const handleNameChange = (name: string) => {
-    const slugified = name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-
     onChange({
       ...formData,
       display_name: name,
-      slug: slugified,
     });
   };
 
@@ -70,58 +62,50 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
 
       {/* Nombre a Mostrar */}
       <div className="relative mt-2">
+        <LabelWithHint htmlFor="display_name" label="Nombre a Mostrar *" hint="Así aparecerá tu nombre principal en la tarjeta." />
         <input
           type="text"
           id="display_name"
           required
           value={formData.display_name}
           onChange={(e) => handleNameChange(e.target.value)}
-          placeholder=" "
-          className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
+          placeholder="Ej: Juan Pérez"
+          className="w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
         />
-        <label htmlFor="display_name" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-          Nombre a Mostrar *
-        </label>
       </div>
 
       {/* Cargo y Empresa */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="relative">
+          <LabelWithHint htmlFor="job_title" label="Cargo / Ocupación *" hint="Tu puesto actual o profesión destacada." />
           <input
             type="text"
             id="job_title"
             required
             value={formData.job_title}
             onChange={(e) => onChange({ ...formData, job_title: e.target.value })}
-            placeholder=" "
-            className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
+            placeholder="Ej: Gerente de Ventas"
+            className="w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
           />
-          <label htmlFor="job_title" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-            Cargo / Ocupación *
-          </label>
         </div>
 
         <div className="relative">
+          <LabelWithHint htmlFor="company" label="Empresa *" hint="La empresa para la que trabajas o tu propia marca." />
           <input
             type="text"
             id="company"
             required
             value={formData.company}
             onChange={(e) => onChange({ ...formData, company: e.target.value })}
-            placeholder=" "
-            className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
+            placeholder="Ej: TechCorp S.A."
+            className="w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
           />
-          <label htmlFor="company" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-            Empresa *
-          </label>
         </div>
       </div>
 
       {/* Slug Personalizado */}
       <div className="flex flex-col gap-1">
-        <label className="text-[10px] font-medium text-sif-muted ml-1">
-          Enlace Personalizado *
-        </label>
+        <LabelWithHint label="Personaliza el enlace de tu perfil *" hint="Este será tu enlace único para compartir (ej: sif.link/p/tu-nombre)." />
         <div className={`flex items-center rounded-xl border bg-sif-surface-subtle px-3 py-1.5 text-sm transition-colors ${
           fieldErrors.slug ? 'border-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.2)]' : 'border-sif-border focus-within:border-sif-gold'
         }`}>
@@ -145,11 +129,9 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
       </div>
 
       {/* WhatsApp & Email */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
         <div className="flex flex-col gap-1">
-          <label className="text-[10px] font-medium text-sif-muted ml-1">
-            WhatsApp *
-          </label>
+          <LabelWithHint label="WhatsApp *" hint="Número principal para que te contacten rápidamente por WhatsApp." />
           <PhoneInput
             international
             defaultCountry="EC"
@@ -167,27 +149,71 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
           />
         </div>
 
-        <div className="relative mt-[18px]">
-          <input
-            type="email"
-            id="email"
-            required
-            value={formData.direct_contacts.email}
-            onChange={(e) =>
-              onChange({
-                ...formData,
-                direct_contacts: {
-                  ...formData.direct_contacts,
-                  email: e.target.value,
-                },
-              })
-            }
-            placeholder=" "
-            className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
-          />
-          <label htmlFor="email" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-            Email *
-          </label>
+        <div className="flex flex-col gap-1 w-full sm:col-span-1">
+          <LabelWithHint label="Emails *" hint="Agrega uno o varios correos a los que te puedan escribir." />
+          {(formData.direct_contacts.emails?.length ? formData.direct_contacts.emails : ['']).map((em, idx, arr) => (
+            <div key={idx} className="relative flex gap-2 items-center w-full mt-1">
+              <div className="relative flex-1">
+                <input
+                  type="email"
+                  required={idx === 0}
+                  value={em}
+                  onChange={(e) => {
+                    const newEmails = [...(formData.direct_contacts.emails?.length ? formData.direct_contacts.emails : [''])];
+                    newEmails[idx] = e.target.value;
+                    onChange({
+                      ...formData,
+                      direct_contacts: {
+                        ...formData.direct_contacts,
+                        emails: newEmails,
+                        email: idx === 0 ? e.target.value : formData.direct_contacts.email,
+                      },
+                    });
+                  }}
+                  className="w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
+                  placeholder={`Ej: correo${idx > 0 ? idx + 1 : ''}@empresa.com`}
+                />
+              </div>
+              
+              {idx === arr.length - 1 ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const currentEmails = formData.direct_contacts.emails?.length ? formData.direct_contacts.emails : [''];
+                    onChange({
+                      ...formData,
+                      direct_contacts: {
+                        ...formData.direct_contacts,
+                        emails: [...currentEmails, ''],
+                      },
+                    });
+                  }}
+                  className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-xl bg-sif-gold/10 text-sif-gold border border-sif-gold/30 hover:bg-sif-gold/20 transition-colors"
+                >
+                  <span className="text-lg font-medium">+</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const currentEmails = formData.direct_contacts.emails?.length ? formData.direct_contacts.emails : [''];
+                    const newEmails = currentEmails.filter((_, i) => i !== idx);
+                    onChange({
+                      ...formData,
+                      direct_contacts: {
+                        ...formData.direct_contacts,
+                        emails: newEmails,
+                        email: newEmails[0] || '',
+                      },
+                    });
+                  }}
+                  className="flex h-[46px] w-[46px] shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-red-500 border border-red-500/30 hover:bg-red-500/20 transition-colors"
+                >
+                  <span className="text-lg font-medium">-</span>
+                </button>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 

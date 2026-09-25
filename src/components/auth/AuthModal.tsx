@@ -277,12 +277,14 @@ export default function AuthModal({
 
         {/* ── Cabecera con imagotipo destacado ── */}
         <div className="mb-5 flex flex-col items-center gap-2">
-          <img
-            src={logoSrc}
-            alt="SIF – Sharing is Fast"
-            className="h-10 sm:h-12 w-auto object-contain drop-shadow-md mx-auto block transition-transform duration-300 hover:scale-105"
-            draggable={false}
-          />
+          <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer">
+            <img
+              src={logoSrc}
+              alt="SIF – Sharing is Fast"
+              className="h-10 sm:h-12 w-auto object-contain drop-shadow-md mx-auto block transition-transform duration-300 hover:scale-105"
+              draggable={false}
+            />
+          </a>
           <div className="text-center">
             <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-sif-text">
               {displayTitle}

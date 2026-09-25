@@ -1,6 +1,7 @@
 import { Plus, Trash2 } from 'lucide-react';
 import SocialIcon from '../../ui/SocialIcon';
 import type { ProfileFormData } from './ProfileForm';
+import LabelWithHint from './LabelWithHint';
 
 interface ContactAndMediaProps {
   formData: ProfileFormData;
@@ -51,6 +52,7 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
     <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="relative mt-2">
+          <LabelWithHint htmlFor="phone" label="Teléfono Fijo / Secundario" hint="Un número adicional para contactos (opcional)." />
           <input
             type="text"
             id="phone"
@@ -64,15 +66,13 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
                 },
               })
             }
-            placeholder=" "
-            className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
+            placeholder="Ej: +593 2 123 4567"
+            className="w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
           />
-          <label htmlFor="phone" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-            Teléfono Fijo / Secundario
-          </label>
         </div>
 
         <div className="relative mt-2">
+          <LabelWithHint htmlFor="location" label="Ubicación / Ciudad" hint="Ciudad y país donde te encuentras o resides." />
           <input
             type="text"
             id="location"
@@ -86,19 +86,16 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
                 },
               })
             }
-            placeholder=" "
-            className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
+            placeholder="Ej: Quito, Ecuador"
+            className="w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
           />
-          <label htmlFor="location" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-            Ubicación / Ciudad
-          </label>
         </div>
       </div>
 
       {/* Redes Sociales Dinámicas */}
-      <div className="flex flex-col gap-3 mt-2">
+      <div className="flex flex-col gap-3 mt-4">
         <div className="flex items-center justify-between">
-          <label className="text-[10px] font-medium text-sif-muted ml-1">Redes Sociales</label>
+          <LabelWithHint label="Redes Sociales" hint="Tus perfiles públicos para conectar." />
           <button
             type="button"
             onClick={addSocialLink}

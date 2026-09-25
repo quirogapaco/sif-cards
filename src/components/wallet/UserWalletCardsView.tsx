@@ -219,12 +219,6 @@ export function UserWalletCardsView() {
         <p className="mb-5 text-xs text-slate-400 leading-relaxed">
           Activa o vincula tu primera tarjeta física NFC para comenzar.
         </p>
-        <button
-          onClick={() => navigate('/')}
-          className="rounded-full border border-[#ddb225]/40 bg-[#ddb225]/10 px-5 py-2.5 text-xs font-semibold text-[#ddb225] hover:bg-[#ddb225]/20 transition-all cursor-pointer"
-        >
-          Vincular nueva tarjeta
-        </button>
       </div>
     );
   }

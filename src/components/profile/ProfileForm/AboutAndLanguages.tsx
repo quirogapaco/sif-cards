@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ProfileFormData } from './ProfileForm';
+import LabelWithHint from './LabelWithHint';
 
 interface AboutAndLanguagesProps {
   formData: ProfileFormData;
@@ -32,22 +33,20 @@ export default function AboutAndLanguages({ formData, onChange }: AboutAndLangua
   return (
     <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
       <div className="relative mt-2">
+        <LabelWithHint htmlFor="bio_description" label="Biografía Profesional" hint="Un breve resumen sobre ti, tus habilidades o lo que ofreces." />
         <textarea
           id="bio_description"
           rows={4}
           value={formData.bio_description}
           onChange={(e) => onChange({ ...formData, bio_description: e.target.value })}
-          placeholder=" "
-          className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold resize-none transition-colors"
+          placeholder="Escribe algo sobre ti..."
+          className="w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-2.5 text-sm text-sif-text outline-none focus:border-sif-gold resize-none transition-colors"
         />
-        <label htmlFor="bio_description" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-          Biografía Profesional
-        </label>
       </div>
 
       {/* Idiomas */}
-      <div className="flex flex-col gap-2.5">
-        <label className="text-[10px] font-medium text-sif-muted ml-1">Idiomas</label>
+      <div className="flex flex-col gap-2.5 mt-2">
+        <LabelWithHint label="Idiomas" hint="Idiomas en los que te puedes comunicar fluidamente." />
         <div className="flex flex-wrap gap-1.5">
           {PRESET_LANGUAGES.map((lang) => {
             const isSelected = formData.languages.includes(lang);

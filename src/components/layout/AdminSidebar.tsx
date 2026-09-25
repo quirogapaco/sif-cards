@@ -41,7 +41,9 @@ export default function AdminSidebar({ expanded, onClose }: AdminSidebarProps) {
       <div className="flex h-24 items-center border-b border-sif-border px-3">
         {/* Logo único pegado a la izquierda */}
         <div className="flex shrink-0 items-center justify-center h-20 w-20 -ml-2">
-          <img src={sifGold} alt="SIF Cards" className="h-full w-full object-contain" />
+          <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer" className="h-full w-full block">
+            <img src={sifGold} alt="SIF Cards" className="h-full w-full object-contain hover:scale-105 transition-transform" />
+          </a>
         </div>
 
         {/* Texto SHARING IS FAST (Montserrat) */}

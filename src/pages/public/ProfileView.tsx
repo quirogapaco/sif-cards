@@ -204,7 +204,13 @@ export default function ProfileView({ profile, isNfcSource = false, token, prefi
         {/* ── 2d. Contactos Directos ─────────────────────────────────────── */}
         <div className="space-y-2">
           <ContactItem type="whatsapp" value={contacts?.whatsapp} onTrack={trackDirectContact} />
-          <ContactItem type="email"    value={contacts?.email}    onTrack={trackDirectContact} />
+          {contacts?.emails && contacts.emails.length > 0 ? (
+            contacts.emails.map((em, idx) => (
+              em.trim() ? <ContactItem key={`email-${idx}`} type="email" value={em} onTrack={trackDirectContact} /> : null
+            ))
+          ) : (
+            <ContactItem type="email" value={contacts?.email} onTrack={trackDirectContact} />
+          )}
           <ContactItem type="phone"    value={contacts?.phone}    onTrack={trackDirectContact} />
           <ContactItem type="location" value={contacts?.location} onTrack={trackDirectContact} />
         </div>

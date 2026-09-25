@@ -42,6 +42,7 @@ export default function ActivateCardPage() {
     direct_contacts: {
       whatsapp: '',
       email: '',
+      emails: [''],
       phone: '',
       location: '',
     },
@@ -103,20 +104,17 @@ export default function ActivateCardPage() {
 
         setCardData(card);
 
+        const uniqueSlug = await activationService.generateUniqueSlug(defaultName);
+
         // Autocompletar datos del usuario
         setFormData((prev) => ({
           ...prev,
           display_name: defaultName || prev.display_name,
-          slug: defaultName
-            ? defaultName
-                .toLowerCase()
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')
-                .replace(/[^a-z0-9]/g, '-')
-            : prev.slug,
+          slug: uniqueSlug,
           direct_contacts: {
             ...prev.direct_contacts,
             email: email || prev.direct_contacts.email,
+            emails: email ? [email] : prev.direct_contacts.emails,
           },
         }));
       }
@@ -239,7 +237,9 @@ export default function ActivateCardPage() {
         />
 
         <div className="relative z-10 w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-8 shadow-2xl backdrop-blur-md flex flex-col items-center text-center">
-          <img src={sifGold} alt="SIF Logo" className="h-12 w-auto mb-6 object-contain" />
+          <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer">
+            <img src={sifGold} alt="SIF Logo" className="h-12 w-auto mb-6 object-contain hover:scale-105 transition-transform" />
+          </a>
 
           <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-sif-gold/40 bg-sif-gold/10 text-sif-gold shadow-lg">
             <Sparkles className="h-8 w-8 animate-pulse" />
@@ -311,12 +311,21 @@ export default function ActivateCardPage() {
           <p className="text-xs text-sif-muted mb-6 leading-relaxed">
             Esta tarjeta física ya fue reclamada y activada previamente. Si eres el dueño de esta tarjeta, puedes editar su perfil iniciando sesión.
           </p>
-          <Link
-            to={activeProfilePath}
-            className="w-full rounded-full bg-sif-gold py-3 text-xs font-semibold text-black hover:opacity-90 transition-all"
-          >
-            Ver tarjeta activa &rarr;
-          </Link>
+          <div className="w-full flex flex-col gap-3">
+            <Link
+              to={activeProfilePath}
+              className="w-full rounded-full bg-sif-gold py-3 text-xs font-semibold text-black hover:opacity-90 transition-all"
+            >
+              Ver tarjeta activa &rarr;
+            </Link>
+            <a
+              href="https://sifcards.com"
+              className="flex w-full items-center justify-center gap-2 rounded-full border border-sif-border bg-sif-surface-subtle py-3 text-xs font-medium text-sif-text transition-all hover:border-sif-gold hover:text-sif-gold active:scale-95"
+            >
+              <span>Ir al panel de admin</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -328,11 +337,13 @@ export default function ActivateCardPage() {
       <header className="sticky top-0 z-30 border-b border-sif-border bg-sif-surface/90 px-4 py-4 backdrop-blur-md sm:px-8">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <img
-              src={sifGold}
-              alt="SIF Logo"
-              className="h-9 w-auto object-contain drop-shadow-sm"
-            />
+            <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer">
+              <img
+                src={sifGold}
+                alt="SIF Logo"
+                className="h-9 w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform"
+              />
+            </a>
             <div className="hidden sm:block h-6 w-px bg-sif-border" />
             <div className="hidden sm:flex flex-col">
               <span className="text-xs font-bold text-sif-text tracking-wide">
@@ -348,7 +359,9 @@ export default function ActivateCardPage() {
             <Info className="h-3.5 w-3.5 text-sif-gold hidden sm:inline" />
             <span className="hidden md:inline">
               Podrás editar tu información en cualquier momento en{' '}
-              <strong className="text-sif-text font-semibold">sif.link/login</strong>
+              <a href="https://sifcards.com/admin" className="text-sif-text font-semibold hover:text-sif-gold hover:underline transition-colors">
+                sifcards.com/admin
+              </a>
             </span>
           </div>
         </div>
@@ -431,7 +444,7 @@ export default function ActivateCardPage() {
         initialMode="register"
         title="Bienvenido a la experiencia SIF"
         subtitle="Para configurar y activar tu tarjeta inteligente, inicia sesión o crea tu cuenta gratuita."
-        onSuccess={() => setIsAuthModalOpen(false)}
+        onSuccess={() => window.location.reload()}
       />
     </div>
   );

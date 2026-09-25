@@ -19,6 +19,7 @@ export interface ProfileFormData {
   direct_contacts: {
     whatsapp: string;
     email: string;
+    emails: string[];
     phone: string;
     location: string;
   };

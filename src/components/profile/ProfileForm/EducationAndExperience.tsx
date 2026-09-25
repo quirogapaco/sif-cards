@@ -1,5 +1,6 @@
 import { GraduationCap, Building2, Plus, Trash2 } from 'lucide-react';
 import type { ProfileFormData } from './ProfileForm';
+import LabelWithHint from './LabelWithHint';
 
 interface EducationAndExperienceProps {
   formData: ProfileFormData;
@@ -95,45 +96,39 @@ export default function EducationAndExperience({ formData, onChange }: Education
             </div>
 
             <div className="relative">
+              <LabelWithHint htmlFor={`edu_title_${idx}`} label="Título o Maestría" />
               <input
                 type="text"
                 id={`edu_title_${idx}`}
                 value={edu.title}
                 onChange={(e) => updateEducation(idx, 'title', e.target.value)}
-                placeholder=" "
-                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+                placeholder="Ej: Licenciatura en Diseño"
+                className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
               />
-              <label htmlFor={`edu_title_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
-                Título o Maestría
-              </label>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
               <div className="relative">
+                <LabelWithHint htmlFor={`edu_inst_${idx}`} label="Universidad / Instituto" />
                 <input
                   type="text"
                   id={`edu_inst_${idx}`}
                   value={edu.institution}
                   onChange={(e) => updateEducation(idx, 'institution', e.target.value)}
-                  placeholder=" "
-                  className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+                  placeholder="Ej: Universidad Nacional"
+                  className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
                 />
-                <label htmlFor={`edu_inst_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
-                  Universidad / Instituto
-                </label>
               </div>
               <div className="relative">
+                <LabelWithHint htmlFor={`edu_per_${idx}`} label="Periodo" />
                 <input
                   type="text"
                   id={`edu_per_${idx}`}
                   value={edu.period}
                   onChange={(e) => updateEducation(idx, 'period', e.target.value)}
-                  placeholder=" "
-                  className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+                  placeholder="Ej: 2018 - 2022"
+                  className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
                 />
-                <label htmlFor={`edu_per_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
-                  Periodo
-                </label>
               </div>
             </div>
           </div>
@@ -178,45 +173,39 @@ export default function EducationAndExperience({ formData, onChange }: Education
             </div>
 
             <div className="relative">
+              <LabelWithHint htmlFor={`biz_name_${idx}`} label="Nombre del proyecto / marca" />
               <input
                 type="text"
                 id={`biz_name_${idx}`}
                 value={biz.name}
                 onChange={(e) => updateBusiness(idx, 'name', e.target.value)}
-                placeholder=" "
-                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+                placeholder="Ej: Mi Empresa S.A."
+                className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
               />
-              <label htmlFor={`biz_name_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
-                Nombre del proyecto / marca
-              </label>
             </div>
 
-            <div className="relative">
+            <div className="relative mt-1">
+              <LabelWithHint htmlFor={`biz_desc_${idx}`} label="Breve resumen del servicio" />
               <input
                 type="text"
                 id={`biz_desc_${idx}`}
                 value={biz.description}
                 onChange={(e) => updateBusiness(idx, 'description', e.target.value)}
-                placeholder=" "
-                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+                placeholder="Ej: Consultoría en marketing digital."
+                className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
               />
-              <label htmlFor={`biz_desc_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
-                Breve resumen del servicio
-              </label>
             </div>
 
-            <div className="relative">
+            <div className="relative mt-1">
+              <LabelWithHint htmlFor={`biz_url_${idx}`} label="Enlace web" hint="URL del proyecto, si tiene." />
               <input
                 type="url"
                 id={`biz_url_${idx}`}
                 value={biz.url}
                 onChange={(e) => updateBusiness(idx, 'url', e.target.value)}
-                placeholder=" "
-                className="peer w-full rounded-lg border border-sif-border bg-sif-surface px-2 pb-1.5 pt-4 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
+                placeholder="Ej: https://miempresa.com"
+                className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
               />
-              <label htmlFor={`biz_url_${idx}`} className="absolute left-2 top-1 text-[9px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-2.5 peer-placeholder-shown:text-[11px] peer-focus:top-1 peer-focus:text-[9px] peer-focus:text-sif-gold pointer-events-none">
-                Enlace web (ej. https://miempresa.com)
-              </label>
             </div>
           </div>
         ))}

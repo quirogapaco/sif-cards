@@ -7,7 +7,9 @@ import type { ProfileData } from '../types/database';
  */
 export function downloadVCard(data: ProfileData, slug: string = 'contacto'): void {
   const phone = data.direct_contacts?.whatsapp || data.direct_contacts?.phone || '';
-  const email = data.direct_contacts?.email || '';
+  const emails = data.direct_contacts?.emails?.length 
+    ? data.direct_contacts.emails.filter(Boolean) 
+    : (data.direct_contacts?.email ? [data.direct_contacts.email] : []);
   const bio   = data.bio_description || '';
 
   // Sanitize phone: keep only digits and leading +
@@ -20,7 +22,7 @@ export function downloadVCard(data: ProfileData, slug: string = 'contacto'): voi
     `ORG:${data.company}`,
     `TITLE:${data.job_title}`,
     cleanPhone ? `TEL;TYPE=CELL:${cleanPhone}` : '',
-    email ? `EMAIL:${email}` : '',
+    ...emails.map(e => `EMAIL:${e}`),
     bio ? `NOTE:${bio.replace(/\n/g, '\\n')}` : '',
     'END:VCARD',
   ].filter(Boolean);

@@ -69,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({ edition }) => {
         
         {/* ── Izquierda: Logotipo + Tagline ── */}
         <div className="flex items-center gap-4">
-          <a href="#" className="flex items-center group focus:outline-none">
+          <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer" className="flex items-center group focus:outline-none">
             <img
               src={currentLogo}
               alt="SIF Cards"

@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Check, Camera } from 'lucide-react';
+import { Check, Camera, Moon, Sun } from 'lucide-react';
 import ImageCropperModal from '../ImageCropperModal';
 import { CARD_THEME_FAMILIES } from '../../../config/cardThemes';
 import { BANNER_PRESETS } from '../../../config/bannerPresets';
 import type { ProfileFormData } from './ProfileForm';
+import LabelWithHint from './LabelWithHint';
 
 interface VisualsProps {
   formData: ProfileFormData;
@@ -11,16 +12,33 @@ interface VisualsProps {
 }
 
 export default function Visuals({ formData, onChange }: VisualsProps) {
-  const [bannerTab, setBannerTab] = useState<'presets' | 'custom'>('presets');
   const [cropperData, setCropperData] = useState<{ src: string; file: File } | null>(null);
+
+  const currentFamily = CARD_THEME_FAMILIES.find(f => f.darkId === formData.theme_palette || f.lightId === formData.theme_palette) || CARD_THEME_FAMILIES[4];
+  const isLightMode = formData.theme_palette === currentFamily.lightId;
+
+  const toggleThemeMode = () => {
+    onChange({
+      ...formData,
+      theme_palette: isLightMode ? currentFamily.darkId : currentFamily.lightId,
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
       {/* Selector de Paleta */}
       <div className="flex flex-col gap-2">
-        <label className="text-[10px] font-medium text-sif-muted ml-1">
-          Paleta Cromática ({CARD_THEME_FAMILIES.find(f => f.darkId === formData.theme_palette || f.lightId === formData.theme_palette)?.name || 'Emerald'})
-        </label>
+        <div className="flex items-center justify-between pr-1">
+          <LabelWithHint label={`Paleta Cromática (${currentFamily.name})`} hint="Selecciona el color principal que definirá el diseño de tu tarjeta." />
+          <button
+            type="button"
+            onClick={toggleThemeMode}
+            className="flex items-center gap-2 rounded-full border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs font-semibold text-sif-text transition-all hover:border-sif-gold hover:text-sif-gold"
+          >
+            {isLightMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            <span>{isLightMode ? 'Modo Claro' : 'Modo Oscuro'}</span>
+          </button>
+        </div>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
           {CARD_THEME_FAMILIES.map((family) => {
             const isSelected =
@@ -34,7 +52,7 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
                 onClick={() =>
                   onChange({
                     ...formData,
-                    theme_palette: family.darkId,
+                    theme_palette: isLightMode ? family.lightId : family.darkId,
                   })
                 }
                 className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${
@@ -45,7 +63,8 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
               >
                 <div
                   className="h-6 w-6 rounded-full border border-white/20 shadow-md mb-1.5 flex items-center justify-center"
-                  style={{ backgroundColor: family.accentColor }}
+                  style={{ backgroundColor: 'var(--card-primary)' }}
+                  data-card-theme={isLightMode ? family.lightId : family.darkId}
                 >
                   {isSelected && <Check className="h-3.5 w-3.5 text-black stroke-[3]" />}
                 </div>
@@ -59,37 +78,10 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
       </div>
 
       {/* Banner de Encabezado */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <label className="text-[10px] font-medium text-sif-muted ml-1">Banner de Perfil</label>
-          <div className="flex items-center rounded-lg border border-sif-border bg-sif-surface-subtle p-0.5 text-xs">
-            <button
-              type="button"
-              onClick={() => setBannerTab('presets')}
-              className={`px-3 py-1 rounded-md transition-all ${
-                bannerTab === 'presets'
-                  ? 'bg-sif-gold text-black font-medium shadow-sm'
-                  : 'text-sif-muted hover:text-sif-text'
-              }`}
-            >
-              Predeterminado
-            </button>
-            <button
-              type="button"
-              onClick={() => setBannerTab('custom')}
-              className={`px-3 py-1 rounded-md transition-all ${
-                bannerTab === 'custom'
-                  ? 'bg-sif-gold text-black font-medium shadow-sm'
-                  : 'text-sif-muted hover:text-sif-text'
-              }`}
-            >
-              URL Propia
-            </button>
-          </div>
-        </div>
+      <div className="flex flex-col gap-3 mt-2">
+        <LabelWithHint label="Banner de Perfil" hint="La imagen panorámica que aparecerá en la parte superior de tu tarjeta." />
 
-        {bannerTab === 'presets' ? (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-48 overflow-y-auto pr-1">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-48 overflow-y-auto pr-1">
             <label className={`group relative h-16 rounded-lg overflow-hidden cursor-pointer transition-all flex flex-col items-center justify-center ${
               formData.banner_url && !BANNER_PRESETS.some(p => p.url === formData.banner_url)
                 ? 'border-2 border-sif-gold ring-2 ring-sif-gold/40'
@@ -160,22 +152,7 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
                 </div>
               );
             })}
-          </div>
-        ) : (
-          <div className="relative mt-2">
-            <input
-              type="url"
-              id="banner_url"
-              value={formData.banner_url}
-              onChange={(e) => onChange({ ...formData, banner_url: e.target.value })}
-              placeholder=" "
-              className="peer w-full rounded-xl border border-sif-border bg-sif-surface-subtle px-3 pb-1.5 pt-5 text-sm text-sif-text outline-none focus:border-sif-gold transition-colors"
-            />
-            <label htmlFor="banner_url" className="absolute left-3 top-2 text-[10px] font-medium text-sif-muted transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-xs peer-focus:top-1.5 peer-focus:text-[10px] peer-focus:text-sif-gold pointer-events-none">
-              URL del Banner (https://...)
-            </label>
-          </div>
-        )}
+        </div>
       </div>
 
       {cropperData && (

@@ -25,7 +25,7 @@ export const FooterCTA: React.FC = () => {
           
           {/* Columna Principal: Marca + Titular Multitud + Botón + Créditos */}
           <div className="md:col-span-5 flex flex-col items-start text-left">
-            <a href="#" className="flex items-center gap-3 mb-4">
+            <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 mb-4">
               <img
                 src={sifGold}
                 alt="SIF Cards Logo"
