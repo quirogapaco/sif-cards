@@ -181,7 +181,6 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
       {cropperData && (
         <ImageCropperModal
           imageSrc={cropperData.src}
-          aspect={820 / 360}
           cropShape="rect"
           title="Recortar Banner"
           onClose={() => setCropperData(null)}

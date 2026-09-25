@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
-import Cropper from 'react-easy-crop';
+import { useState, useRef } from 'react';
+import Cropper from 'react-cropper';
+import type { ReactCropperElement } from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
 import { X, Check } from 'lucide-react';
-import getCroppedImg from '../../utils/cropImage';
 
 interface ImageCropperModalProps {
   imageSrc: string;
@@ -16,30 +17,23 @@ export default function ImageCropperModal({
   imageSrc,
   onCropComplete,
   onClose,
-  aspect = 1,
+  aspect,
   cropShape = 'round',
   title = 'Recortar Imagen'
 }: ImageCropperModalProps) {
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+  const cropperRef = useRef<ReactCropperElement>(null);
   const [isCropping, setIsCropping] = useState(false);
 
-  const onCropCompleteHandler = useCallback((_croppedArea: any, croppedAreaPixels: any) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  }, []);
-
-  const handleConfirm = async () => {
-    try {
+  const handleConfirm = () => {
+    if (typeof cropperRef.current?.cropper !== "undefined") {
       setIsCropping(true);
-      const croppedImageFile = await getCroppedImg(imageSrc, croppedAreaPixels);
-      if (croppedImageFile) {
-        onCropComplete(croppedImageFile);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsCropping(false);
+      cropperRef.current?.cropper.getCroppedCanvas().toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], 'cropped.jpg', { type: 'image/jpeg' });
+          onCropComplete(file);
+        }
+        setIsCropping(false);
+      }, 'image/jpeg', 0.9);
     }
   };
 
@@ -58,38 +52,28 @@ export default function ImageCropperModal({
         </div>
 
         {/* Cropper Container */}
-        <div className="relative flex-1 bg-black/50">
+        <div className="relative flex-1 bg-black/50 overflow-hidden">
           <Cropper
-            image={imageSrc}
-            crop={crop}
-            zoom={zoom}
-            aspect={aspect}
-            cropShape={cropShape}
-            onCropChange={setCrop}
-            onCropComplete={onCropCompleteHandler}
-            onZoomChange={setZoom}
-            showGrid={false}
+            src={imageSrc}
+            style={{ height: '100%', width: '100%' }}
+            aspectRatio={aspect}
+            guides={true}
+            ref={cropperRef}
+            viewMode={1}
+            dragMode="move"
+            background={false}
+            className={cropShape === 'round' ? 'cropper-round' : ''}
           />
         </div>
+        <style>{`
+          .cropper-round .cropper-view-box,
+          .cropper-round .cropper-face {
+            border-radius: 50%;
+          }
+        `}</style>
 
         {/* Controls */}
         <div className="p-4 bg-[#18181c] border-t border-sif-border flex flex-col gap-4">
-          <div className="flex items-center gap-4">
-            <span className="text-xs text-sif-muted">Zoom</span>
-            <input
-              type="range"
-              value={zoom}
-              min={1}
-              max={3}
-              step={0.1}
-              aria-labelledby="Zoom"
-              onChange={(e) => {
-                setZoom(Number(e.target.value));
-              }}
-              className="flex-1 accent-sif-gold"
-            />
-          </div>
-
           <div className="flex justify-end gap-3 mt-2">
             <button
               onClick={onClose}
