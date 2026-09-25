@@ -16,6 +16,8 @@ import {
   ShieldAlert,
   ArrowRight,
   Info,
+  Copy,
+  Check,
 } from 'lucide-react';
 
 export default function ActivateCardPage() {
@@ -29,6 +31,17 @@ export default function ActivateCardPage() {
   const [cardData, setCardData] = useState<Card | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isActivatedSuccess, setIsActivatedSuccess] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopyLink = async (url: string) => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy', err);
+    }
+  };
 
   // Estado unificado del formulario
   const [formData, setFormData] = useState<ProfileFormData>({
@@ -238,12 +251,10 @@ export default function ActivateCardPage() {
 
         <div className="relative z-10 w-full max-w-md rounded-3xl border border-sif-border bg-sif-surface p-8 shadow-2xl backdrop-blur-md flex flex-col items-center text-center">
           <a href="https://sifcards.com" target="_blank" rel="noopener noreferrer">
-            <img src={sifGold} alt="SIF Logo" className="h-12 w-auto mb-6 object-contain hover:scale-105 transition-transform" />
+            <img src={sifGold} alt="SIF Logo" className="h-32 w-auto mb-6 object-contain hover:scale-105 transition-transform" />
           </a>
 
-          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-sif-gold/40 bg-sif-gold/10 text-sif-gold shadow-lg">
-            <Sparkles className="h-8 w-8 animate-pulse" />
-          </div>
+          
 
           <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-400 mb-3">
             <CheckCircle2 className="h-4 w-4" />
@@ -259,13 +270,22 @@ export default function ActivateCardPage() {
           </p>
 
           {/* Tarjeta con URL pública */}
-          <div className="w-full rounded-2xl border border-sif-gold/30 bg-sif-surface-subtle p-4 mb-6 text-left">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-sif-muted mb-1">
-              Enlace de tu Perfil Público:
-            </p>
-            <p className="text-sm font-mono font-bold text-sif-gold truncate">
-              {(import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com').replace(/\/$/, '')}{publicProfilePath}
-            </p>
+          <div className="w-full rounded-2xl border border-sif-gold/30 bg-sif-surface-subtle p-4 mb-6 text-left flex items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] font-medium uppercase tracking-wider text-sif-muted mb-1">
+                Enlace de tu Perfil Público:
+              </p>
+              <p className="text-sm font-mono font-bold text-sif-gold truncate">
+                {(import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com').replace(/\/$/, '')}{publicProfilePath}
+              </p>
+            </div>
+            <button
+              onClick={() => handleCopyLink(`${(import.meta.env.VITE_APP_DOMAIN || 'https://sifcards.com').replace(/\/$/, '')}${publicProfilePath}`)}
+              className="flex items-center justify-center h-10 w-10 rounded-full border border-sif-border bg-sif-surface transition-all hover:border-sif-gold hover:text-sif-gold active:scale-95 shrink-0"
+              title="Copiar enlace"
+            >
+              {isCopied ? <Check className="h-4 w-4 text-emerald-400" /> : <Copy className="h-4 w-4 text-sif-text" />}
+            </button>
           </div>
 
           <div className="w-full flex flex-col gap-3">
