@@ -4,6 +4,7 @@
 @custom-variant dark (&:where(.dark, .dark *, [data-app-theme="dark"], [data-app-theme="dark"] *));
 
 @layer base {
+
   input,
   select,
   textarea {
@@ -92,10 +93,12 @@
 
 /* ── GOLD (Oro Cálido / Fondo Café Profundo) ── */
 [data-card-theme="gold-dark"] {
-  --card-primary: #D1A769; /* Oro suave con vida */
+  --card-primary: #D1A769;
+  /* Oro suave con vida */
   --card-primary-fg: #1C1409;
   --card-secondary: #362919;
-  --card-surface: #14110C; /* Negro con ligero tinte café */
+  --card-surface: #14110C;
+  /* Negro con ligero tinte café */
   --card-surface-card: rgba(38, 30, 22, 0.75);
   --card-surface-border: rgba(209, 167, 105, 0.2);
   --card-text-main: #FDF9F3;
@@ -119,10 +122,12 @@
 
 /* ── PURPLE (Lavanda Oscuro / Amatista Suave) ── */
 [data-card-theme="purple-dark"] {
-  --card-primary: #A285C7; /* Morado con suficiente luz */
+  --card-primary: #A285C7;
+  /* Morado con suficiente luz */
   --card-primary-fg: #181021;
   --card-secondary: #312342;
-  --card-surface: #110D17; /* Negro morado profundo */
+  --card-surface: #110D17;
+  /* Negro morado profundo */
   --card-surface-card: rgba(38, 28, 51, 0.75);
   --card-surface-border: rgba(162, 133, 199, 0.2);
   --card-text-main: #F6F2FC;
@@ -173,10 +178,12 @@
 
 /* ── SAPPHIRE (Azul Pizarra - Fiel a la Imagen 3) ── */
 [data-card-theme="sapphire-dark"] {
-  --card-primary: #7697BB; /* Azul vivo pero no eléctrico */
+  --card-primary: #7697BB;
+  /* Azul vivo pero no eléctrico */
   --card-primary-fg: #0B131C;
   --card-secondary: #1F2D40;
-  --card-surface: #0B111A; /* Navy muy profundo */
+  --card-surface: #0B111A;
+  /* Navy muy profundo */
   --card-surface-card: rgba(26, 37, 54, 0.75);
   --card-surface-border: rgba(118, 151, 187, 0.2);
   --card-text-main: #F0F5FA;
@@ -200,10 +207,12 @@
 
 /* ── EMERALD (Verde Salvia - Fiel a la Imagen 2) ── */
 [data-card-theme="emerald-dark"] {
-  --card-primary: #709983; /* Verde calmado pero claro */
+  --card-primary: #709983;
+  /* Verde calmado pero claro */
   --card-primary-fg: #0E1713;
   --card-secondary: #1F3328;
-  --card-surface: #0B140F; /* Bosque nocturno */
+  --card-surface: #0B140F;
+  /* Bosque nocturno */
   --card-surface-card: rgba(26, 43, 34, 0.75);
   --card-surface-border: rgba(112, 153, 131, 0.2);
   --card-text-main: #EFF5F1;
@@ -227,10 +236,12 @@
 
 /* ── WINE (Rosa Vino - Fiel a la Imagen 1) ── */
 [data-card-theme="wine-dark"] {
-  --card-primary: #C7838E; /* Rosa oscuro con vitalidad */
+  --card-primary: #C7838E;
+  /* Rosa oscuro con vitalidad */
   --card-primary-fg: #1F1113;
   --card-secondary: #3D2227;
-  --card-surface: #1A0D0F; /* Vino ultra oscuro */
+  --card-surface: #1A0D0F;
+  /* Vino ultra oscuro */
   --card-surface-card: rgba(48, 28, 32, 0.75);
   --card-surface-border: rgba(199, 131, 142, 0.2);
   --card-text-main: #FCF5F6;
@@ -275,6 +286,7 @@ select {
 }
 
 @media (max-width: 767px) {
+
   input,
   select,
   textarea {

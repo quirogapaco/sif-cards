@@ -55,11 +55,10 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
                     theme_palette: isLightMode ? family.lightId : family.darkId,
                   })
                 }
-                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${
-                  isSelected
+                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${isSelected
                     ? 'border-sif-gold bg-sif-gold/10 ring-2 ring-sif-gold/30'
                     : 'border-sif-border bg-sif-surface-subtle hover:border-sif-gold/40'
-                }`}
+                  }`}
               >
                 <div
                   className="h-6 w-6 rounded-full border border-white/20 shadow-md mb-1.5 flex items-center justify-center"
@@ -82,76 +81,74 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
         <LabelWithHint label="Banner de Perfil" hint="La imagen panorámica que aparecerá en la parte superior de tu tarjeta." />
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 max-h-48 overflow-y-auto pr-1">
-            <label className={`group relative h-16 rounded-lg overflow-hidden cursor-pointer transition-all flex flex-col items-center justify-center ${
-              formData.banner_url && !BANNER_PRESETS.some(p => p.url === formData.banner_url)
-                ? 'border-2 border-sif-gold ring-2 ring-sif-gold/40'
-                : 'border-2 border-dashed border-sif-border hover:border-sif-gold/50 bg-sif-surface-subtle'
+          <label className={`group relative h-16 rounded-lg overflow-hidden cursor-pointer transition-all flex flex-col items-center justify-center ${formData.banner_url && !BANNER_PRESETS.some(p => p.url === formData.banner_url)
+              ? 'border-2 border-sif-gold ring-2 ring-sif-gold/40'
+              : 'border-2 border-dashed border-sif-border hover:border-sif-gold/50 bg-sif-surface-subtle'
             }`}>
-              {formData.banner_url && !BANNER_PRESETS.some(p => p.url === formData.banner_url) ? (
-                <>
-                  <img src={formData.banner_url} alt="Custom banner" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-2 flex items-end">
-                    <span className="text-[10px] font-medium text-white truncate">
-                      Tu Foto
-                    </span>
-                  </div>
+            {formData.banner_url && !BANNER_PRESETS.some(p => p.url === formData.banner_url) ? (
+              <>
+                <img src={formData.banner_url} alt="Custom banner" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-2 flex items-end">
+                  <span className="text-[10px] font-medium text-white truncate">
+                    Tu Foto
+                  </span>
+                </div>
+                <div className="absolute top-1.5 right-1.5 h-5 w-5 rounded-full bg-sif-gold text-black flex items-center justify-center">
+                  <Check className="h-3 w-3 stroke-[3]" />
+                </div>
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera className="h-5 w-5 text-white drop-shadow-md" />
+                </div>
+              </>
+            ) : (
+              <>
+                <Camera className="h-5 w-5 text-sif-muted group-hover:text-sif-gold mb-1 transition-colors" />
+                <span className="text-[10px] font-medium text-sif-muted group-hover:text-sif-gold transition-colors">Subir Foto</span>
+              </>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const tempUrl = URL.createObjectURL(file);
+                  setCropperData({ src: tempUrl, file });
+                  e.target.value = '';
+                }
+              }}
+            />
+          </label>
+          {BANNER_PRESETS.map((preset) => {
+            const isSelected = formData.banner_url === preset.url;
+            return (
+              <div
+                key={preset.id}
+                onClick={() => onChange({ ...formData, banner_url: preset.url })}
+                className={`group relative h-16 rounded-lg overflow-hidden cursor-pointer border transition-all ${isSelected
+                    ? 'border-sif-gold ring-2 ring-sif-gold/40'
+                    : 'border-sif-border hover:border-sif-gold/50'
+                  }`}
+              >
+                <img
+                  src={preset.url}
+                  alt={preset.name}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-2 flex items-end">
+                  <span className="text-[10px] font-medium text-white truncate">
+                    {preset.name}
+                  </span>
+                </div>
+                {isSelected && (
                   <div className="absolute top-1.5 right-1.5 h-5 w-5 rounded-full bg-sif-gold text-black flex items-center justify-center">
                     <Check className="h-3 w-3 stroke-[3]" />
                   </div>
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Camera className="h-5 w-5 text-white drop-shadow-md" />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Camera className="h-5 w-5 text-sif-muted group-hover:text-sif-gold mb-1 transition-colors" />
-                  <span className="text-[10px] font-medium text-sif-muted group-hover:text-sif-gold transition-colors">Subir Foto</span>
-                </>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const tempUrl = URL.createObjectURL(file);
-                    setCropperData({ src: tempUrl, file });
-                    e.target.value = '';
-                  }
-                }}
-              />
-            </label>
-            {BANNER_PRESETS.map((preset) => {
-              const isSelected = formData.banner_url === preset.url;
-              return (
-                <div
-                  key={preset.id}
-                  onClick={() => onChange({ ...formData, banner_url: preset.url })}
-                  className={`group relative h-16 rounded-lg overflow-hidden cursor-pointer border transition-all ${
-                    isSelected
-                      ? 'border-sif-gold ring-2 ring-sif-gold/40'
-                      : 'border-sif-border hover:border-sif-gold/50'
-                  }`}
-                >
-                  <img
-                    src={preset.url}
-                    alt={preset.name}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-2 flex items-end">
-                    <span className="text-[10px] font-medium text-white truncate">
-                      {preset.name}
-                    </span>
-                  </div>
-                  {isSelected && (
-                    <div className="absolute top-1.5 right-1.5 h-5 w-5 rounded-full bg-sif-gold text-black flex items-center justify-center">
-                      <Check className="h-3 w-3 stroke-[3]" />
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 

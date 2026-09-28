@@ -62,7 +62,7 @@ export const profileService = {
         .not('profile_id', 'is', null);
 
       if (error) throw error;
-      
+
       // La respuesta viene anidada: [{ profiles: { id, display_name } }]
       return (data as any[]).map((row) => row.profiles).filter(Boolean);
     } catch (err: unknown) {
@@ -171,9 +171,9 @@ export const profileService = {
       social_links: (d.social_links && d.social_links.length > 0)
         ? d.social_links
         : [
-            { platform: 'linkedin', url: '' },
-            { platform: 'instagram', url: '' },
-          ],
+          { platform: 'linkedin', url: '' },
+          { platform: 'instagram', url: '' },
+        ],
       languages: (d.languages && d.languages.length > 0) ? d.languages : ['Español'],
       education: d.education || [],
       businesses: d.businesses || [],
@@ -253,7 +253,7 @@ export const profileService = {
         avatar_url: finalAvatarUrl,
         banner_url: finalBannerUrl,
       };
-      
+
       // Eliminar referencias locales de archivos para guardar en la BD limpiamente
       delete finalProfileData.avatar_file;
       delete finalProfileData.banner_file;

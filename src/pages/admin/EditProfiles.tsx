@@ -66,12 +66,12 @@ export default function EditProfiles() {
       setInitLoading(true);
 
       const dbUser = await userService.getUserRecord(user.id);
-      
+
       if (dbUser?.role === 'org_admin' && dbUser.org_id) {
         // Cargar Colaboradores para Org Admin
         const members = await userService.getOrganizationTeam(dbUser.org_id);
         setTeamMembers(members);
-        
+
         if (members.length > 0) {
           const firstMemberId = location.state?.memberId || members[0].id;
           setSelectedMemberId(firstMemberId);
@@ -83,10 +83,10 @@ export default function EditProfiles() {
         // Usuario Normal
         const options = await profileService.getUserProfileOptions(user.id);
         setProfileOptions(options);
-        
+
         if (options.length > 0) {
           const targetProfileId = initialProfileId && options.find(o => o.id === initialProfileId)
-            ? initialProfileId 
+            ? initialProfileId
             : options[0].id;
           await handleProfileSelect(targetProfileId);
         } else {
@@ -104,10 +104,10 @@ export default function EditProfiles() {
     const member = members.find(m => m.id === memberId);
     const options = member?.profiles || [];
     setProfileOptions(options);
-    
+
     if (options.length > 0) {
       const targetProfileId = profileIdToSelect && options.find(o => o.id === profileIdToSelect)
-        ? profileIdToSelect 
+        ? profileIdToSelect
         : options[0].id;
       await handleProfileSelect(targetProfileId);
     } else {
@@ -120,9 +120,9 @@ export default function EditProfiles() {
   // ── 3. Carga de un Perfil Específico (Completo) ──
   const handleProfileSelect = async (profileId: string) => {
     setInitLoading(true);
-    
+
     const { profile, error } = await profileService.getProfileById(profileId);
-    
+
     if (error || !profile) {
       setErrorMsg(error || 'Error al cargar el perfil.');
       setActiveProfile(null);
@@ -132,7 +132,7 @@ export default function EditProfiles() {
     }
 
     setActiveProfile(profile);
-    
+
     // Restaurar borrador de sessionStorage si existe
     const draftKey = `sif_draft_${profile.id}`;
     const savedDraft = sessionStorage.getItem(draftKey);
@@ -145,7 +145,7 @@ export default function EditProfiles() {
     } else {
       setFormData(profileService.mapProfileToFormData(profile));
     }
-    
+
     setErrorMsg(null);
     setSuccessMsg(null);
     setFieldErrors({});
@@ -204,10 +204,10 @@ export default function EditProfiles() {
         if (error?.includes('en uso')) setFieldErrors({ slug: true });
       } else {
         setSuccessMsg('Perfil actualizado exitosamente.');
-        
+
         // Limpiar el borrador
         sessionStorage.removeItem(`sif_draft_${currentProfileId}`);
-        
+
         // Actualizar el perfil activo actual en memoria
         setActiveProfile((prev) => prev ? {
           ...prev,
@@ -217,9 +217,9 @@ export default function EditProfiles() {
         } : null);
 
         // Actualizar el display_name en la lista de opciones si cambió
-        setProfileOptions((prevOptions) => 
-          prevOptions.map((opt) => 
-            opt.id === currentProfileId 
+        setProfileOptions((prevOptions) =>
+          prevOptions.map((opt) =>
+            opt.id === currentProfileId
               ? { ...opt, display_name: finalProfileData.display_name || opt.display_name }
               : opt
           )
@@ -253,7 +253,7 @@ export default function EditProfiles() {
             ? 'Este colaborador aún no cuenta con perfiles registrados.'
             : 'Aún no has activado ninguna tarjeta inteligente asociada a esta cuenta. Activa una tarjeta primero para poder editar tu perfil.'}
         </p>
-        
+
         {teamMembers.length > 0 && (
           <div className="mt-6 flex items-center gap-3">
             <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Cambiar Colaborador:</span>
@@ -264,8 +264,8 @@ export default function EditProfiles() {
                 className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner"
               >
                 <span className="truncate font-medium text-slate-100">
-                  {teamMembers.find(m => m.id === selectedMemberId) 
-                    ? getMemberDisplayName(teamMembers.find(m => m.id === selectedMemberId)!) 
+                  {teamMembers.find(m => m.id === selectedMemberId)
+                    ? getMemberDisplayName(teamMembers.find(m => m.id === selectedMemberId)!)
                     : 'Selecciona un colaborador...'}
                 </span>
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isMemberDropdownOpen ? 'rotate-180 text-white' : ''}`} />
@@ -283,11 +283,10 @@ export default function EditProfiles() {
                           loadProfilesForMember(teamMembers, m.id);
                           setIsMemberDropdownOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
-                          isCurrent
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
                             ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
                             : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                        }`}
+                          }`}
                       >
                         <span className="truncate">{getMemberDisplayName(m)}</span>
                         {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
@@ -323,7 +322,7 @@ export default function EditProfiles() {
 
         {/* Selectores (Lote y Perfil) */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mt-2 sm:mt-0">
-          
+
           {/* Selector de Colaborador (Sólo si hay más de 0, típicamente org_admin) */}
           {teamMembers.length > 0 && (
             <div className="flex flex-col items-start gap-1 w-full sm:w-auto relative">
@@ -339,8 +338,8 @@ export default function EditProfiles() {
                   className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner"
                 >
                   <span className="truncate font-medium text-slate-100">
-                    {teamMembers.find(m => m.id === selectedMemberId) 
-                      ? getMemberDisplayName(teamMembers.find(m => m.id === selectedMemberId)!) 
+                    {teamMembers.find(m => m.id === selectedMemberId)
+                      ? getMemberDisplayName(teamMembers.find(m => m.id === selectedMemberId)!)
                       : 'Selecciona...'}
                   </span>
                   <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isMemberDropdownOpen ? 'rotate-180 text-white' : ''}`} />
@@ -348,8 +347,8 @@ export default function EditProfiles() {
                 {isMemberDropdownOpen && (
                   <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
                     <div className="p-2 border-b border-white/10 bg-[#121215]">
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         autoFocus
                         placeholder="Buscar colaborador..."
                         value={memberSearchQuery}
@@ -372,17 +371,16 @@ export default function EditProfiles() {
                                 loadProfilesForMember(teamMembers, m.id);
                                 setIsMemberDropdownOpen(false);
                               }}
-                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
-                                isCurrent
+                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
                                   ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
                                   : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                              }`}
+                                }`}
                             >
                               <span className="truncate">{getMemberDisplayName(m)}</span>
                               {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
                             </button>
                           );
-                      })}
+                        })}
                       {teamMembers.filter(m => getMemberDisplayName(m).toLowerCase().includes(memberSearchQuery.toLowerCase())).length === 0 && (
                         <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
                       )}
@@ -420,8 +418,8 @@ export default function EditProfiles() {
                 {isProfileDropdownOpen && (
                   <div className="absolute top-full right-0 sm:left-auto sm:right-0 mt-2 w-full sm:min-w-[240px] z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
                     <div className="p-2 border-b border-white/10 bg-[#121215]">
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         autoFocus
                         placeholder="Buscar perfil..."
                         value={profileSearchQuery}
@@ -443,11 +441,10 @@ export default function EditProfiles() {
                                 handleProfileSelect(p.id);
                                 setIsProfileDropdownOpen(false);
                               }}
-                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${
-                                isCurrent
+                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
                                   ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
                                   : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                              }`}
+                                }`}
                             >
                               <div className="flex items-center gap-2 truncate">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225]" />
@@ -456,7 +453,7 @@ export default function EditProfiles() {
                               {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
                             </button>
                           );
-                      })}
+                        })}
                       {profileOptions.filter(p => (p.display_name || '').toLowerCase().includes(profileSearchQuery.toLowerCase())).length === 0 && (
                         <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
                       )}

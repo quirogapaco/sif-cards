@@ -72,11 +72,10 @@ export default function ProfileForm({
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-2.5 text-xs font-semibold transition-colors border-b-2 ${
-                isActive
+              className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-2.5 text-xs font-semibold transition-colors border-b-2 ${isActive
                   ? 'border-sif-gold text-sif-gold bg-sif-gold/5'
                   : 'border-transparent text-sif-muted hover:text-sif-text hover:bg-sif-surface-subtle/50'
-              }`}
+                }`}
             >
               <Icon className="h-3.5 w-3.5" />
               <span>{tab.label}</span>
@@ -94,7 +93,7 @@ export default function ProfileForm({
             fieldErrors={fieldErrors}
           />
         )}
-        
+
         {activeTab === 'visuals' && (
           <Visuals
             formData={formData}
