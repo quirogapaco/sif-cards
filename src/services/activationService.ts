@@ -139,7 +139,15 @@ export const activationService = {
       const validLinks = data.social_links.filter(
         (link) => link.platform?.trim() && link.url?.trim()
       );
-      if (validLinks.length > 0) cleaned.social_links = validLinks;
+      if (validLinks.length > 0) {
+        cleaned.social_links = validLinks.map(link => {
+          let u = link.url.trim();
+          if (u && !u.startsWith('http://') && !u.startsWith('https://')) {
+            u = 'https://' + u;
+          }
+          return { platform: link.platform, url: u };
+        });
+      }
     }
 
     // Idiomas
@@ -161,11 +169,19 @@ export const activationService = {
       const validBiz = data.businesses.filter(
         (b) => b.name?.trim()
       );
-      if (validBiz.length > 0) cleaned.businesses = validBiz.map(b => ({
-        name: b.name.trim(),
-        description: b.description?.trim() || '',
-        url: b.url?.trim() || ''
-      }));
+      if (validBiz.length > 0) {
+        cleaned.businesses = validBiz.map(b => {
+          let u = b.url?.trim() || '';
+          if (u && !u.startsWith('http://') && !u.startsWith('https://')) {
+            u = 'https://' + u;
+          }
+          return {
+            name: b.name.trim(),
+            description: b.description?.trim() || '',
+            url: u
+          };
+        });
+      }
     }
 
     return cleaned;

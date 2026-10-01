@@ -20,11 +20,6 @@ export default function GlobalDashboardPage() {
             </h1>
             <p className="text-sm text-[var(--sif-muted)] mt-1">Métricas globales y rendimiento en tiempo real</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[var(--sif-surface)] border border-[var(--sif-border)] flex items-center justify-center text-[var(--sif-gold)] font-bold shadow-sm">
-              SC
-            </div>
-          </div>
         </header>
 
         {user && <DashboardContainer targetUserId={user.id} />}

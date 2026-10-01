@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { User, Palette, Share2, FileText, Briefcase, ArrowRight } from 'lucide-react';
 import PersonalInfo from './PersonalInfo';
 import Visuals from './Visuals';
@@ -51,19 +51,31 @@ export default function ProfileForm({
 }: ProfileFormProps) {
   // Navegación por Pestañas (Tabs)
   const [activeTab, setActiveTab] = useState<string>('personal');
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!tabsContainerRef.current) return;
+    const activeTabElement = tabsContainerRef.current.querySelector(`[data-tab-id="${activeTab}"]`) as HTMLElement;
+    if (activeTabElement) {
+      activeTabElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, [activeTab]);
 
   const tabs = [
     { id: 'personal', label: 'Personal', icon: User },
     { id: 'visuals', label: 'Visuales', icon: Palette },
     { id: 'contact', label: 'Contacto', icon: Share2 },
     { id: 'about', label: 'Biografía', icon: FileText },
-    { id: 'education', label: 'Trayectoria', icon: Briefcase },
+    { id: 'education', label: 'Negocios y Proyectos', icon: Briefcase },
   ];
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2 text-sif-text">
       {/* ── Navegación Tabs ── */}
-      <div className="flex overflow-x-auto gap-1 border-b border-sif-border pb-px [&::-webkit-scrollbar]:hidden">
+      <div 
+        ref={tabsContainerRef}
+        className="flex overflow-x-auto gap-1 border-b border-sif-border pb-px [&::-webkit-scrollbar]:hidden"
+      >
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -71,6 +83,7 @@ export default function ProfileForm({
             <button
               key={tab.id}
               type="button"
+              data-tab-id={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-1.5 whitespace-nowrap px-3 py-2.5 text-xs font-semibold transition-colors border-b-2 ${isActive
                   ? 'border-sif-gold text-sif-gold bg-sif-gold/5'

@@ -32,7 +32,7 @@ export default function ProfileBusinesses({ businessesList }: ProfileBusinessesP
         style={{ color: 'var(--card-primary)' }}
       >
         <Building2 className="w-5 h-5 shrink-0" />
-        Trayectoria
+        Negocios y Proyectos
       </h3>
 
       {/* Lista de entradas */}

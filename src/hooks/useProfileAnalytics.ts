@@ -17,6 +17,8 @@ interface UseProfileAnalyticsParams {
   isNfcSource: boolean;
   /** Token del chip NFC, solo cuando isNfcSource = true */
   token?: string;
+  /** Evita registrar eventos analíticos si está en modo de vista previa */
+  isPreview?: boolean;
 }
 
 interface UseProfileAnalyticsReturn {
@@ -39,12 +41,14 @@ export function useProfileAnalytics({
   userId,
   isNfcSource,
   token,
+  isPreview = false,
 }: UseProfileAnalyticsParams): UseProfileAnalyticsReturn {
   // Flag para disparar el evento de vista exactamente una vez por montaje,
   // incluso en React StrictMode (donde los efectos se ejecutan dos veces en desarrollo).
   const viewTracked = useRef(false);
 
   useEffect(() => {
+    if (isPreview) return; // No registrar en modo de edición
     if (viewTracked.current) return; // Ya registrado en esta sesión de montaje
     viewTracked.current = true;
 
@@ -78,43 +82,47 @@ export function useProfileAnalytics({
   // ── Callbacks expuestos ────────────────────────────────────────────────────
 
   const trackContactSave = useCallback(() => {
+    if (isPreview) return;
     trackEvent(profileId, userId, {
       event_type: 'contact_download',
       format: 'vcf',
       timestamp: new Date().toISOString(),
     });
-  }, [profileId, userId]);
+  }, [profileId, userId, isPreview]);
 
   const trackDirectContact = useCallback(
     (channel: 'whatsapp' | 'email' | 'phone' | 'location', targetValue: string) => {
+      if (isPreview) return;
       trackEvent(profileId, userId, {
         event_type: 'direct_contact_click',
         channel,
         target_value: targetValue,
       });
     },
-    [profileId, userId]
+    [profileId, userId, isPreview]
   );
 
   const trackSocialClick = useCallback(
     (platform: string, targetUrl: string) => {
+      if (isPreview) return;
       trackEvent(profileId, userId, {
         event_type: 'social_link_click',
         platform,
         target_url: targetUrl,
       });
     },
-    [profileId, userId]
+    [profileId, userId, isPreview]
   );
 
   const trackShare = useCallback(
     (method: 'native_share' | 'clipboard') => {
+      if (isPreview) return;
       trackEvent(profileId, userId, {
         event_type: 'profile_share',
         method,
       });
     },
-    [profileId, userId]
+    [profileId, userId, isPreview]
   );
 
   return { trackContactSave, trackDirectContact, trackSocialClick, trackShare };

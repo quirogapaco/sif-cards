@@ -23,6 +23,8 @@ interface ProfileViewProps {
   prefix?: string;
   /** Si es true, inyecta el color de fondo al <body> para evitar destellos blancos al hacer overscroll */
   isStandalone?: boolean;
+  /** Evita que se registren analíticas al visualizar la tarjeta (ej. en el panel de admin) */
+  isPreview?: boolean;
 }
 
 /**
@@ -30,14 +32,14 @@ interface ProfileViewProps {
  * Envoltura raíz con [data-card-theme] para el scope aislado de CSS.
  * Todos los hijos consumen exclusivamente variables card-*.
  */
-export default function ProfileView({ profile, isNfcSource = false, token, prefix, isStandalone = false }: ProfileViewProps) {
+export default function ProfileView({ profile, isNfcSource = false, token, prefix, isStandalone = false, isPreview = false }: ProfileViewProps) {
   const data     = profile.data;
   const theme    = profile.theme_palette || 'emerald-dark';
   const contacts = data.direct_contacts;
 
   // ── Telemetría ──────────────────────────────────────────────────────────────
   const { trackContactSave, trackDirectContact, trackSocialClick, trackShare } =
-    useProfileAnalytics({ profileId: profile.id, userId: profile.user_id, isNfcSource, token });
+    useProfileAnalytics({ profileId: profile.id, userId: profile.user_id, isNfcSource, token, isPreview });
 
   // ── Desactivar rebote (Overscroll) e inyectar color global ──
   useEffect(() => {
@@ -62,7 +64,11 @@ export default function ProfileView({ profile, isNfcSource = false, token, prefi
 
   const handleSaveContact = useCallback(() => {
     trackContactSave();
-    downloadVCard(data, profile.slug);
+    // Retrasar la descarga 150ms para asegurar que el navegador 
+    // dispare el request de analytics antes de abrir el modal de descarga
+    setTimeout(() => {
+      downloadVCard(data, profile.slug);
+    }, 150);
   }, [trackContactSave, data, profile.slug]);
 
   const handleShare = useCallback(async () => {

@@ -59,6 +59,17 @@ export default function EditProfiles() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Auto-scroll al mostrar alertas
+  useEffect(() => {
+    if (successMsg || errorMsg) {
+      const topElement = document.getElementById('edit-profiles-top');
+      if (topElement) {
+        // En un layout con overflow interno, scrollIntoView es más seguro que window.scrollTo
+        topElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }, [successMsg, errorMsg]);
+
   // ── 1. Carga Inicial (Colaboradores u Opciones de Usuario) ──
   useEffect(() => {
     async function loadInitialData() {
@@ -313,7 +324,7 @@ export default function EditProfiles() {
   return (
     <div className="flex flex-1 flex-col overflow-hidden bg-sif-bg">
       {/* Encabezado */}
-      <div className="border-b border-sif-border bg-sif-surface px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div id="edit-profiles-top" className="border-b border-sif-border bg-sif-surface px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-base font-semibold text-sif-text">Perfiles</h2>
           <p className="mt-0.5 text-xs text-sif-muted">
@@ -506,7 +517,7 @@ export default function EditProfiles() {
         }
         childrenRight={
           previewProfile ? (
-            <ProfileView profile={previewProfile} isNfcSource={false} />
+            <ProfileView profile={previewProfile} isNfcSource={false} isPreview={true} />
           ) : (
             <div className="flex h-full items-center justify-center pt-24 text-sif-muted">
               <span>Cargando vista previa...</span>

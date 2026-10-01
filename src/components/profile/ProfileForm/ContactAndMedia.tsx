@@ -107,13 +107,13 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
         </div>
 
         {formData.social_links.map((link, idx) => (
-          <div key={idx} className="flex items-center gap-2">
-            <div className="flex items-center gap-2 rounded-xl border border-sif-border bg-sif-surface-subtle px-2 py-1.5">
+          <div key={idx} className="flex items-center gap-1.5 sm:gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-sif-border bg-sif-surface-subtle px-2 py-1.5 shrink-0">
               <SocialIcon platform={link.platform} className="h-4 w-4 text-sif-gold shrink-0" />
               <select
                 value={link.platform}
                 onChange={(e) => updateSocialLink(idx, 'platform', e.target.value)}
-                className="bg-transparent text-xs font-medium text-sif-text outline-none cursor-pointer max-w-[120px]"
+                className="bg-transparent text-[11px] sm:text-xs font-medium text-sif-text outline-none cursor-pointer w-[80px] sm:w-auto sm:max-w-[120px] truncate"
               >
                 {SUPPORTED_SOCIAL_PLATFORMS.map((plat) => {
                   const isUsed = formData.social_links.some((l, i) => i !== idx && l.platform === plat.id);
@@ -134,11 +134,12 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
             </div>
 
             <input
-              type="url"
+              type="text"
+              inputMode="url"
               value={link.url}
               onChange={(e) => updateSocialLink(idx, 'url', e.target.value)}
-              placeholder="https://..."
-              className="flex-1 rounded-xl border border-sif-border bg-sif-surface-subtle px-3 py-1.5 text-xs text-sif-text outline-none focus:border-sif-gold"
+              placeholder="sifcards.com/..."
+              className="flex-1 min-w-0 rounded-xl border border-sif-border bg-sif-surface-subtle px-2 sm:px-3 py-1.5 text-xs text-sif-text outline-none focus:border-sif-gold"
             />
 
             <button

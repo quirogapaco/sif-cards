@@ -15,15 +15,21 @@ export function downloadVCard(data: ProfileData, slug: string = 'contacto'): voi
   // Sanitize phone: keep only digits and leading +
   const cleanPhone = phone.replace(/[^\d+]/g, '');
 
+  const nameParts = (data.display_name || '').trim().split(' ');
+  const givenName = nameParts[0] || '';
+  const familyName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
   const lines: string[] = [
     'BEGIN:VCARD',
     'VERSION:3.0',
-    `FN:${data.display_name}`,
-    `ORG:${data.company}`,
-    `TITLE:${data.job_title}`,
+    `N:${familyName};${givenName};;;`,
+    data.display_name ? `FN:${data.display_name}` : '',
+    data.company ? `ORG:${data.company}` : '',
+    data.job_title ? `TITLE:${data.job_title}` : '',
     cleanPhone ? `TEL;TYPE=CELL:${cleanPhone}` : '',
     ...emails.map(e => `EMAIL:${e}`),
     bio ? `NOTE:${bio.replace(/\n/g, '\\n')}` : '',
+    `URL:https://sifcards.com/p/${slug}`,
     'END:VCARD',
   ].filter(Boolean);
 

@@ -160,13 +160,13 @@ export default function EducationAndExperience({ formData, onChange }: Education
             {/* Header de la tarjeta */}
             <div className="flex items-center justify-between border-b border-sif-border pb-2 mb-1">
               <span className="text-[11px] font-semibold text-sif-muted uppercase tracking-wider">
-                Trayectoria {idx + 1}
+                Negocios y Proyectos {idx + 1}
               </span>
               <button
                 type="button"
                 onClick={() => removeBusiness(idx)}
                 className="text-sif-muted transition-colors hover:text-red-400 p-1 rounded-md hover:bg-red-500/10"
-                title="Eliminar trayectoria"
+                title="Eliminar proyecto"
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
@@ -199,11 +199,12 @@ export default function EducationAndExperience({ formData, onChange }: Education
             <div className="relative mt-1">
               <LabelWithHint htmlFor={`biz_url_${idx}`} label="Enlace web" hint="URL del proyecto, si tiene." />
               <input
-                type="url"
+                type="text"
+                inputMode="url"
                 id={`biz_url_${idx}`}
                 value={biz.url}
                 onChange={(e) => updateBusiness(idx, 'url', e.target.value)}
-                placeholder="Ej: https://miempresa.com"
+                placeholder="Ej: sifcards.com"
                 className="w-full rounded-lg border border-sif-border bg-sif-surface px-3 py-2 text-xs text-sif-text outline-none focus:border-sif-gold transition-colors"
               />
             </div>

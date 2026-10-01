@@ -452,7 +452,7 @@ export default function ActivateCardPage() {
             />
           }
           childrenRight={
-            <ProfileView profile={previewProfile} isNfcSource={false} />
+            <ProfileView profile={previewProfile} isNfcSource={false} isPreview={true} />
           }
         />
       </main>
