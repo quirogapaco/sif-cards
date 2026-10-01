@@ -7,6 +7,8 @@ export interface DashboardMetrics {
     tapsGrowth: number;
     contactsSaved: number;
     contactsGrowth: number;
+    totalShares: number;
+    sharesGrowth: number;
     ctr: number;
     ctrGrowth: number;
   };
@@ -46,6 +48,8 @@ export interface DashboardMetricsResponse {
     prev_nfc_taps: number;
     contacts_saved: number;
     prev_contacts_saved: number;
+    profiles_shared: number;
+    prev_profiles_shared: number;
   };
   funnel: {
     unique_visitors: number | null;

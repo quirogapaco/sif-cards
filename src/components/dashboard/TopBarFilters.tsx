@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Users, Contact, ChevronDown, Download } from 'lucide-react';
+import { Users, Contact, ChevronDown, Download, RefreshCcw } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { dashboardService } from '../../services/dashboardService';
 import type { TeamMember } from '../../services/userService';
@@ -13,9 +13,10 @@ export interface DashboardFilters {
 interface TopBarFiltersProps {
   onFilterChange?: (filters: DashboardFilters) => void;
   onExport?: () => void;
+  onRefresh?: () => void;
 }
 
-export default function TopBarFilters({ onFilterChange, onExport }: TopBarFiltersProps) {
+export default function TopBarFilters({ onFilterChange, onExport, onRefresh }: TopBarFiltersProps) {
   const { user, userRole, orgId } = useAuth();
 
   // Estados de datos
@@ -31,7 +32,7 @@ export default function TopBarFilters({ onFilterChange, onExport }: TopBarFilter
   const [selectedUserId, setSelectedUserId] = useState<string>('all');
   const [selectedProfileId, setSelectedProfileId] = useState<string>('all');
 
-  const ranges = ['7D', '30D', '3M', '1Y'];
+  const ranges = ['Hoy', '7D', '30D', '1Y'];
 
   // Usar useRef para evitar problemas de dependencia (infinite loop) con onFilterChange
   const onFilterChangeRef = useRef(onFilterChange);
@@ -186,12 +187,19 @@ export default function TopBarFilters({ onFilterChange, onExport }: TopBarFilter
               ))}
             </div>
             <div className="hidden sm:block w-[1px] h-6 bg-[var(--sif-border)] mx-1"></div>
-            <button 
+            {/* <button 
               onClick={onExport}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--sif-text)] hover:text-[var(--sif-gold)] bg-[var(--sif-surface-subtle)] hover:bg-[var(--sif-surface)] border border-[var(--sif-border)] rounded-xl transition-colors flex-shrink-0"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Exportar</span>
+            </button> */}
+            <button
+              onClick={onRefresh}
+              className="flex items-center justify-center p-1.5 text-[var(--sif-muted)] hover:text-[var(--sif-gold)] bg-[var(--sif-surface-subtle)] hover:bg-[var(--sif-surface)] border border-[var(--sif-border)] rounded-lg transition-colors flex-shrink-0"
+              title="Refrescar datos"
+            >
+              <RefreshCcw className="w-4 h-4" />
             </button>
           </div>
 

@@ -16,14 +16,14 @@ export default function DashboardContainer({ targetUserId }: DashboardContainerP
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
   const [days, setDays] = useState<number>(30);
 
-  const { data, isLoading, error } = useDashboardData({ targetUserId, profileId: selectedProfileId, days });
+  const { data, isLoading, error, refetch } = useDashboardData({ targetUserId, profileId: selectedProfileId, days });
 
   const handleFilterChange = useCallback((filters: DashboardFilters) => {
     setSelectedProfileId(filters.selectedProfileId === 'all' ? null : filters.selectedProfileId);
     switch (filters.dateRange) {
+      case 'Hoy': setDays(1); break;
       case '7D': setDays(7); break;
       case '30D': setDays(30); break;
-      case '3M': setDays(90); break;
       case '1Y': setDays(365); break;
     }
   }, []);
@@ -69,6 +69,8 @@ export default function DashboardContainer({ targetUserId }: DashboardContainerP
     tapsGrowth: calculateGrowth(data.kpis.nfc_taps, data.kpis.prev_nfc_taps),
     contactsSaved: data.kpis.contacts_saved,
     contactsGrowth: calculateGrowth(data.kpis.contacts_saved, data.kpis.prev_contacts_saved),
+    totalShares: data.kpis.profiles_shared || 0,
+    sharesGrowth: calculateGrowth(data.kpis.profiles_shared || 0, data.kpis.prev_profiles_shared || 0),
     ctr: ctr,
     ctrGrowth: 0,
   } : null;
@@ -103,7 +105,7 @@ export default function DashboardContainer({ targetUserId }: DashboardContainerP
 
   return (
     <>
-      <TopBarFilters onFilterChange={handleFilterChange} onExport={handleExport} />
+      <TopBarFilters onFilterChange={handleFilterChange} onExport={handleExport} onRefresh={refetch} />
       
       {isLoading && (
         <div className="flex items-center justify-center h-64 bg-[var(--sif-surface)]/50 rounded-2xl border border-[var(--sif-border)] backdrop-blur-sm">

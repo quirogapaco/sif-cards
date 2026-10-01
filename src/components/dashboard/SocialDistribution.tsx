@@ -31,7 +31,7 @@ export default function SocialDistribution({ data }: SocialDistributionProps) {
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-bold text-[var(--sif-text)]">Clics en Redes</h3>
         <span className="text-[11px] font-medium text-[var(--sif-muted)]">
-          Total: {(totalClicks / 1000).toFixed(1)}k
+          Total: {totalClicks >= 1000 ? `${(totalClicks / 1000).toFixed(1)}k` : totalClicks.toLocaleString()}
         </span>
       </div>
       <p className="text-xs text-[var(--sif-muted)] mb-2">

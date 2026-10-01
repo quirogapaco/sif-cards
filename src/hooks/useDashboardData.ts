@@ -12,6 +12,7 @@ interface UseDashboardDataReturn {
   data: DashboardMetricsResponse | null;
   isLoading: boolean;
   error: string | null;
+  refetch: () => void;
 }
 
 export function useDashboardData({
@@ -22,6 +23,9 @@ export function useDashboardData({
   const [data, setData] = useState<DashboardMetricsResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [tick, setTick] = useState(0);
+
+  const refetch = () => setTick(t => t + 1);
 
   useEffect(() => {
     let isMounted = true;
@@ -60,7 +64,7 @@ export function useDashboardData({
     return () => {
       isMounted = false;
     };
-  }, [targetUserId, profileId, days]);
+  }, [targetUserId, profileId, days, tick]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, refetch };
 }

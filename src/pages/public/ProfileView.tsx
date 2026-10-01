@@ -85,8 +85,8 @@ export default function ProfileView({ profile, isNfcSource = false, token, prefi
     // Intentar Web Share API nativa (móviles)
     if (navigator.share && navigator.canShare?.(shareData)) {
       try {
-        await navigator.share(shareData);
         trackShare('native_share');
+        await navigator.share(shareData);
       } catch {
         // El usuario canceló — no contabilizar ni mostrar error
       }
@@ -95,12 +95,13 @@ export default function ProfileView({ profile, isNfcSource = false, token, prefi
 
     // Fallback: copiar al portapapeles
     try {
-      await navigator.clipboard.writeText(shareUrl);
       trackShare('clipboard');
+      await navigator.clipboard.writeText(shareUrl);
       setShareState('copied');
       setTimeout(() => setShareState('idle'), 2000);
     } catch {
       // Fallback final: selección manual con prompt
+      trackShare('clipboard');
       window.prompt('Copia el enlace del perfil:', shareUrl);
     }
   }, [profile.slug, data.display_name, data.job_title, data.company, trackShare, prefix, token]);
