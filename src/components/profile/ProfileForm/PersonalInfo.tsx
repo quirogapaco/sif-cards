@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Camera, Image as ImageIcon, Info } from 'lucide-react';
+import { Camera, Image as ImageIcon } from 'lucide-react';
 import PhoneInput from 'react-phone-number-input';
 import ImageCropperModal from '../ImageCropperModal';
 import 'react-phone-number-input/style.css';
