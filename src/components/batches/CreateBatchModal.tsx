@@ -45,8 +45,8 @@ export function CreateBatchModal({ isOpen, onClose, onSuccess }: CreateBatchModa
   /* Preview dinámica de URL */
   const slugifiedPrefix = form.url_prefix ? slugifyPrefix(form.url_prefix) : '';
   const urlPreview = slugifiedPrefix
-    ? `sif.link/${slugifiedPrefix}/:token`
-    : 'sif.link/t/:token';
+    ? `sifcards.com/${slugifiedPrefix}/:token`
+    : 'sifcards.com/t/:token';
 
   const isFormValid =
     form.name.trim().length >= 3 &&

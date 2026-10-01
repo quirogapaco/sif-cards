@@ -2,8 +2,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
 import { userService } from '../../services/userService';
 import { useAppTheme } from '../../context/AppThemeContext';
-import sifGold from '../../assets/sif_gold.png';
-import sifSilver from '../../assets/sif_silver.png';
+const sifGold = '/sif_gold.png';
+const sifSilver = '/sif_silver.png';
 
 // ── Tipos ──────────────────────────────────────────────────────────────────
 type AuthMode = 'login' | 'register';

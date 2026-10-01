@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { CrowdCanvas } from './CrowdCanvas';
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 
 export const FooterCTA: React.FC = () => {
   return (

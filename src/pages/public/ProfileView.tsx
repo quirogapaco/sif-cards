@@ -37,7 +37,7 @@ export default function ProfileView({ profile, isNfcSource = false, token, prefi
 
   // ── Telemetría ──────────────────────────────────────────────────────────────
   const { trackContactSave, trackDirectContact, trackSocialClick, trackShare } =
-    useProfileAnalytics({ profileId: profile.id, isNfcSource, token });
+    useProfileAnalytics({ profileId: profile.id, userId: profile.user_id, isNfcSource, token });
 
   // ── Desactivar rebote (Overscroll) e inyectar color global ──
   useEffect(() => {

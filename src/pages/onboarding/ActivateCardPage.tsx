@@ -7,7 +7,7 @@ import ProfileForm, { type ProfileFormData } from '../../components/profile/Prof
 import ProfileView from '../public/ProfileView';
 import ProfileEditorLayout from '../../components/profile/ProfileEditorLayout/ProfileEditorLayout';
 import AuthModal from '../../components/auth/AuthModal';
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 import type { Card, Profile } from '../../types/database';
 import {
   Sparkles,
@@ -155,7 +155,7 @@ export default function ActivateCardPage() {
       const formattedSlug = formData.slug.toLowerCase().trim().replace(/[^a-z0-9-]/g, '');
       const isAvailable = await activationService.isSlugAvailable(formattedSlug);
       if (!isAvailable) {
-        setErrorMsg(`El enlace personalizado "sif.link/p/${formattedSlug}" ya está en uso. Por favor elige otro.`);
+        setErrorMsg(`El enlace personalizado "sifcards.com/p/${formattedSlug}" ya está en uso. Por favor elige otro.`);
         setFieldErrors({ slug: true });
         setSubmitLoading(false);
         return;

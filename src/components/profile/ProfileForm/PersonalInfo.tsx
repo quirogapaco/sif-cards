@@ -105,11 +105,11 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
 
       {/* Slug Personalizado */}
       <div className="flex flex-col gap-1">
-        <LabelWithHint label="Personaliza el enlace de tu perfil *" hint="Este será tu enlace único para compartir (ej: sif.link/p/tu-nombre)." />
+        <LabelWithHint label="Personaliza el enlace de tu perfil *" hint="Este será tu enlace único para compartir (ej: sifcards.com/p/tu-nombre)." />
         <div className={`flex items-center rounded-xl border bg-sif-surface-subtle px-3 py-1.5 text-sm transition-colors ${
           fieldErrors.slug ? 'border-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.2)]' : 'border-sif-border focus-within:border-sif-gold'
         }`}>
-          <span className="text-sif-muted select-none">sif.link/p/</span>
+          <span className="text-sif-muted select-none">sifcards.com/p/</span>
           <input
             type="text"
             required

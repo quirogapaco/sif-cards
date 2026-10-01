@@ -5,7 +5,7 @@ import type { Card, Profile } from '../../types/database';
 import ProfileView from '../public/ProfileView';
 import AuthModal from '../../components/auth/AuthModal';
 import { supabase } from '../../lib/supabase';
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 import {
   AlertCircle,
   ShieldAlert,

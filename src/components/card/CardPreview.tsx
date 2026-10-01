@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Download, Phone, Mail, MapPin, ExternalLink } from 'lucide-react';
 import type { ProfileData } from '../../types/profile';
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 
 interface CardPreviewProps {
   profile: ProfileData;

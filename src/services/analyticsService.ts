@@ -6,6 +6,29 @@
 
 import { supabase } from '../lib/supabase';
 import type { AnalyticsEventType, AnalyticsEventInsert } from '../types/database';
+import type { DashboardMetricsResponse } from '../types/dashboard';
+
+// ── Utilidades ──────────────────────────────────────────────────────────────
+
+/**
+ * Genera o recupera un ID de sesión único basado en la pestaña actual del navegador.
+ * Útil para calcular visitantes únicos en el embudo de conversión.
+ */
+function getVisitorSessionId(): string {
+  const SESSION_KEY = 'sif_visitor_session_id';
+  try {
+    let sessionId = sessionStorage.getItem(SESSION_KEY);
+    if (!sessionId) {
+      // Generar un hash único simple (timestamp + aleatoriedad)
+      sessionId = `sess_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 9)}`;
+      sessionStorage.setItem(SESSION_KEY, sessionId);
+    }
+    return sessionId;
+  } catch (e) {
+    // Fallback silencioso en caso de que sessionStorage esté bloqueado (ej. modo incógnito muy estricto)
+    return `sess_temp_${Date.now()}`;
+  }
+}
 
 // ── Payloads tipados por evento ─────────────────────────────────────────────
 
@@ -66,12 +89,13 @@ export type TrackEventPayload =
  * @param profileId - ID del perfil cuyo evento se registra
  * @param payload   - Datos tipados del evento
  */
-export function trackEvent(profileId: string, payload: TrackEventPayload): void {
+export function trackEvent(profileId: string, userId: string | null, payload: TrackEventPayload): void {
   const { event_type, ...meta } = payload;
 
   // Construir el registro para insertar
   const record: AnalyticsEventInsert = {
     profile_id: profileId,
+    user_id: userId,
     event_type: event_type as AnalyticsEventType,
     metadata: {
       ...meta,
@@ -80,6 +104,7 @@ export function trackEvent(profileId: string, payload: TrackEventPayload): void 
       _user_agent: navigator.userAgent,
       _referrer: document.referrer || null,
       _screen_width: window.innerWidth,
+      _session_id: getVisitorSessionId(),
     } as Record<string, unknown>,
   };
 
@@ -101,4 +126,35 @@ export function trackEvent(profileId: string, payload: TrackEventPayload): void 
       // Captura fallos de red, bloqueadores de rastreo, modo incógnito, etc.
       console.error('[Analytics] Excepción en trackEvent:', err);
     });
+}
+
+/**
+ * Obtiene las métricas agregadas del dashboard llamando al RPC 'get_dashboard_metrics'.
+ * 
+ * @param targetUserId ID del usuario cuyas métricas queremos ver
+ * @param profileId    ID de un perfil específico (o null para todos)
+ * @param days         Rango de días a consultar
+ */
+export async function getDashboardData(
+  targetUserId: string,
+  profileId: string | null,
+  days: number
+): Promise<DashboardMetricsResponse | null> {
+  try {
+    const { data, error } = await supabase.rpc('get_dashboard_metrics', {
+      p_target_user_id: targetUserId,
+      p_profile_id: profileId,
+      p_days: days,
+    });
+
+    if (error) {
+      console.error('[AnalyticsService] Error en RPC get_dashboard_metrics:', error.message);
+      return null;
+    }
+
+    return data as DashboardMetricsResponse;
+  } catch (err) {
+    console.error('[AnalyticsService] Excepción en getDashboardData:', err);
+    return null;
+  }
 }

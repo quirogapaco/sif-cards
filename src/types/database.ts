@@ -111,6 +111,7 @@ export type AnalyticsEventType =
 export interface AnalyticsEvent {
   id: string;
   profile_id: string | null;
+  user_id: string | null;
   event_type: AnalyticsEventType | string;
   metadata: Record<string, unknown>;
   created_at: string;

@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { LogIn, LogOut, LayoutDashboard, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useAppTheme } from '../../context/AppThemeContext';
-import sifGold from '../../assets/sif_gold.png';
-import sifSilver from '../../assets/sif_silver.png';
+const sifGold = '/sif_gold.png';
+const sifSilver = '/sif_silver.png';
 
 interface NavbarProps {
   edition: 'gold' | 'silver';

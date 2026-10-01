@@ -1,4 +1,4 @@
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 
 /**
  * Sello de marca oficial al pie de la vista de perfil pública.

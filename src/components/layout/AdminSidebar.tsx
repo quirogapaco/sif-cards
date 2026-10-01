@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { ADMIN_NAV_ITEMS } from '../../config/adminNav';
 import { useAuth } from '../../context/AuthContext';
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 
 interface AdminSidebarProps {
   expanded: boolean;

@@ -1,4 +1,4 @@
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 
 /**
  * Fallback de carga minimalista en tono deep matte (#09090b)

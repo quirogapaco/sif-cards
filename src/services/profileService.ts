@@ -115,7 +115,7 @@ export const profileService = {
       if (existingProfiles && existingProfiles.length > 0) {
         return {
           success: false,
-          error: `El enlace personalizado "sif.link/p/${formattedSlug}" ya está en uso. Por favor elige otro.`,
+          error: `El enlace personalizado "sifcards.com/p/${formattedSlug}" ya está en uso. Por favor elige otro.`,
         };
       }
 

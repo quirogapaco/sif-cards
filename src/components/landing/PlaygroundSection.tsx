@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Download, Phone, Mail, MapPin, ExternalLink, Share2, Globe, BookOpen } from 'lucide-react';
-import sifGold from '../../assets/sif_gold.png';
+const sifGold = '/sif_gold.png';
 
 type ThemeMode = 'dark' | 'light';
 type PaletteKey = 'gold' | 'purple' | 'monochrome' | 'sapphire' | 'emerald' | 'wine';

@@ -37,3 +37,21 @@ export interface DashboardMetrics {
     saves: number;
   };
 }
+
+export interface DashboardMetricsResponse {
+  kpis: {
+    web_views: number;
+    prev_web_views: number;
+    nfc_taps: number;
+    prev_nfc_taps: number;
+    contacts_saved: number;
+    prev_contacts_saved: number;
+  };
+  funnel: {
+    unique_visitors: number | null;
+    interactions: number;
+    leads: number;
+  };
+  social_clicks: Array<{ platform: string; clicks: number }>;
+  direct_contacts: Array<{ channel: string; clicks: number }>;
+}

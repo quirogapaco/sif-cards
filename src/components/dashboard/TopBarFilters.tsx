@@ -12,9 +12,10 @@ export interface DashboardFilters {
 
 interface TopBarFiltersProps {
   onFilterChange?: (filters: DashboardFilters) => void;
+  onExport?: () => void;
 }
 
-export default function TopBarFilters({ onFilterChange }: TopBarFiltersProps) {
+export default function TopBarFilters({ onFilterChange, onExport }: TopBarFiltersProps) {
   const { user, userRole, orgId } = useAuth();
 
   // Estados de datos
@@ -185,7 +186,10 @@ export default function TopBarFilters({ onFilterChange }: TopBarFiltersProps) {
               ))}
             </div>
             <div className="hidden sm:block w-[1px] h-6 bg-[var(--sif-border)] mx-1"></div>
-            <button className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--sif-text)] hover:text-[var(--sif-gold)] bg-[var(--sif-surface-subtle)] hover:bg-[var(--sif-surface)] border border-[var(--sif-border)] rounded-xl transition-colors flex-shrink-0">
+            <button 
+              onClick={onExport}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--sif-text)] hover:text-[var(--sif-gold)] bg-[var(--sif-surface-subtle)] hover:bg-[var(--sif-surface)] border border-[var(--sif-border)] rounded-xl transition-colors flex-shrink-0"
+            >
               <Download className="w-3.5 h-3.5" />
               <span>Exportar</span>
             </button>

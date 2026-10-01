@@ -11,6 +11,8 @@ import { trackEvent } from '../services/analyticsService';
 interface UseProfileAnalyticsParams {
   /** ID del perfil al que pertenecen los eventos */
   profileId: string;
+  /** ID del usuario dueño del perfil */
+  userId: string | null;
   /** true si el acceso proviene de una tarjeta física (/t/:token o /:prefix/:token) */
   isNfcSource: boolean;
   /** Token del chip NFC, solo cuando isNfcSource = true */
@@ -34,6 +36,7 @@ interface UseProfileAnalyticsReturn {
  */
 export function useProfileAnalytics({
   profileId,
+  userId,
   isNfcSource,
   token,
 }: UseProfileAnalyticsParams): UseProfileAnalyticsReturn {
@@ -46,7 +49,7 @@ export function useProfileAnalytics({
     viewTracked.current = true;
 
     if (isNfcSource && token) {
-      trackEvent(profileId, {
+      trackEvent(profileId, userId, {
         event_type: 'nfc_tap',
         token,
         pathname: window.location.pathname,
@@ -55,7 +58,7 @@ export function useProfileAnalytics({
         user_agent: navigator.userAgent,
       });
     } else {
-      trackEvent(profileId, {
+      trackEvent(profileId, userId, {
         event_type: 'profile_view',
         pathname: window.location.pathname,
         referrer: document.referrer,
@@ -70,48 +73,48 @@ export function useProfileAnalytics({
       viewTracked.current = false;
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profileId]); // Solo depende del profileId — intencionalmente estable
+  }, [profileId, userId]); // Dependencias estables
 
   // ── Callbacks expuestos ────────────────────────────────────────────────────
 
   const trackContactSave = useCallback(() => {
-    trackEvent(profileId, {
+    trackEvent(profileId, userId, {
       event_type: 'contact_download',
       format: 'vcf',
       timestamp: new Date().toISOString(),
     });
-  }, [profileId]);
+  }, [profileId, userId]);
 
   const trackDirectContact = useCallback(
     (channel: 'whatsapp' | 'email' | 'phone' | 'location', targetValue: string) => {
-      trackEvent(profileId, {
+      trackEvent(profileId, userId, {
         event_type: 'direct_contact_click',
         channel,
         target_value: targetValue,
       });
     },
-    [profileId]
+    [profileId, userId]
   );
 
   const trackSocialClick = useCallback(
     (platform: string, targetUrl: string) => {
-      trackEvent(profileId, {
+      trackEvent(profileId, userId, {
         event_type: 'social_link_click',
         platform,
         target_url: targetUrl,
       });
     },
-    [profileId]
+    [profileId, userId]
   );
 
   const trackShare = useCallback(
     (method: 'native_share' | 'clipboard') => {
-      trackEvent(profileId, {
+      trackEvent(profileId, userId, {
         event_type: 'profile_share',
         method,
       });
     },
-    [profileId]
+    [profileId, userId]
   );
 
   return { trackContactSave, trackDirectContact, trackSocialClick, trackShare };

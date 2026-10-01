@@ -225,8 +225,9 @@ export default function EditProfiles() {
           )
         );
       }
-    } catch (err) {
-      setErrorMsg('Error inesperado durante la actualización.');
+    } catch (err: any) {
+      console.error('[EditProfiles] Error en handleConfirmSubmit:', err);
+      setErrorMsg(err.message || 'Error inesperado durante la actualización.');
     } finally {
       setSubmitLoading(false);
     }
