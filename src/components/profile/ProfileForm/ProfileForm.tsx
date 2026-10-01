@@ -28,6 +28,7 @@ export interface ProfileFormData {
   languages: string[];
   education: Array<{ title: string; institution: string; period: string }>;
   businesses: Array<{ name: string; description: string; url: string }>;
+  acceptMarketing?: boolean;
 }
 
 export interface ProfileFormProps {
@@ -153,21 +154,58 @@ export default function ProfileForm({
         )}
 
         {(alwaysShowSubmit || tabs.findIndex(t => t.id === activeTab) === tabs.length - 1) && (
-          <button
-            type="submit"
-            disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-bold text-black transition-all duration-200 hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 shadow-lg"
-            style={{
-              background:
-                'linear-gradient(135deg, var(--sif-gold) 0%, #f0cc5a 50%, var(--sif-gold) 100%)',
-              boxShadow: '0 4px 24px rgba(221, 178, 37, 0.35)',
-            }}
-          >
-            {loading && (
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent" />
-            )}
-            <span>{submitButtonText}</span>
-          </button>
+          <>
+            <div className="flex flex-col gap-4 mt-6 mb-4">
+              {/* Casilla Opcional de Comunicaciones */}
+              <label className="flex items-start gap-3 cursor-pointer group">
+                <div className="relative flex items-center mt-0.5">
+                  <input 
+                    type="checkbox" 
+                    name="acceptMarketing"
+                    checked={formData.acceptMarketing || false}
+                    onChange={(e) => onChange({ ...formData, acceptMarketing: e.target.checked })}
+                    className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-slate-300 dark:border-slate-600 bg-transparent transition-all checked:border-[#ddb225] checked:bg-[#ddb225] hover:border-[#ddb225]"
+                  />
+                  {/* Icono de Check */}
+                  <span className="absolute text-black opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </span>
+                </div>
+                <span className="text-sm text-slate-600 dark:text-slate-400 select-none group-hover:text-slate-800 dark:group-hover:text-slate-300 transition-colors">
+                  Autorizo el envío de comunicados sobre actualizaciones, nuevas características y ofertas relacionadas con el servicio.
+                </span>
+              </label>
+
+              {/* Texto Obligatorio de Términos */}
+              <p className="text-xs text-slate-500 dark:text-slate-500 text-center leading-relaxed">
+                Al hacer clic en "{submitButtonText}", confirmas que has leído y aceptas nuestros{' '}
+                <a href="/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#ddb225] transition-colors">
+                  Términos y Condiciones
+                </a>
+                {' '}y{' '}
+                <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#ddb225] transition-colors">
+                  Políticas de Privacidad
+                </a>.
+              </p>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-bold text-black transition-all duration-200 hover:opacity-95 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50 shadow-lg"
+              style={{
+                background:
+                  'linear-gradient(135deg, var(--sif-gold) 0%, #f0cc5a 50%, var(--sif-gold) 100%)',
+                boxShadow: '0 4px 24px rgba(221, 178, 37, 0.35)',
+              }}
+            >
+              {loading && (
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-black border-t-transparent" />
+              )}
+              <span>{submitButtonText}</span>
+            </button>
+          </>
         )}
       </div>
     </form>
