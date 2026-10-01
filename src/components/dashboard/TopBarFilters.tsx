@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Users, Contact, ChevronDown, Download, RefreshCcw } from 'lucide-react';
+import { Users, Contact, ChevronDown, RefreshCcw } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { dashboardService } from '../../services/dashboardService';
 import type { TeamMember } from '../../services/userService';
@@ -12,11 +12,10 @@ export interface DashboardFilters {
 
 interface TopBarFiltersProps {
   onFilterChange?: (filters: DashboardFilters) => void;
-  onExport?: () => void;
   onRefresh?: () => void;
 }
 
-export default function TopBarFilters({ onFilterChange, onExport, onRefresh }: TopBarFiltersProps) {
+export default function TopBarFilters({ onFilterChange, onRefresh }: TopBarFiltersProps) {
   const { user, userRole, orgId } = useAuth();
 
   // Estados de datos
