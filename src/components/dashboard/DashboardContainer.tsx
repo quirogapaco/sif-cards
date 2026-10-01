@@ -28,31 +28,6 @@ export default function DashboardContainer({ targetUserId }: DashboardContainerP
     }
   }, []);
 
-  const handleExport = useCallback(() => {
-    if (!data) return;
-    
-    const lines = ['Métrica,Valor'];
-    lines.push(`Vistas Web,${data.kpis.web_views}`);
-    lines.push(`Taps NFC,${data.kpis.nfc_taps}`);
-    lines.push(`Contactos Guardados,${data.kpis.contacts_saved}`);
-    lines.push(`Visitantes Únicos,${data.funnel.unique_visitors || 0}`);
-    lines.push(`Interacciones,${data.funnel.interactions}`);
-    lines.push(`Leads,${data.funnel.leads}`);
-    
-    data.social_clicks.forEach(s => lines.push(`Social - ${s.platform},${s.clicks}`));
-    data.direct_contacts.forEach(d => lines.push(`Directo - ${d.channel},${d.clicks}`));
-
-    const csvContent = lines.join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `analytics_export_${days}d.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }, [data, days]);
-
   const calculateGrowth = (current: number, prev: number) => {
     if (prev === 0) return current > 0 ? 100 : 0;
     return Math.round(((current - prev) / prev) * 100);
@@ -105,7 +80,7 @@ export default function DashboardContainer({ targetUserId }: DashboardContainerP
 
   return (
     <>
-      <TopBarFilters onFilterChange={handleFilterChange} onExport={handleExport} onRefresh={refetch} />
+      <TopBarFilters onFilterChange={handleFilterChange} onRefresh={refetch} />
       
       {isLoading && (
         <div className="flex items-center justify-center h-64 bg-[var(--sif-surface)]/50 rounded-2xl border border-[var(--sif-border)] backdrop-blur-sm">

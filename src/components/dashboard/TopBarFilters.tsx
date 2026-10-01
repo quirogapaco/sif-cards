@@ -186,13 +186,6 @@ export default function TopBarFilters({ onFilterChange, onRefresh }: TopBarFilte
               ))}
             </div>
             <div className="hidden sm:block w-[1px] h-6 bg-[var(--sif-border)] mx-1"></div>
-            {/* <button 
-              onClick={onExport}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--sif-text)] hover:text-[var(--sif-gold)] bg-[var(--sif-surface-subtle)] hover:bg-[var(--sif-surface)] border border-[var(--sif-border)] rounded-xl transition-colors flex-shrink-0"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Exportar</span>
-            </button> */}
             <button
               onClick={onRefresh}
               className="flex items-center justify-center p-1.5 text-[var(--sif-muted)] hover:text-[var(--sif-gold)] bg-[var(--sif-surface-subtle)] hover:bg-[var(--sif-surface)] border border-[var(--sif-border)] rounded-lg transition-colors flex-shrink-0"
