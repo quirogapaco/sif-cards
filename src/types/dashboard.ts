@@ -54,4 +54,5 @@ export interface DashboardMetricsResponse {
   };
   social_clicks: Array<{ platform: string; clicks: number }>;
   direct_contacts: Array<{ channel: string; clicks: number }>;
+  traffic: Array<{ date: string; web_views: number; nfc_taps: number }>;
 }

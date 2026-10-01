@@ -99,10 +99,7 @@ export default function DashboardContainer({ targetUserId }: DashboardContainerP
     saves: data.funnel.leads,
   } : null;
 
-  const mockTimeSeries = [
-    { date: '2023-10-01', views: 1000, taps: 300 },
-    { date: '2023-10-02', views: 1200, taps: 400 },
-  ];
+
 
   return (
     <>
@@ -128,7 +125,7 @@ export default function DashboardContainer({ targetUserId }: DashboardContainerP
       {!isLoading && !error && data && overview && funnel && (
         <div className="flex flex-col gap-6 sm:gap-8 animate-fade-in">
           <KpiGrid data={overview} />
-          <TrafficChart data={mockTimeSeries} />
+          <TrafficChart data={data.traffic} />
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <SocialDistribution data={socialDistribution} />
             <DirectLinks data={directLinks} />
