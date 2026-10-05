@@ -9,6 +9,8 @@ interface CreateBatchModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialOrgId?: string;
+  initialUrlPrefix?: string;
 }
 
 const CARD_TYPE_OPTIONS = [
@@ -28,19 +30,19 @@ const INITIAL_FORM: CreateBatchDTO = {
 
 type SubmitState = 'idle' | 'loading' | 'success';
 
-export function CreateBatchModal({ isOpen, onClose, onSuccess }: CreateBatchModalProps) {
-  const [form, setForm] = useState<CreateBatchDTO>(INITIAL_FORM);
+export function CreateBatchModal({ isOpen, onClose, onSuccess, initialOrgId, initialUrlPrefix }: CreateBatchModalProps) {
+  const [form, setForm] = useState<CreateBatchDTO>({ ...INITIAL_FORM, url_prefix: initialUrlPrefix || '', org_id: initialOrgId });
   const [submitState, setSubmitState] = useState<SubmitState>('idle');
   const [error, setError] = useState<string | null>(null);
 
   /* Reset al cerrar */
   useEffect(() => {
     if (!isOpen) {
-      setForm(INITIAL_FORM);
+      setForm({ ...INITIAL_FORM, url_prefix: initialUrlPrefix || '', org_id: initialOrgId });
       setSubmitState('idle');
       setError(null);
     }
-  }, [isOpen]);
+  }, [isOpen, initialOrgId, initialUrlPrefix]);
 
   /* Preview dinámica de URL */
   const slugifiedPrefix = form.url_prefix ? slugifyPrefix(form.url_prefix) : '';
