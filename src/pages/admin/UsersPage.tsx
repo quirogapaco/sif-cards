@@ -1,11 +1,13 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Users, UserCheck, UserX, Shield, RefreshCw } from 'lucide-react';
+import { Users, UserCheck, Shield, RefreshCw } from 'lucide-react';
 import { userService, type AdminUserListItem } from '../../services/userService';
 import { ClientsTable } from '../../components/admin/ClientsTable';
+import { ClientDetailsModal } from '../../components/admin/ClientDetailsModal';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<AdminUserListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedUser, setSelectedUser] = useState<AdminUserListItem | null>(null);
 
   const loadUsers = useCallback(async () => {
     setIsLoading(true);
@@ -34,7 +36,7 @@ export default function UsersPage() {
       (u) => new Date(u.created_at) >= thirtyDaysAgo
     ).length;
 
-    const proAccounts = users.filter((u) => u.profiles_count > 0).length; // Ejemplo temporal
+    const proAccounts = users.filter((u) => u.profiles_count > 0).length;
 
     return { total, newSignups, proAccounts };
   }, [users]);
@@ -89,13 +91,16 @@ export default function UsersPage() {
         ) : (
           <ClientsTable
             users={users}
-            onViewDetails={(user) => {
-              // TODO: Implementar vista de detalle
-              console.log('Ver detalles de', user.email);
-            }}
+            onViewDetails={(user) => setSelectedUser(user)}
           />
         )}
       </div>
+
+      <ClientDetailsModal
+        user={selectedUser}
+        isOpen={!!selectedUser}
+        onClose={() => setSelectedUser(null)}
+      />
     </div>
   );
 }
