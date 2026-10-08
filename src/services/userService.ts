@@ -14,7 +14,62 @@ export interface TeamMember {
   profiles: TeamMemberProfile[];
 }
 
+export interface AdminUserListItem {
+  id: string;
+  email: string;
+  display_name: string | null;
+  role: UserRole;
+  org_id: string | null;
+  created_at: string;
+  profiles_count: number;
+  cards_count: number;
+}
+
+export interface OrgAdminListItem {
+  id: string;
+  email: string;
+  display_name: string | null;
+  role: UserRole;
+  org_id: string | null;
+  created_at: string;
+}
+
 export const userService = {
+  /**
+   * Llama a la RPC para obtener la lista de usuarios (solo superadmin).
+   */
+  async getAdminUsersList(): Promise<AdminUserListItem[]> {
+    try {
+      const { data, error } = await supabase.rpc('get_admin_users_list');
+      
+      if (error) {
+        console.error('Error fetching admin users list:', error.message);
+        throw new Error(error.message);
+      }
+      return data || [];
+    } catch (err) {
+      console.error('Exception fetching admin users list:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Llama a la RPC para obtener los administradores de una organización específica.
+   */
+  async getOrgAdminsList(orgId: string): Promise<OrgAdminListItem[]> {
+    try {
+      const { data, error } = await supabase.rpc('get_org_admins', { p_org_id: orgId });
+      
+      if (error) {
+        console.error('Error fetching org admins:', error.message);
+        throw new Error(error.message);
+      }
+      return data || [];
+    } catch (err) {
+      console.error('Exception fetching org admins:', err);
+      return [];
+    }
+  },
   /**
    * Asegura que exista el registro del usuario en la tabla pública 'users'.
    * Si el usuario ya está registrado, no sobrescribe sus datos ni su rol.
