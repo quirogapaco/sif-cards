@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Building2, UploadCloud, Code, Loader2, Settings2, Plus } from 'lucide-react';
+import { X, Building2, UploadCloud, Loader2, Settings2, Plus } from 'lucide-react';
 import { orgService } from '../../services/orgService';
 
 interface CreateOrgModalProps {

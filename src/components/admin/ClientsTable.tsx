@@ -26,7 +26,7 @@ export function ClientsTable({ users, onViewDetails }: ClientsTableProps) {
                   <Badge variant="gold">Superadmin</Badge>
                 )}
                 {role === 'org_admin' && (
-                  <Badge variant="default">Admin Org</Badge>
+                  <Badge variant="inactive">Admin Org</Badge>
                 )}
               </div>
             </div>
