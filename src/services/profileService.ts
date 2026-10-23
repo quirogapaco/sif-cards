@@ -27,18 +27,50 @@ export const profileService = {
   },
 
   /**
-   * Obtiene la lista simplificada de perfiles para un usuario específico (para el select).
+   * Obtiene la lista simplificada de todos los perfiles existentes en la base de datos (para superadmin).
    */
-  async getUserProfileOptions(userId: string): Promise<{ id: string; display_name: string }[]> {
+  async getAllProfilesOptions(): Promise<{ id: string; display_name: string; slug?: string }[]> {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, display_name:data->>display_name')
+        .select('id, slug, data')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return (data || []).map((p: any) => ({
+        id: p.id,
+        slug: p.slug,
+        display_name:
+          p.data?.display_name ||
+          p.data?.name ||
+          (p.slug ? `@${p.slug}` : 'Perfil sin título'),
+      }));
+    } catch (err: unknown) {
+      console.error('Error al obtener todos los perfiles:', err);
+      return [];
+    }
+  },
+
+  /**
+   * Obtiene la lista simplificada de perfiles para un usuario específico (para el select).
+   */
+  async getUserProfileOptions(userId: string): Promise<{ id: string; display_name: string; slug?: string }[]> {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, slug, data')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return (data as any[]) || [];
+      return (data || []).map((p: any) => ({
+        id: p.id,
+        slug: p.slug,
+        display_name:
+          p.data?.display_name ||
+          p.data?.name ||
+          (p.slug ? `@${p.slug}` : 'Perfil sin título'),
+      }));
     } catch (err: unknown) {
       console.error('Error al obtener opciones de perfil:', err);
       return [];
