@@ -105,22 +105,44 @@ export const profileService = {
   },
 
   /**
-   * Obtiene el perfil completo por su ID.
+   * Obtiene el perfil completo por su ID junto con los datos de enlace de su tarjeta vinculada.
    */
-  async getProfileById(profileId: string): Promise<{ profile: Profile | null; error?: string }> {
+  async getProfileById(profileId: string): Promise<{
+    profile: Profile | null;
+    cardLinkInfo?: { token: string; urlPrefix?: string | null } | null;
+    error?: string;
+  }> {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', profileId)
-        .single();
+      const [{ data, error }, { data: cardData }] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', profileId)
+          .single(),
+        supabase
+          .from('cards')
+          .select('token, batch:batches(url_prefix)')
+          .eq('profile_id', profileId)
+          .limit(1)
+          .maybeSingle(),
+      ]);
 
       if (error) throw error;
-      return { profile: data as Profile };
+
+      const cardRow = cardData as any;
+      const cardLinkInfo = cardRow?.token
+        ? {
+            token: cardRow.token as string,
+            urlPrefix: (Array.isArray(cardRow.batch) ? cardRow.batch[0]?.url_prefix : cardRow.batch?.url_prefix) ?? null,
+          }
+        : null;
+
+      return { profile: data as Profile, cardLinkInfo };
     } catch (err: unknown) {
       console.error('[profileService] Error en getProfileById:', err);
       return {
         profile: null,
+        cardLinkInfo: null,
         error: 'Ups, ocurrió un error.',
       };
     }

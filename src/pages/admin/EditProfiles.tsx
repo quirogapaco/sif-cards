@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Save, AlertCircle, ChevronDown, Check } from 'lucide-react';
+import { Save, AlertCircle, ChevronDown, Check, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { profileService } from '../../services/profileService';
 import { activationService } from '../../services/activationService';
@@ -29,6 +29,7 @@ export default function EditProfiles() {
   const [profileOptions, setProfileOptions] = useState<{ id: string; display_name: string; slug?: string }[]>([]);
   // Perfil completo cargado actualmente en memoria
   const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
+  const [activeCardLink, setActiveCardLink] = useState<{ token: string; urlPrefix?: string | null } | null>(null);
 
   // Estados para org_admin
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
@@ -149,6 +150,7 @@ export default function EditProfiles() {
       await handleProfileSelect(targetProfileId);
     } else {
       setActiveProfile(null);
+      setActiveCardLink(null);
       setFormData(null);
       setInitLoading(false);
     }
@@ -158,18 +160,20 @@ export default function EditProfiles() {
   const handleProfileSelect = async (profileId: string) => {
     setInitLoading(true);
 
-    const { profile, error } = await profileService.getProfileById(profileId);
+    const { profile, cardLinkInfo, error } = await profileService.getProfileById(profileId);
 
     if (error || !profile) {
       console.error('[EditProfiles] Error al cargar el perfil:', error);
       setErrorMsg('Ups, ocurrió un error.');
       setActiveProfile(null);
+      setActiveCardLink(null);
       setFormData(null);
       setInitLoading(false);
       return;
     }
 
     setActiveProfile(profile);
+    setActiveCardLink(cardLinkInfo || null);
 
     // Restaurar borrador de sessionStorage si existe
     const draftKey = `sif_draft_${profile.id}`;
@@ -370,6 +374,12 @@ export default function EditProfiles() {
     data: activationService.cleanProfileData(formData),
   } : null;
 
+  const publicProfilePath = activeProfile && activeCardLink?.token
+    ? activeCardLink.urlPrefix
+      ? `/${activeCardLink.urlPrefix}/${activeProfile.slug}/${activeCardLink.token}`
+      : `/p/${activeProfile.slug}/${activeCardLink.token}`
+    : null;
+
   return (
     <div className="flex flex-1 flex-col overflow-hidden bg-sif-bg">
       {/* Encabezado */}
@@ -467,87 +477,102 @@ export default function EditProfiles() {
               <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 whitespace-nowrap">
                 {currentUserRole === 'superadmin' ? `Todos los Perfiles (${profileOptions.length})` : 'Perfil Vinculado'}
               </span>
-              <div className="relative w-full sm:min-w-[220px]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsProfileDropdownOpen(!isProfileDropdownOpen);
-                    setIsMemberDropdownOpen(false);
-                    if (!isProfileDropdownOpen) setProfileSearchQuery('');
-                  }}
-                  className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner gap-2"
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <div className="w-5 h-5 rounded-full bg-[#ddb225]/15 border border-[#ddb225]/30 flex items-center justify-center text-[10px] text-[#ddb225] font-bold shrink-0">
-                      {(profileOptions.find(p => p.id === activeProfile?.id)?.display_name?.charAt(0).toUpperCase()) || 'P'}
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="relative flex-1 sm:min-w-[220px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsProfileDropdownOpen(!isProfileDropdownOpen);
+                      setIsMemberDropdownOpen(false);
+                      if (!isProfileDropdownOpen) setProfileSearchQuery('');
+                    }}
+                    className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner gap-2"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <div className="w-5 h-5 rounded-full bg-[#ddb225]/15 border border-[#ddb225]/30 flex items-center justify-center text-[10px] text-[#ddb225] font-bold shrink-0">
+                        {(profileOptions.find(p => p.id === activeProfile?.id)?.display_name?.charAt(0).toUpperCase()) || 'P'}
+                      </div>
+                      <span className="truncate font-medium text-slate-100">
+                        {profileOptions.find(p => p.id === activeProfile?.id)?.display_name || 'Selecciona un perfil...'}
+                      </span>
                     </div>
-                    <span className="truncate font-medium text-slate-100">
-                      {profileOptions.find(p => p.id === activeProfile?.id)?.display_name || 'Selecciona un perfil...'}
-                    </span>
-                  </div>
-                  <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ${isProfileDropdownOpen ? 'rotate-180 text-white' : ''}`} />
-                </button>
-                {isProfileDropdownOpen && (
-                  <div className="absolute top-full right-0 sm:left-auto sm:right-0 mt-2 w-full sm:min-w-[260px] z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-                    <div className="p-2 border-b border-white/10 bg-[#121215]">
-                      <input
-                        type="text"
-                        autoFocus
-                        placeholder="Buscar por nombre o @slug..."
-                        value={profileSearchQuery}
-                        onChange={(e) => setProfileSearchQuery(e.target.value)}
-                        className="w-full bg-[#1f1f24] text-white text-xs px-3 py-1.5 rounded-lg border border-white/5 focus:border-[#ddb225]/50 focus:outline-none placeholder-slate-500"
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    </div>
-                    <div className="p-1.5 space-y-1 max-h-56 overflow-y-auto">
-                      {profileOptions
-                        .filter((p) => {
+                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ${isProfileDropdownOpen ? 'rotate-180 text-white' : ''}`} />
+                  </button>
+                  {isProfileDropdownOpen && (
+                    <div className="absolute top-full right-0 sm:left-auto sm:right-0 mt-2 w-full sm:min-w-[260px] z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                      <div className="p-2 border-b border-white/10 bg-[#121215]">
+                        <input
+                          type="text"
+                          autoFocus
+                          placeholder="Buscar por nombre o @slug..."
+                          value={profileSearchQuery}
+                          onChange={(e) => setProfileSearchQuery(e.target.value)}
+                          className="w-full bg-[#1f1f24] text-white text-xs px-3 py-1.5 rounded-lg border border-white/5 focus:border-[#ddb225]/50 focus:outline-none placeholder-slate-500"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                      <div className="p-1.5 space-y-1 max-h-56 overflow-y-auto">
+                        {profileOptions
+                          .filter((p) => {
+                            const query = profileSearchQuery.toLowerCase();
+                            return (
+                              (p.display_name || '').toLowerCase().includes(query) ||
+                              (p.slug || '').toLowerCase().includes(query)
+                            );
+                          })
+                          .map((p) => {
+                            const isCurrent = p.id === activeProfile?.id;
+                            return (
+                              <button
+                                key={p.id}
+                                type="button"
+                                onClick={() => {
+                                  handleProfileSelect(p.id);
+                                  setIsProfileDropdownOpen(false);
+                                }}
+                                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
+                                    ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
+                                    : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                                  }`}
+                              >
+                                <div className="flex items-center gap-2 truncate">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225] shrink-0" />
+                                  <div className="flex flex-col truncate">
+                                    <span className="truncate font-medium">{p.display_name || 'Perfil sin nombre'}</span>
+                                    {p.slug && (
+                                      <span className="text-[10px] text-slate-400 font-mono truncate">@{p.slug}</span>
+                                    )}
+                                  </div>
+                                </div>
+                                {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0 ml-2" />}
+                              </button>
+                            );
+                          })}
+                        {profileOptions.filter((p) => {
                           const query = profileSearchQuery.toLowerCase();
                           return (
                             (p.display_name || '').toLowerCase().includes(query) ||
                             (p.slug || '').toLowerCase().includes(query)
                           );
-                        })
-                        .map((p) => {
-                          const isCurrent = p.id === activeProfile?.id;
-                          return (
-                            <button
-                              key={p.id}
-                              type="button"
-                              onClick={() => {
-                                handleProfileSelect(p.id);
-                                setIsProfileDropdownOpen(false);
-                              }}
-                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
-                                  ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
-                                  : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                                }`}
-                            >
-                              <div className="flex items-center gap-2 truncate">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225] shrink-0" />
-                                <div className="flex flex-col truncate">
-                                  <span className="truncate font-medium">{p.display_name || 'Perfil sin nombre'}</span>
-                                  {p.slug && (
-                                    <span className="text-[10px] text-slate-400 font-mono truncate">@{p.slug}</span>
-                                  )}
-                                </div>
-                              </div>
-                              {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0 ml-2" />}
-                            </button>
-                          );
-                        })}
-                      {profileOptions.filter((p) => {
-                        const query = profileSearchQuery.toLowerCase();
-                        return (
-                          (p.display_name || '').toLowerCase().includes(query) ||
-                          (p.slug || '').toLowerCase().includes(query)
-                        );
-                      }).length === 0 && (
-                        <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
-                      )}
+                        }).length === 0 && (
+                          <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
+                </div>
+
+                {publicProfilePath && (
+                  <a
+                    href={publicProfilePath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Abrir página pública del perfil"
+                    className="flex items-center justify-center gap-1.5 bg-[#ddb225]/15 hover:bg-[#ddb225]/25 border border-[#ddb225]/40 hover:border-[#ddb225] text-[#ddb225] rounded-xl px-3.5 py-2 text-xs font-semibold transition-all shrink-0 shadow-sm"
+                  >
+                    <span>Ver Perfil</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 )}
               </div>
             </div>
