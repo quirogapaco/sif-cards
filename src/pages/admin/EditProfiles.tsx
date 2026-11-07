@@ -161,7 +161,8 @@ export default function EditProfiles() {
     const { profile, error } = await profileService.getProfileById(profileId);
 
     if (error || !profile) {
-      setErrorMsg(error || 'Error al cargar el perfil.');
+      console.error('[EditProfiles] Error al cargar el perfil:', error);
+      setErrorMsg('Ups, ocurrió un error.');
       setActiveProfile(null);
       setFormData(null);
       setInitLoading(false);
@@ -173,14 +174,24 @@ export default function EditProfiles() {
     // Restaurar borrador de sessionStorage si existe
     const draftKey = `sif_draft_${profile.id}`;
     const savedDraft = sessionStorage.getItem(draftKey);
+    const mappedProfile = profileService.mapProfileToFormData(profile);
     if (savedDraft) {
       try {
-        setFormData(JSON.parse(savedDraft));
+        const parsed = JSON.parse(savedDraft);
+        delete parsed.avatar_file;
+        delete parsed.banner_file;
+        if (typeof parsed.avatar_url === 'string' && parsed.avatar_url.startsWith('blob:')) {
+          parsed.avatar_url = mappedProfile.avatar_url;
+        }
+        if (typeof parsed.banner_url === 'string' && parsed.banner_url.startsWith('blob:')) {
+          parsed.banner_url = mappedProfile.banner_url;
+        }
+        setFormData(parsed);
       } catch (e) {
-        setFormData(profileService.mapProfileToFormData(profile));
+        setFormData(mappedProfile);
       }
     } else {
-      setFormData(profileService.mapProfileToFormData(profile));
+      setFormData(mappedProfile);
     }
 
     setErrorMsg(null);
@@ -199,7 +210,8 @@ export default function EditProfiles() {
     if (!activeProfile?.id || !formData) return;
 
     const timeoutId = setTimeout(() => {
-      sessionStorage.setItem(`sif_draft_${activeProfile.id}`, JSON.stringify(formData));
+      const { avatar_file, banner_file, ...serializableData } = formData;
+      sessionStorage.setItem(`sif_draft_${activeProfile.id}`, JSON.stringify(serializableData));
     }, 500);
 
     return () => clearTimeout(timeoutId);
@@ -237,8 +249,13 @@ export default function EditProfiles() {
       );
 
       if (!success) {
-        setErrorMsg(error || 'Ocurrió un error al actualizar el perfil.');
-        if (error?.includes('en uso')) setFieldErrors({ slug: true });
+        if (error?.includes('en uso')) {
+          setErrorMsg(error);
+          setFieldErrors({ slug: true });
+        } else {
+          console.error('[EditProfiles] Error al actualizar el perfil:', error);
+          setErrorMsg('Ups, ocurrió un error.');
+        }
       } else {
         setSuccessMsg('Perfil actualizado exitosamente.');
 
@@ -268,7 +285,7 @@ export default function EditProfiles() {
       }
     } catch (err: any) {
       console.error('[EditProfiles] Error en handleConfirmSubmit:', err);
-      setErrorMsg(err.message || 'Error inesperado durante la actualización.');
+      setErrorMsg('Ups, ocurrió un error.');
     } finally {
       setSubmitLoading(false);
     }

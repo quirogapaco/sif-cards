@@ -153,7 +153,8 @@ export default function AuthModal({
       });
       if (error) throw error;
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error al conectar con Google.');
+      console.error('[AuthModal] Error en Google Sign-In:', err);
+      setError('Ups, ocurrió un error.');
       setGoogleLoading(false);
     }
   };
@@ -207,7 +208,8 @@ export default function AuthModal({
         }
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Ocurrió un error inesperado.');
+      console.error('[AuthModal] Error de autenticación:', err);
+      setError('Ups, ocurrió un error.');
     } finally {
       setLoading(false);
     }

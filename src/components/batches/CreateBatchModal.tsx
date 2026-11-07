@@ -92,7 +92,8 @@ export function CreateBatchModal({ isOpen, onClose, onSuccess, initialOrgId, ini
         onClose();
       }, 1200);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error inesperado al crear el lote.');
+      console.error('[CreateBatchModal] Error al crear el lote:', err);
+      setError('Ups, ocurrió un error.');
       setSubmitState('idle');
     }
   };

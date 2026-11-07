@@ -65,7 +65,8 @@ export default function CardsBatchesPage() {
       const cardArrays = await Promise.all(cardPromises);
       setAllCards(cardArrays.flat());
     } catch (err: unknown) {
-      setLoadError(err instanceof Error ? err.message : 'Error al cargar datos.');
+      console.error('[CardsBatchesPage] Error al cargar datos:', err);
+      setLoadError('Ups, ocurrió un error.');
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);

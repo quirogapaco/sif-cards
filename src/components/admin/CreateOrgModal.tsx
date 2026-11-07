@@ -82,7 +82,8 @@ export function CreateOrgModal({ isOpen, onClose, onSuccess }: CreateOrgModalPro
       onSuccess();
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Error al crear la organización');
+      console.error('[CreateOrgModal] Error al crear organización:', err);
+      setError('Ups, ocurrió un error.');
     } finally {
       setIsSubmitting(false);
     }

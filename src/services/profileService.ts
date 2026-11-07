@@ -19,9 +19,10 @@ export const profileService = {
       if (error) throw error;
       return { profiles: (data as Profile[]) || [] };
     } catch (err: unknown) {
+      console.error('[profileService] Error en getUserProfiles:', err);
       return {
         profiles: [],
-        error: err instanceof Error ? err.message : 'Error al obtener los perfiles del usuario.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },
@@ -117,9 +118,10 @@ export const profileService = {
       if (error) throw error;
       return { profile: data as Profile };
     } catch (err: unknown) {
+      console.error('[profileService] Error en getProfileById:', err);
       return {
         profile: null,
-        error: err instanceof Error ? err.message : 'Error al obtener el perfil.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },
@@ -171,9 +173,10 @@ export const profileService = {
 
       return { success: true };
     } catch (err: unknown) {
+      console.error('[profileService] Error en updateProfile:', err);
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Error inesperado al actualizar el perfil.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },
@@ -232,9 +235,9 @@ export const profileService = {
     const uploadedPaths: string[] = [];
 
     try {
-      if (formData.avatar_file) {
+      if (formData.avatar_file instanceof File) {
         const avatarBucket = import.meta.env.VITE_SUPABASE_AVATARS_BUCKET;
-        const ext = formData.avatar_file.name.split('.').pop() || 'jpg';
+        const ext = formData.avatar_file.name?.split('.').pop() || 'jpg';
         const path = `avatar-${identifierPrefix}-${Date.now()}.${ext}`;
         const uploadedUrl = await storageService.uploadProfileImage(avatarBucket, path, formData.avatar_file);
         if (uploadedUrl) {
@@ -256,9 +259,9 @@ export const profileService = {
         }
       }
 
-      if (formData.banner_file) {
+      if (formData.banner_file instanceof File) {
         const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET;
-        const ext = formData.banner_file.name.split('.').pop() || 'jpg';
+        const ext = formData.banner_file.name?.split('.').pop() || 'jpg';
         const path = `banner-${identifierPrefix}-${Date.now()}.${ext}`;
         const uploadedUrl = await storageService.uploadProfileImage(bannerBucket, path, formData.banner_file);
         if (uploadedUrl) {
@@ -292,10 +295,11 @@ export const profileService = {
 
       return { finalProfileData, uploadedPaths };
     } catch (err: unknown) {
+      console.error('[profileService] Error en processProfileImages:', err);
       return {
         finalProfileData: formData as any,
         uploadedPaths,
-        error: err instanceof Error ? err.message : 'Error al subir las imágenes.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },

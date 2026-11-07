@@ -103,7 +103,8 @@ export default function ActivateCardPage() {
         if (!isMounted) return;
 
         if (error || !card) {
-          setErrorMsg(error || 'La tarjeta especificada no fue encontrada.');
+          if (error) console.error('[ActivateCardPage] Error al verificar tarjeta:', error);
+          setErrorMsg(error ? 'Ups, ocurrió un error.' : 'La tarjeta especificada no fue encontrada.');
           setInitLoading(false);
           return;
         }
@@ -195,7 +196,13 @@ export default function ActivateCardPage() {
             await storageService.removeImage(bucket, p);
           }
         }
-        setErrorMsg(result.error || 'Ocurrió un error al activar tu tarjeta.');
+        if (result.error?.includes('en uso')) {
+          setErrorMsg(result.error);
+          setFieldErrors({ slug: true });
+        } else {
+          console.error('[ActivateCardPage] Error al activar tarjeta:', result.error);
+          setErrorMsg('Ups, ocurrió un error.');
+        }
         setSubmitLoading(false);
         return;
       }
@@ -203,7 +210,8 @@ export default function ActivateCardPage() {
       setSubmitLoading(false);
       setIsActivatedSuccess(true);
     } catch (err) {
-      setErrorMsg('Error inesperado durante la activación.');
+      console.error('[ActivateCardPage] Error inesperado durante la activación:', err);
+      setErrorMsg('Ups, ocurrió un error.');
       setSubmitLoading(false);
     }
   };

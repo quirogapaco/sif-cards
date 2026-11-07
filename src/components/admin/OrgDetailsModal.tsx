@@ -112,7 +112,7 @@ export function OrgDetailsModal({ organization, isOpen, onClose, onUpdate }: Org
       onUpdate();
     } catch (error) {
       console.error("Error saving settings", error);
-      alert("Error al guardar la configuración");
+      alert("Ups, ocurrió un error.");
     } finally {
       setIsSaving(false);
     }

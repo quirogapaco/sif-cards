@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Camera, Image as ImageIcon } from 'lucide-react';
+import { Camera, Image as ImageIcon, Loader2 } from 'lucide-react';
 import PhoneInput from 'react-phone-number-input';
 import ImageCropperModal from '../ImageCropperModal';
+import { ensureCompatibleImage, isHeicFile } from '../../../utils/imageProcessor';
 import 'react-phone-number-input/style.css';
 import type { ProfileFormData } from './ProfileForm';
 import LabelWithHint from './LabelWithHint';
@@ -14,6 +15,7 @@ interface PersonalInfoProps {
 
 export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: PersonalInfoProps) {
   const [cropperData, setCropperData] = useState<{ src: string; file: File } | null>(null);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
 
   const handleNameChange = (name: string) => {
     onChange({
@@ -39,19 +41,39 @@ export default function PersonalInfo({ formData, onChange, fieldErrors = {} }: P
           )}
           
           <div className="flex-1 flex flex-col gap-2">
-            <label className="flex items-center justify-center gap-1.5 rounded-lg border border-sif-gold/30 bg-sif-gold/10 px-3 py-1.5 text-[11px] font-semibold text-sif-gold cursor-pointer hover:bg-sif-gold/20 transition-colors text-center w-fit">
-              <Camera className="h-4 w-4" />
-              <span>Tomar Foto o Subir</span>
+            <label className={`flex items-center justify-center gap-1.5 rounded-lg border border-sif-gold/30 bg-sif-gold/10 px-3 py-1.5 text-[11px] font-semibold text-sif-gold transition-colors text-center w-fit ${isProcessingImage ? 'opacity-60 cursor-wait' : 'cursor-pointer hover:bg-sif-gold/20'}`}>
+              {isProcessingImage ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Procesando formato...</span>
+                </>
+              ) : (
+                <>
+                  <Camera className="h-4 w-4" />
+                  <span>Tomar Foto o Subir</span>
+                </>
+              )}
               <input
                 type="file"
-                accept="image/*"
+                accept="image/*,.heic,.heif"
+                disabled={isProcessingImage}
                 className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const tempUrl = URL.createObjectURL(file);
-                    setCropperData({ src: tempUrl, file });
-                    e.target.value = '';
+                onChange={async (e) => {
+                  const rawFile = e.target.files?.[0];
+                  e.target.value = '';
+                  if (!rawFile) return;
+
+                  try {
+                    if (isHeicFile(rawFile)) {
+                      setIsProcessingImage(true);
+                    }
+                    const compatibleFile = await ensureCompatibleImage(rawFile);
+                    const tempUrl = URL.createObjectURL(compatibleFile);
+                    setCropperData({ src: tempUrl, file: compatibleFile });
+                  } catch (err) {
+                    console.error('Error al procesar la imagen:', err);
+                  } finally {
+                    setIsProcessingImage(false);
                   }
                 }}
               />
