@@ -63,14 +63,14 @@ export const EditionsSection: React.FC = () => {
                 </h3>
                 <div className="text-right">
                   <div className="flex items-baseline justify-end gap-1">
-                    <span className="text-2xl sm:text-3xl font-bold dark:text-white text-slate-900 tracking-tight">$10</span>
+                    <span className="text-2xl sm:text-3xl font-bold dark:text-white text-slate-900 tracking-tight">$15</span>
                     <span className="text-[10px] font-mono dark:text-slate-500 text-slate-600 font-medium">USD</span>
                   </div>
                   <span className="block text-[8.5px] font-mono dark:text-slate-600 text-slate-600 mt-0.5 tracking-tight font-medium">
                     *renovación anual
                   </span>
                   <span className="block text-[8.5px] font-mono dark:text-slate-500 text-slate-500 mt-0.5 tracking-tight font-medium">
-                    *Costo de tarjeta: $5
+                    *Costo de tarjeta: $10
                   </span>
                 </div>
               </div>
