@@ -64,8 +64,8 @@ export function BatchesTable({ batches, onFilterByBatch }: BatchesTableProps) {
         accessorKey: 'card_type',
         header: 'Acabado',
         cell: ({ getValue }) => {
-          const type = getValue() as string;
-          const label = CARD_TYPE_LABELS[type] ?? type;
+          const type = (getValue() as string) || '';
+          const label = CARD_TYPE_LABELS[type] ?? (type || '—');
           const isGold = type.includes('gold');
           return (
             <span

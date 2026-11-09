@@ -19,26 +19,59 @@ export const profileService = {
       if (error) throw error;
       return { profiles: (data as Profile[]) || [] };
     } catch (err: unknown) {
+      console.error('[profileService] Error en getUserProfiles:', err);
       return {
         profiles: [],
-        error: err instanceof Error ? err.message : 'Error al obtener los perfiles del usuario.',
+        error: 'Ups, ocurrió un error.',
       };
+    }
+  },
+
+  /**
+   * Obtiene la lista simplificada de todos los perfiles existentes en la base de datos (para superadmin).
+   */
+  async getAllProfilesOptions(): Promise<{ id: string; display_name: string; slug?: string }[]> {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('id, slug, data')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return (data || []).map((p: any) => ({
+        id: p.id,
+        slug: p.slug,
+        display_name:
+          p.data?.display_name ||
+          p.data?.name ||
+          (p.slug ? `@${p.slug}` : 'Perfil sin título'),
+      }));
+    } catch (err: unknown) {
+      console.error('Error al obtener todos los perfiles:', err);
+      return [];
     }
   },
 
   /**
    * Obtiene la lista simplificada de perfiles para un usuario específico (para el select).
    */
-  async getUserProfileOptions(userId: string): Promise<{ id: string; display_name: string }[]> {
+  async getUserProfileOptions(userId: string): Promise<{ id: string; display_name: string; slug?: string }[]> {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, display_name:data->>display_name')
+        .select('id, slug, data')
         .eq('user_id', userId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return (data as any[]) || [];
+      return (data || []).map((p: any) => ({
+        id: p.id,
+        slug: p.slug,
+        display_name:
+          p.data?.display_name ||
+          p.data?.name ||
+          (p.slug ? `@${p.slug}` : 'Perfil sin título'),
+      }));
     } catch (err: unknown) {
       console.error('Error al obtener opciones de perfil:', err);
       return [];
@@ -72,22 +105,45 @@ export const profileService = {
   },
 
   /**
-   * Obtiene el perfil completo por su ID.
+   * Obtiene el perfil completo por su ID junto con los datos de enlace de su tarjeta vinculada.
    */
-  async getProfileById(profileId: string): Promise<{ profile: Profile | null; error?: string }> {
+  async getProfileById(profileId: string): Promise<{
+    profile: Profile | null;
+    cardLinkInfo?: { token: string; urlPrefix?: string | null } | null;
+    error?: string;
+  }> {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', profileId)
-        .single();
+      const [{ data, error }, { data: cardData }] = await Promise.all([
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', profileId)
+          .single(),
+        supabase
+          .from('cards')
+          .select('token, batch:batches(url_prefix)')
+          .eq('profile_id', profileId)
+          .limit(1)
+          .maybeSingle(),
+      ]);
 
       if (error) throw error;
-      return { profile: data as Profile };
+
+      const cardRow = cardData as any;
+      const cardLinkInfo = cardRow?.token
+        ? {
+            token: cardRow.token as string,
+            urlPrefix: (Array.isArray(cardRow.batch) ? cardRow.batch[0]?.url_prefix : cardRow.batch?.url_prefix) ?? null,
+          }
+        : null;
+
+      return { profile: data as Profile, cardLinkInfo };
     } catch (err: unknown) {
+      console.error('[profileService] Error en getProfileById:', err);
       return {
         profile: null,
-        error: err instanceof Error ? err.message : 'Error al obtener el perfil.',
+        cardLinkInfo: null,
+        error: 'Ups, ocurrió un error.',
       };
     }
   },
@@ -139,9 +195,10 @@ export const profileService = {
 
       return { success: true };
     } catch (err: unknown) {
+      console.error('[profileService] Error en updateProfile:', err);
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Error inesperado al actualizar el perfil.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },
@@ -200,9 +257,9 @@ export const profileService = {
     const uploadedPaths: string[] = [];
 
     try {
-      if (formData.avatar_file) {
+      if (formData.avatar_file instanceof File) {
         const avatarBucket = import.meta.env.VITE_SUPABASE_AVATARS_BUCKET;
-        const ext = formData.avatar_file.name.split('.').pop() || 'jpg';
+        const ext = formData.avatar_file.name?.split('.').pop() || 'jpg';
         const path = `avatar-${identifierPrefix}-${Date.now()}.${ext}`;
         const uploadedUrl = await storageService.uploadProfileImage(avatarBucket, path, formData.avatar_file);
         if (uploadedUrl) {
@@ -224,9 +281,9 @@ export const profileService = {
         }
       }
 
-      if (formData.banner_file) {
+      if (formData.banner_file instanceof File) {
         const bannerBucket = import.meta.env.VITE_SUPABASE_BANNERS_BUCKET;
-        const ext = formData.banner_file.name.split('.').pop() || 'jpg';
+        const ext = formData.banner_file.name?.split('.').pop() || 'jpg';
         const path = `banner-${identifierPrefix}-${Date.now()}.${ext}`;
         const uploadedUrl = await storageService.uploadProfileImage(bannerBucket, path, formData.banner_file);
         if (uploadedUrl) {
@@ -260,10 +317,11 @@ export const profileService = {
 
       return { finalProfileData, uploadedPaths };
     } catch (err: unknown) {
+      console.error('[profileService] Error en processProfileImages:', err);
       return {
         finalProfileData: formData as any,
         uploadedPaths,
-        error: err instanceof Error ? err.message : 'Error al subir las imágenes.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },

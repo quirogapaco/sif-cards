@@ -40,13 +40,14 @@ export function useDashboardData({
           if (result) {
             setData(result);
           } else {
-            setError('Error al obtener las métricas del dashboard.');
+            console.error('[useDashboardData] Error al obtener las métricas del dashboard.');
+            setError('Ups, ocurrió un error.');
           }
         }
       } catch (err) {
         if (isMounted) {
-          setError('Ocurrió un error inesperado al cargar las métricas.');
-          console.error(err);
+          setError('Ups, ocurrió un error.');
+          console.error('[useDashboardData] Error inesperado:', err);
         }
       } finally {
         if (isMounted) {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Check, Camera, Moon, Sun } from 'lucide-react';
+import { Check, Camera, Moon, Sun, Loader2 } from 'lucide-react';
 import ImageCropperModal from '../ImageCropperModal';
+import { ensureCompatibleImage, isHeicFile } from '../../../utils/imageProcessor';
 import { CARD_THEME_FAMILIES } from '../../../config/cardThemes';
 import { BANNER_PRESETS } from '../../../config/bannerPresets';
 import type { ProfileFormData } from './ProfileForm';
@@ -13,6 +14,7 @@ interface VisualsProps {
 
 export default function Visuals({ formData, onChange }: VisualsProps) {
   const [cropperData, setCropperData] = useState<{ src: string; file: File } | null>(null);
+  const [isProcessingImage, setIsProcessingImage] = useState(false);
 
   const currentFamily = CARD_THEME_FAMILIES.find(f => f.darkId === formData.theme_palette || f.lightId === formData.theme_palette) || CARD_THEME_FAMILIES[4];
   const isLightMode = formData.theme_palette === currentFamily.lightId;
@@ -100,6 +102,11 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
                   <Camera className="h-5 w-5 text-white drop-shadow-md" />
                 </div>
               </>
+            ) : isProcessingImage ? (
+              <>
+                <Loader2 className="h-5 w-5 text-sif-gold animate-spin mb-1" />
+                <span className="text-[10px] font-medium text-sif-gold">Procesando...</span>
+              </>
             ) : (
               <>
                 <Camera className="h-5 w-5 text-sif-muted group-hover:text-sif-gold mb-1 transition-colors" />
@@ -108,14 +115,25 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
             )}
             <input
               type="file"
-              accept="image/*"
+              accept="image/*,.heic,.heif"
+              disabled={isProcessingImage}
               className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const tempUrl = URL.createObjectURL(file);
-                  setCropperData({ src: tempUrl, file });
-                  e.target.value = '';
+              onChange={async (e) => {
+                const rawFile = e.target.files?.[0];
+                e.target.value = '';
+                if (!rawFile) return;
+
+                try {
+                  if (isHeicFile(rawFile)) {
+                    setIsProcessingImage(true);
+                  }
+                  const compatibleFile = await ensureCompatibleImage(rawFile);
+                  const tempUrl = URL.createObjectURL(compatibleFile);
+                  setCropperData({ src: tempUrl, file: compatibleFile });
+                } catch (err) {
+                  console.error('Error al procesar la imagen de banner:', err);
+                } finally {
+                  setIsProcessingImage(false);
                 }
               }}
             />
@@ -155,6 +173,7 @@ export default function Visuals({ formData, onChange }: VisualsProps) {
       {cropperData && (
         <ImageCropperModal
           imageSrc={cropperData.src}
+          aspect={375 / 240}
           cropShape="rect"
           title="Recortar Banner"
           onClose={() => setCropperData(null)}

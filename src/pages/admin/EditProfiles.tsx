@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Save, AlertCircle, ChevronDown, Check } from 'lucide-react';
+import { Save, AlertCircle, ChevronDown, Check, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { profileService } from '../../services/profileService';
 import { activationService } from '../../services/activationService';
@@ -8,7 +8,7 @@ import { userService, type TeamMember } from '../../services/userService';
 import ProfileForm, { type ProfileFormData } from '../../components/profile/ProfileForm/ProfileForm';
 import ProfileView from '../public/ProfileView';
 import ProfileEditorLayout from '../../components/profile/ProfileEditorLayout/ProfileEditorLayout';
-import type { Profile } from '../../types/database';
+import type { Profile, UserRole } from '../../types/database';
 
 const getMemberDisplayName = (m: TeamMember) => {
   if (m.profiles && m.profiles.length > 0) {
@@ -18,14 +18,18 @@ const getMemberDisplayName = (m: TeamMember) => {
 };
 
 export default function EditProfiles() {
-  const { user } = useAuth();
+  const { user, userRole, orgId } = useAuth();
   const location = useLocation();
   const initialProfileId = location.state?.profileId;
 
-  // Opciones simplificadas para el selector de perfiles
-  const [profileOptions, setProfileOptions] = useState<{ id: string; display_name: string }[]>([]);
+  // Rol efectivo del usuario actual
+  const [currentUserRole, setCurrentUserRole] = useState<UserRole | null>(null);
+
+  // Opciones simplificadas para el selector de perfiles (incluyendo slug para búsqueda)
+  const [profileOptions, setProfileOptions] = useState<{ id: string; display_name: string; slug?: string }[]>([]);
   // Perfil completo cargado actualmente en memoria
   const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
+  const [activeCardLink, setActiveCardLink] = useState<{ token: string; urlPrefix?: string | null } | null>(null);
 
   // Estados para org_admin
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
@@ -70,21 +74,44 @@ export default function EditProfiles() {
     }
   }, [successMsg, errorMsg]);
 
-  // ── 1. Carga Inicial (Colaboradores u Opciones de Usuario) ──
+  // ── 1. Carga Inicial (Superadmin / Colaboradores / Opciones de Usuario) ──
   useEffect(() => {
     async function loadInitialData() {
       if (!user) return;
       setInitLoading(true);
 
       const dbUser = await userService.getUserRecord(user.id);
+      const effectiveRole: UserRole = (dbUser?.role as UserRole) || (userRole as UserRole) || 'user';
+      setCurrentUserRole(effectiveRole);
 
-      if (dbUser?.role === 'org_admin' && dbUser.org_id) {
+      if (effectiveRole === 'superadmin') {
+        // Superadmin: Acceso a todos los perfiles existentes en la base de datos
+        const options = await profileService.getAllProfilesOptions();
+        setProfileOptions(options);
+
+        if (initialProfileId && options.some(o => o.id === initialProfileId)) {
+          await handleProfileSelect(initialProfileId);
+        } else if (initialProfileId) {
+          await handleProfileSelect(initialProfileId);
+        } else if (options.length > 0) {
+          await handleProfileSelect(options[0].id);
+        } else {
+          setInitLoading(false);
+        }
+      } else if (effectiveRole === 'org_admin' && (dbUser?.org_id || orgId)) {
         // Cargar Colaboradores para Org Admin
-        const members = await userService.getOrganizationTeam(dbUser.org_id);
+        const members = await userService.getOrganizationTeam(dbUser?.org_id || orgId!);
         setTeamMembers(members);
 
         if (members.length > 0) {
-          const firstMemberId = location.state?.memberId || members[0].id;
+          let targetMemberId = location.state?.memberId;
+          if (!targetMemberId && initialProfileId) {
+            const memberWithProfile = members.find(m => m.profiles?.some(p => p.id === initialProfileId));
+            if (memberWithProfile) {
+              targetMemberId = memberWithProfile.id;
+            }
+          }
+          const firstMemberId = targetMemberId || members[0].id;
           setSelectedMemberId(firstMemberId);
           await loadProfilesForMember(members, firstMemberId, initialProfileId);
         } else {
@@ -107,7 +134,7 @@ export default function EditProfiles() {
     }
 
     loadInitialData();
-  }, [user]);
+  }, [user, userRole, orgId]);
 
   // ── 2. Carga de Opciones de Perfil por Colaborador (org_admin) ──
   const loadProfilesForMember = async (members: TeamMember[], memberId: string, profileIdToSelect?: string) => {
@@ -123,6 +150,7 @@ export default function EditProfiles() {
       await handleProfileSelect(targetProfileId);
     } else {
       setActiveProfile(null);
+      setActiveCardLink(null);
       setFormData(null);
       setInitLoading(false);
     }
@@ -132,29 +160,42 @@ export default function EditProfiles() {
   const handleProfileSelect = async (profileId: string) => {
     setInitLoading(true);
 
-    const { profile, error } = await profileService.getProfileById(profileId);
+    const { profile, cardLinkInfo, error } = await profileService.getProfileById(profileId);
 
     if (error || !profile) {
-      setErrorMsg(error || 'Error al cargar el perfil.');
+      console.error('[EditProfiles] Error al cargar el perfil:', error);
+      setErrorMsg('Ups, ocurrió un error.');
       setActiveProfile(null);
+      setActiveCardLink(null);
       setFormData(null);
       setInitLoading(false);
       return;
     }
 
     setActiveProfile(profile);
+    setActiveCardLink(cardLinkInfo || null);
 
     // Restaurar borrador de sessionStorage si existe
     const draftKey = `sif_draft_${profile.id}`;
     const savedDraft = sessionStorage.getItem(draftKey);
+    const mappedProfile = profileService.mapProfileToFormData(profile);
     if (savedDraft) {
       try {
-        setFormData(JSON.parse(savedDraft));
+        const parsed = JSON.parse(savedDraft);
+        delete parsed.avatar_file;
+        delete parsed.banner_file;
+        if (typeof parsed.avatar_url === 'string' && parsed.avatar_url.startsWith('blob:')) {
+          parsed.avatar_url = mappedProfile.avatar_url;
+        }
+        if (typeof parsed.banner_url === 'string' && parsed.banner_url.startsWith('blob:')) {
+          parsed.banner_url = mappedProfile.banner_url;
+        }
+        setFormData(parsed);
       } catch (e) {
-        setFormData(profileService.mapProfileToFormData(profile));
+        setFormData(mappedProfile);
       }
     } else {
-      setFormData(profileService.mapProfileToFormData(profile));
+      setFormData(mappedProfile);
     }
 
     setErrorMsg(null);
@@ -173,7 +214,8 @@ export default function EditProfiles() {
     if (!activeProfile?.id || !formData) return;
 
     const timeoutId = setTimeout(() => {
-      sessionStorage.setItem(`sif_draft_${activeProfile.id}`, JSON.stringify(formData));
+      const { avatar_file, banner_file, ...serializableData } = formData;
+      sessionStorage.setItem(`sif_draft_${activeProfile.id}`, JSON.stringify(serializableData));
     }, 500);
 
     return () => clearTimeout(timeoutId);
@@ -211,8 +253,13 @@ export default function EditProfiles() {
       );
 
       if (!success) {
-        setErrorMsg(error || 'Ocurrió un error al actualizar el perfil.');
-        if (error?.includes('en uso')) setFieldErrors({ slug: true });
+        if (error?.includes('en uso')) {
+          setErrorMsg(error);
+          setFieldErrors({ slug: true });
+        } else {
+          console.error('[EditProfiles] Error al actualizar el perfil:', error);
+          setErrorMsg('Ups, ocurrió un error.');
+        }
       } else {
         setSuccessMsg('Perfil actualizado exitosamente.');
 
@@ -231,14 +278,18 @@ export default function EditProfiles() {
         setProfileOptions((prevOptions) =>
           prevOptions.map((opt) =>
             opt.id === currentProfileId
-              ? { ...opt, display_name: finalProfileData.display_name || opt.display_name }
+              ? {
+                  ...opt,
+                  slug: finalProfileData.slug || opt.slug,
+                  display_name: finalProfileData.display_name || opt.display_name,
+                }
               : opt
           )
         );
       }
     } catch (err: any) {
       console.error('[EditProfiles] Error en handleConfirmSubmit:', err);
-      setErrorMsg(err.message || 'Error inesperado durante la actualización.');
+      setErrorMsg('Ups, ocurrió un error.');
     } finally {
       setSubmitLoading(false);
     }
@@ -252,7 +303,7 @@ export default function EditProfiles() {
     );
   }
 
-  // Si no tiene colaboradores (org_admin) o no tiene perfiles (user normal / org_admin en colaborador vacío)
+  // Si no tiene colaboradores (org_admin) o no tiene perfiles (user normal / org_admin en colaborador vacío / bd vacía)
   if (profileOptions.length === 0) {
     return (
       <div className="flex h-full flex-col items-center justify-center p-6 text-center">
@@ -261,7 +312,9 @@ export default function EditProfiles() {
         </div>
         <h2 className="mb-2 text-lg font-bold text-sif-text">No hay perfiles configurados</h2>
         <p className="text-sm text-sif-muted max-w-md">
-          {teamMembers.length > 0
+          {currentUserRole === 'superadmin'
+            ? 'No existen perfiles registrados en la base de datos.'
+            : teamMembers.length > 0
             ? 'Este colaborador aún no cuenta con perfiles registrados.'
             : 'Aún no has activado ninguna tarjeta inteligente asociada a esta cuenta. Activa una tarjeta primero para poder editar tu perfil.'}
         </p>
@@ -321,14 +374,29 @@ export default function EditProfiles() {
     data: activationService.cleanProfileData(formData),
   } : null;
 
+  const publicProfilePath = activeProfile && activeCardLink?.token
+    ? activeCardLink.urlPrefix
+      ? `/${activeCardLink.urlPrefix}/${activeProfile.slug}/${activeCardLink.token}`
+      : `/p/${activeProfile.slug}/${activeCardLink.token}`
+    : null;
+
   return (
     <div className="flex flex-1 flex-col overflow-hidden bg-sif-bg">
       {/* Encabezado */}
       <div id="edit-profiles-top" className="border-b border-sif-border bg-sif-surface px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-semibold text-sif-text">Perfiles</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-semibold text-sif-text">Perfiles</h2>
+            {currentUserRole === 'superadmin' && (
+              <span className="rounded-full bg-[#ddb225]/15 border border-[#ddb225]/30 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#ddb225]">
+                Superadmin
+              </span>
+            )}
+          </div>
           <p className="mt-0.5 text-xs text-sif-muted">
-            Personaliza tus perfiles.
+            {currentUserRole === 'superadmin'
+              ? 'Acceso global: Visualiza y edita cualquier perfil existente en la plataforma.'
+              : 'Personaliza tus perfiles.'}
           </p>
         </div>
 
@@ -406,71 +474,105 @@ export default function EditProfiles() {
           {/* Selector de perfiles */}
           {profileOptions.length > 0 && (
             <div className="flex flex-col items-start gap-1 w-full sm:w-auto relative">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 whitespace-nowrap">Perfil Vinculado</span>
-              <div className="relative w-full sm:min-w-[200px]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsProfileDropdownOpen(!isProfileDropdownOpen);
-                    setIsMemberDropdownOpen(false);
-                    if (!isProfileDropdownOpen) setProfileSearchQuery('');
-                  }}
-                  className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner"
-                >
-                  <div className="flex items-center gap-2 truncate">
-                    <div className="w-5 h-5 rounded-full bg-[#ddb225]/15 border border-[#ddb225]/30 flex items-center justify-center text-[10px] text-[#ddb225] font-bold shrink-0">
-                      {(profileOptions.find(p => p.id === activeProfile?.id)?.display_name?.charAt(0).toUpperCase()) || 'P'}
+              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 whitespace-nowrap">
+                {currentUserRole === 'superadmin' ? `Todos los Perfiles (${profileOptions.length})` : 'Perfil Vinculado'}
+              </span>
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="relative flex-1 sm:min-w-[220px]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsProfileDropdownOpen(!isProfileDropdownOpen);
+                      setIsMemberDropdownOpen(false);
+                      if (!isProfileDropdownOpen) setProfileSearchQuery('');
+                    }}
+                    className="w-full flex items-center justify-between bg-[#18181c] hover:bg-[#1f1f24] border border-white/10 hover:border-white/20 rounded-xl px-3.5 py-2 text-xs text-white transition-all cursor-pointer shadow-inner gap-2"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <div className="w-5 h-5 rounded-full bg-[#ddb225]/15 border border-[#ddb225]/30 flex items-center justify-center text-[10px] text-[#ddb225] font-bold shrink-0">
+                        {(profileOptions.find(p => p.id === activeProfile?.id)?.display_name?.charAt(0).toUpperCase()) || 'P'}
+                      </div>
+                      <span className="truncate font-medium text-slate-100">
+                        {profileOptions.find(p => p.id === activeProfile?.id)?.display_name || 'Selecciona un perfil...'}
+                      </span>
                     </div>
-                    <span className="truncate font-medium text-slate-100">
-                      {profileOptions.find(p => p.id === activeProfile?.id)?.display_name || 'Selecciona un perfil...'}
-                    </span>
-                  </div>
-                  <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isProfileDropdownOpen ? 'rotate-180 text-white' : ''}`} />
-                </button>
-                {isProfileDropdownOpen && (
-                  <div className="absolute top-full right-0 sm:left-auto sm:right-0 mt-2 w-full sm:min-w-[240px] z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-                    <div className="p-2 border-b border-white/10 bg-[#121215]">
-                      <input
-                        type="text"
-                        autoFocus
-                        placeholder="Buscar perfil..."
-                        value={profileSearchQuery}
-                        onChange={(e) => setProfileSearchQuery(e.target.value)}
-                        className="w-full bg-[#1f1f24] text-white text-xs px-3 py-1.5 rounded-lg border border-white/5 focus:border-[#ddb225]/50 focus:outline-none placeholder-slate-500"
-                        onClick={(e) => e.stopPropagation()}
-                      />
-                    </div>
-                    <div className="p-1.5 space-y-1 max-h-44 overflow-y-auto">
-                      {profileOptions
-                        .filter(p => (p.display_name || '').toLowerCase().includes(profileSearchQuery.toLowerCase()))
-                        .map((p) => {
-                          const isCurrent = p.id === activeProfile?.id;
+                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0 ${isProfileDropdownOpen ? 'rotate-180 text-white' : ''}`} />
+                  </button>
+                  {isProfileDropdownOpen && (
+                    <div className="absolute top-full right-0 sm:left-auto sm:right-0 mt-2 w-full sm:min-w-[260px] z-50 bg-[#18181c] border border-white/15 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                      <div className="p-2 border-b border-white/10 bg-[#121215]">
+                        <input
+                          type="text"
+                          autoFocus
+                          placeholder="Buscar por nombre o @slug..."
+                          value={profileSearchQuery}
+                          onChange={(e) => setProfileSearchQuery(e.target.value)}
+                          className="w-full bg-[#1f1f24] text-white text-xs px-3 py-1.5 rounded-lg border border-white/5 focus:border-[#ddb225]/50 focus:outline-none placeholder-slate-500"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                      </div>
+                      <div className="p-1.5 space-y-1 max-h-56 overflow-y-auto">
+                        {profileOptions
+                          .filter((p) => {
+                            const query = profileSearchQuery.toLowerCase();
+                            return (
+                              (p.display_name || '').toLowerCase().includes(query) ||
+                              (p.slug || '').toLowerCase().includes(query)
+                            );
+                          })
+                          .map((p) => {
+                            const isCurrent = p.id === activeProfile?.id;
+                            return (
+                              <button
+                                key={p.id}
+                                type="button"
+                                onClick={() => {
+                                  handleProfileSelect(p.id);
+                                  setIsProfileDropdownOpen(false);
+                                }}
+                                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
+                                    ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
+                                    : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
+                                  }`}
+                              >
+                                <div className="flex items-center gap-2 truncate">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225] shrink-0" />
+                                  <div className="flex flex-col truncate">
+                                    <span className="truncate font-medium">{p.display_name || 'Perfil sin nombre'}</span>
+                                    {p.slug && (
+                                      <span className="text-[10px] text-slate-400 font-mono truncate">@{p.slug}</span>
+                                    )}
+                                  </div>
+                                </div>
+                                {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0 ml-2" />}
+                              </button>
+                            );
+                          })}
+                        {profileOptions.filter((p) => {
+                          const query = profileSearchQuery.toLowerCase();
                           return (
-                            <button
-                              key={p.id}
-                              type="button"
-                              onClick={() => {
-                                handleProfileSelect(p.id);
-                                setIsProfileDropdownOpen(false);
-                              }}
-                              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer text-left ${isCurrent
-                                  ? 'bg-[#ddb225]/15 text-[#ddb225] font-medium border border-[#ddb225]/30'
-                                  : 'text-slate-300 hover:bg-white/[0.06] hover:text-white'
-                                }`}
-                            >
-                              <div className="flex items-center gap-2 truncate">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#ddb225]" />
-                                <span className="truncate">{p.display_name || 'Perfil sin nombre'}</span>
-                              </div>
-                              {isCurrent && <Check className="w-3.5 h-3.5 text-[#ddb225] shrink-0" />}
-                            </button>
+                            (p.display_name || '').toLowerCase().includes(query) ||
+                            (p.slug || '').toLowerCase().includes(query)
                           );
-                        })}
-                      {profileOptions.filter(p => (p.display_name || '').toLowerCase().includes(profileSearchQuery.toLowerCase())).length === 0 && (
-                        <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
-                      )}
+                        }).length === 0 && (
+                          <div className="text-xs text-slate-500 p-2 text-center italic">No hay resultados</div>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
+                </div>
+
+                {publicProfilePath && (
+                  <a
+                    href={publicProfilePath}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Abrir página pública del perfil"
+                    className="flex items-center justify-center gap-1.5 bg-[#ddb225]/15 hover:bg-[#ddb225]/25 border border-[#ddb225]/40 hover:border-[#ddb225] text-[#ddb225] rounded-xl px-3.5 py-2 text-xs font-semibold transition-all shrink-0 shadow-sm"
+                  >
+                    <span>Ver Perfil</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 )}
               </div>
             </div>

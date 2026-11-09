@@ -45,9 +45,10 @@ export const activationService = {
       if (error) throw error;
       return { card: data as Card | null };
     } catch (err: unknown) {
+      console.error('[activationService] Error en getCardStatus:', err);
       return {
         card: null,
-        error: err instanceof Error ? err.message : 'Error al consultar la tarjeta.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },
@@ -276,9 +277,10 @@ export const activationService = {
         profileId: profileRow.id,
       };
     } catch (err: unknown) {
+      console.error('[activationService] Error en activateCard:', err);
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Error inesperado durante la activación.',
+        error: 'Ups, ocurrió un error.',
       };
     }
   },
