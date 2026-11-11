@@ -146,7 +146,11 @@ export const activationService = {
           if (u && !u.startsWith('http://') && !u.startsWith('https://')) {
             u = 'https://' + u;
           }
-          return { platform: link.platform, url: u };
+          return {
+            platform: link.platform,
+            url: u,
+            ...(link.shape ? { shape: link.shape } : {}),
+          };
         });
       }
     }

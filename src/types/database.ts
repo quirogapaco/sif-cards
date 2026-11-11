@@ -27,6 +27,7 @@ export interface ProfileData {
   social_links?: Array<{
     platform: string;
     url: string;
+    shape?: 'circle' | 'rect';
   }>;
   languages?: string[];
   education?: Array<{

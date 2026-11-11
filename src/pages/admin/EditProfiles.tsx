@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Save, AlertCircle, ChevronDown, Check, ExternalLink } from 'lucide-react';
+import { Save, AlertCircle, ChevronDown, Check, ExternalLink, RotateCcw } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { profileService } from '../../services/profileService';
 import { activationService } from '../../services/activationService';
@@ -207,6 +207,15 @@ export default function EditProfiles() {
   const handleOpenConfirm = (e: React.FormEvent) => {
     e.preventDefault();
     setIsConfirmModalOpen(true);
+  };
+
+  const handleCancelChanges = () => {
+    if (!activeProfile) return;
+    sessionStorage.removeItem(`sif_draft_${activeProfile.id}`);
+    setFormData(profileService.mapProfileToFormData(activeProfile));
+    setFieldErrors({});
+    setErrorMsg(null);
+    setSuccessMsg(null);
   };
 
   // Guardar en sessionStorage automáticamente al cambiar (con debouncing)
@@ -601,20 +610,31 @@ export default function EditProfiles() {
         themePalette={formData?.theme_palette}
         childrenLeft={
           formData && (
-            <ProfileForm
-              formData={formData}
-              onChange={(updated) => {
-                setFormData(updated);
-                setFieldErrors({});
-                setErrorMsg(null);
-                setSuccessMsg(null);
-              }}
-              onSubmit={handleOpenConfirm}
-              loading={submitLoading}
-              submitButtonText="Guardar Cambios"
-              fieldErrors={fieldErrors}
-              alwaysShowSubmit={true}
-            />
+            <div className="flex flex-col gap-2">
+              <ProfileForm
+                formData={formData}
+                onChange={(updated) => {
+                  setFormData(updated);
+                  setFieldErrors({});
+                  setErrorMsg(null);
+                  setSuccessMsg(null);
+                }}
+                onSubmit={handleOpenConfirm}
+                loading={submitLoading}
+                submitButtonText="Guardar Cambios"
+                fieldErrors={fieldErrors}
+                alwaysShowSubmit={true}
+              />
+              <button
+                type="button"
+                onClick={handleCancelChanges}
+                disabled={submitLoading}
+                className="flex w-full items-center justify-center gap-2 rounded-full border border-sif-border bg-sif-surface-subtle py-2.5 text-sm font-semibold text-sif-muted transition-all duration-200 hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+              >
+                <RotateCcw className="h-4 w-4" />
+                <span>Cancelar Cambios</span>
+              </button>
+            </div>
           )
         }
         childrenRight={
