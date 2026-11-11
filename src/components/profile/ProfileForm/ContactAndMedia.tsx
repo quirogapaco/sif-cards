@@ -1,4 +1,4 @@
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Circle, RectangleHorizontal } from 'lucide-react';
 import SocialIcon from '../../ui/SocialIcon';
 import type { ProfileFormData } from './ProfileForm';
 import LabelWithHint from './LabelWithHint';
@@ -11,10 +11,12 @@ interface ContactAndMediaProps {
 const SUPPORTED_SOCIAL_PLATFORMS = [
   { id: 'linkedin', label: 'LinkedIn' },
   { id: 'instagram', label: 'Instagram' },
+  { id: 'tiktok', label: 'TikTok' },
   { id: 'facebook', label: 'Facebook' },
   { id: 'x', label: 'X (Twitter)' },
   { id: 'github', label: 'GitHub' },
   { id: 'youtube', label: 'YouTube' },
+  { id: 'riman', label: 'RIMAN' },
   { id: 'website', label: 'Sitio Web' },
   { id: 'other', label: 'Otro' },
 ];
@@ -30,14 +32,35 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
       ...formData,
       social_links: [
         ...formData.social_links,
-        { platform: availablePlatform, url: '' },
+        {
+          platform: availablePlatform,
+          url: '',
+          shape: availablePlatform === 'riman' ? 'rect' : 'circle',
+        },
       ],
     });
   };
 
-  const updateSocialLink = (index: number, field: 'platform' | 'url', val: string) => {
+  const updateSocialLink = (
+    index: number,
+    field: 'platform' | 'url' | 'shape',
+    val: string
+  ) => {
     const updated = [...formData.social_links];
-    updated[index] = { ...updated[index], [field]: val };
+    if (field === 'platform') {
+      updated[index] = {
+        ...updated[index],
+        platform: val,
+        shape: val === 'riman' ? 'rect' : (updated[index].shape ?? 'circle'),
+      };
+    } else if (field === 'shape') {
+      updated[index] = {
+        ...updated[index],
+        shape: val as 'circle' | 'rect',
+      };
+    } else {
+      updated[index] = { ...updated[index], [field]: val };
+    }
     onChange({ ...formData, social_links: updated });
   };
 
@@ -95,7 +118,7 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
       {/* Redes Sociales Dinámicas */}
       <div className="flex flex-col gap-3 mt-4">
         <div className="flex items-center justify-between">
-          <LabelWithHint label="Redes Sociales" hint="Tus perfiles públicos para conectar." />
+          <LabelWithHint label="Redes Sociales" hint="Tus perfiles públicos para conectar. Puedes elegir formato circular o rectangular en cada red." />
           <button
             type="button"
             onClick={addSocialLink}
@@ -106,51 +129,94 @@ export default function ContactAndMedia({ formData, onChange }: ContactAndMediaP
           </button>
         </div>
 
-        {formData.social_links.map((link, idx) => (
-          <div key={idx} className="flex items-center gap-1.5 sm:gap-2">
-            <div className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-sif-border bg-sif-surface-subtle px-2 py-1.5 shrink-0">
-              <SocialIcon platform={link.platform} className="h-4 w-4 text-sif-gold shrink-0" />
-              <select
-                value={link.platform}
-                onChange={(e) => updateSocialLink(idx, 'platform', e.target.value)}
-                className="bg-transparent text-[11px] sm:text-xs font-medium text-sif-text outline-none cursor-pointer w-[80px] sm:w-auto sm:max-w-[120px] truncate"
+        {formData.social_links.map((link, idx) => {
+          const isRiman = link.platform === 'riman';
+          const currentShape = isRiman ? 'rect' : (link.shape ?? 'circle');
+          const isRect = currentShape === 'rect';
+
+          return (
+            <div key={idx} className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-sif-border bg-sif-surface-subtle px-2 py-1.5 shrink-0">
+                <SocialIcon platform={link.platform} className="h-4 w-4 text-sif-gold shrink-0" />
+                <select
+                  value={link.platform}
+                  onChange={(e) => updateSocialLink(idx, 'platform', e.target.value)}
+                  className="bg-transparent text-[11px] sm:text-xs font-medium text-sif-text outline-none cursor-pointer w-[80px] sm:w-auto sm:max-w-[120px] truncate"
+                >
+                  {SUPPORTED_SOCIAL_PLATFORMS.map((plat) => {
+                    const isUsed = formData.social_links.some((l, i) => i !== idx && l.platform === plat.id);
+                    const isDisabled = isUsed && plat.id !== 'other' && plat.id !== 'website';
+
+                    return (
+                      <option 
+                        key={plat.id} 
+                        value={plat.id} 
+                        className="bg-sif-surface text-sif-text"
+                        disabled={isDisabled}
+                      >
+                        {plat.label}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <input
+                type="text"
+                inputMode="url"
+                value={link.url}
+                onChange={(e) => updateSocialLink(idx, 'url', e.target.value)}
+                placeholder="sifcards.com/..."
+                className="flex-1 min-w-0 rounded-xl border border-sif-border bg-sif-surface-subtle px-2 sm:px-3 py-1.5 text-xs text-sif-text outline-none focus:border-sif-gold"
+              />
+
+              {/* Toggle de forma (Círculo <-> Rectángulo) */}
+              <button
+                type="button"
+                disabled={isRiman}
+                onClick={() => updateSocialLink(idx, 'shape', isRect ? 'circle' : 'rect')}
+                title={
+                  isRiman
+                    ? 'RIMAN siempre se muestra en formato rectangular'
+                    : isRect
+                    ? 'Formato actual: Rectángulo (clic para cambiar a Círculo)'
+                    : 'Formato actual: Círculo (clic para cambiar a Rectángulo)'
+                }
+                className={`relative flex h-8 w-14 shrink-0 items-center rounded-full border border-sif-border bg-sif-surface-subtle p-1 transition-colors ${
+                  isRiman ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer hover:border-sif-gold/50'
+                }`}
               >
-                {SUPPORTED_SOCIAL_PLATFORMS.map((plat) => {
-                  const isUsed = formData.social_links.some((l, i) => i !== idx && l.platform === plat.id);
-                  const isDisabled = isUsed && plat.id !== 'other' && plat.id !== 'website';
+                <span
+                  className={`absolute h-6 w-6 rounded-full bg-sif-gold shadow-sm transition-transform duration-200 ${
+                    isRect ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                />
+                <span
+                  className={`relative z-10 flex w-6 items-center justify-center transition-colors ${
+                    !isRect ? 'text-black' : 'text-sif-muted'
+                  }`}
+                >
+                  <Circle className="h-3.5 w-3.5" />
+                </span>
+                <span
+                  className={`relative z-10 flex w-6 items-center justify-center transition-colors ${
+                    isRect ? 'text-black' : 'text-sif-muted'
+                  }`}
+                >
+                  <RectangleHorizontal className="h-3.5 w-3.5" />
+                </span>
+              </button>
 
-                  return (
-                    <option 
-                      key={plat.id} 
-                      value={plat.id} 
-                      className="bg-sif-surface text-sif-text"
-                      disabled={isDisabled}
-                    >
-                      {plat.label}
-                    </option>
-                  );
-                })}
-              </select>
+              <button
+                type="button"
+                onClick={() => removeSocialLink(idx)}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-sif-border text-sif-muted transition-colors hover:border-red-500/40 hover:text-red-400"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
             </div>
-
-            <input
-              type="text"
-              inputMode="url"
-              value={link.url}
-              onChange={(e) => updateSocialLink(idx, 'url', e.target.value)}
-              placeholder="sifcards.com/..."
-              className="flex-1 min-w-0 rounded-xl border border-sif-border bg-sif-surface-subtle px-2 sm:px-3 py-1.5 text-xs text-sif-text outline-none focus:border-sif-gold"
-            />
-
-            <button
-              type="button"
-              onClick={() => removeSocialLink(idx)}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-sif-border text-sif-muted transition-colors hover:border-red-500/40 hover:text-red-400"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

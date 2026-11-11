@@ -24,7 +24,7 @@ export interface ProfileFormData {
     location: string;
   };
   bio_description: string;
-  social_links: Array<{ platform: string; url: string }>;
+  social_links: Array<{ platform: string; url: string; shape?: 'circle' | 'rect' }>;
   languages: string[];
   education: Array<{ title: string; institution: string; period: string }>;
   businesses: Array<{ name: string; description: string; url: string }>;

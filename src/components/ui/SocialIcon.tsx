@@ -57,6 +57,20 @@ export const SOCIAL_ICONS_MAP: Record<string, (className?: string) => JSX.Elemen
       <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z" />
     </SvgIcon>
   ),
+  riman: (className) => (
+    <svg className={className ?? 'w-4 h-4'} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <text
+        x="12"
+        y="18"
+        textAnchor="middle"
+        fontFamily="Georgia, 'Playfair Display', serif"
+        fontWeight="bold"
+        fontSize="18"
+      >
+        R
+      </text>
+    </svg>
+  ),
   default: (className) => (
     <svg className={className ?? 'w-4 h-4'} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <circle cx="12" cy="12" r="10"/>
