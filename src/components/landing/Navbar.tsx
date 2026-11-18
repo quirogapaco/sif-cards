@@ -41,6 +41,8 @@ export const Navbar: React.FC<NavbarProps> = ({ edition }) => {
     const element = document.querySelector(hash);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.location.href = `/${hash}`;
     }
   };
 
@@ -111,6 +113,12 @@ export const Navbar: React.FC<NavbarProps> = ({ edition }) => {
           >
             Modelos
           </a>
+          <Link
+            to="/manual"
+            className="dark:hover:text-white hover:text-slate-900 text-[#ddb225] font-semibold transition-colors duration-200"
+          >
+            Manual de Uso
+          </Link>
         </nav>
 
         {/* ── Derecha: Toggle Tema + Cápsula de Usuario / Login + Hamburguesa ── */}
@@ -275,6 +283,13 @@ export const Navbar: React.FC<NavbarProps> = ({ edition }) => {
             >
               Modelos
             </a>
+            <Link
+              to="/manual"
+              onClick={closeMobileMenu}
+              className="py-2 text-[#ddb225] font-semibold transition-colors border-b dark:border-white/[0.04] border-slate-100"
+            >
+              Manual de Uso
+            </Link>
 
             {/* Opciones de usuario en menú móvil */}
             {session && user ? (

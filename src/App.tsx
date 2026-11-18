@@ -8,6 +8,7 @@ import AuthModal from './components/auth/AuthModal';
 
 // ── Landing Page (Pública) ──────────────────────────────────────────────────
 const LandingPage = lazy(() => import('./pages/landing/LandingPage'));
+const ManualPage = lazy(() => import('./pages/manual/ManualPage'));
 const LegalPage = lazy(() => import('./pages/public/LegalPage'));
 
 // ── Páginas de Resolución y Onboarding ─────────────────────────────────────
@@ -50,6 +51,7 @@ export default function App() {
             <Routes>
               {/* ── Ruta raíz: Landing Page Oficial ── */}
               <Route path="/" element={<LandingPage />} />
+              <Route path="/manual" element={<ManualPage />} />
               
               {/* ── Páginas Legales ── */}
               <Route path="/privacy" element={<LegalPage type="privacy" />} />
