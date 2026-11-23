@@ -77,6 +77,7 @@ export const FooterCTA: React.FC = () => {
                 <li><a href="#activacion" className="dark:hover:text-white hover:text-slate-900 transition-colors">Activación</a></li>
                 <li><a href="#playground" className="dark:hover:text-white hover:text-slate-900 transition-colors">Simulador</a></li>
                 <li><a href="#modelos" className="dark:hover:text-white hover:text-slate-900 transition-colors">Modelos &amp; Precios</a></li>
+                <li><Link to="/manual" className="text-[#ddb225] font-medium hover:underline transition-colors">Manual de Uso</Link></li>
               </ul>
             </div>
 
